@@ -1,0 +1,30 @@
+name: Build Rules
+
+on:
+  schedule:
+    - cron: '0 */2 * * *'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Build rules
+        run: python3 build.py --no-hosts
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          cp dist/adguard-home-rules.txt .
+          cp dist/adguard-home-allowlist.txt .
+          cp dist/stats.json .
+          git add -A
+          git commit -m "auto: update rules $(date -u '+%Y-%m-%d %H:%M UTC')" || echo "no changes"
+          git push
