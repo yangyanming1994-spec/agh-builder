@@ -1,0 +1,6 @@
+# AGH-Builder 上游白名单源（每行一个 URL 或 file: 本地文件，# 开头为注释）
+# 远程白名单上游已按用户要求清空；拦截源自带的 @@ 放行规则仍会自动归入白名单。
+# 如需自己补充放行规则，写到下面两个本地文件即可。
+
+file:local/wan.txt
+file:local/whitelist.txt
