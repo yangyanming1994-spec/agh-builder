@@ -10,9 +10,5 @@ https://raw.githubusercontent.com/privacy-protection-tools/anti-AD/master/anti-a
 https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 https://adguardteam.github.io/HostlistsRegistry/assets/filter_1.txt
 https://raw.githubusercontent.com/8680/GOODBYEADS/master/data/rules/dns.txt
-https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/pro.txt
-https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/tif.txt
-
-
 # 本地自定义广告规则(DNS类,元素隐藏自动剔除)
 file:local/adblock.txt
