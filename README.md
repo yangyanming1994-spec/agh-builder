@@ -5,6 +5,22 @@
 > ⚠️ **重要声明：本工具仅适用于 AdGuard Home。**
 > 不支持 Clash、V2Ray、Shadowrocket、Quantumult X、SingBox、dnsmasq 等其他程序。
 
+## 一键订阅（推荐）
+
+规则每 2 小时自动更新，直接复制以下链接添加到 AdGuard Home 即可：
+
+**拦截规则：**
+```
+https://raw.githubusercontent.com/yangyanming1994-spec/agh-builder/main/adguard-home-rules.txt
+```
+
+**白名单：**
+```
+https://raw.githubusercontent.com/yangyanming1994-spec/agh-builder/main/adguard-home-allowlist.txt
+```
+
+添加方法：AdGuard Home → 过滤 → DNS 封锁列表 → 添加列表 → 粘贴上面的链接。
+
 ## 这是什么
 
 AGH-Builder 从多个开源广告拦截规则源拉取规则，自动清洗、去重、合并，产出 AdGuard Home 能直接订阅的 DNS 层拦截规则。
