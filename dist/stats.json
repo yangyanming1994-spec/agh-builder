@@ -1,7 +1,7 @@
 {
   "builder": "AGH-Builder",
   "version": "2.0",
-  "generated_at": "2026-09-26 08:20:48",
+  "generated_at": "2026-09-26 10:14:57",
   "sources": {
     "https://adguardteam.github.io/HostlistsRegistry/assets/filter_2.txt": {
       "is_allow_source": false,
@@ -98,6 +98,25 @@
         "invalid": 0
       }
     },
+    "https://adguardteam.github.io/HostlistsRegistry/assets/filter_1.txt": {
+      "is_allow_source": false,
+      "ok": true,
+      "lines": 183030,
+      "kept_black": 182622,
+      "kept_allow": 12,
+      "kept_regex": 15,
+      "skipped": {
+        "total": 183030,
+        "kept": 182649,
+        "comment": 9,
+        "element": 0,
+        "js": 0,
+        "path": 11,
+        "modifier": 7,
+        "ip": 72,
+        "invalid": 282
+      }
+    },
     "https://raw.githubusercontent.com/qq5460168/666/master/rules.txt": {
       "is_allow_source": false,
       "ok": true,
@@ -117,23 +136,23 @@
         "invalid": 238
       }
     },
-    "https://adguardteam.github.io/HostlistsRegistry/assets/filter_1.txt": {
+    "https://raw.githubusercontent.com/privacy-protection-tools/anti-AD/master/anti-ad-easylist.txt": {
       "is_allow_source": false,
       "ok": true,
-      "lines": 183002,
-      "kept_black": 182594,
-      "kept_allow": 12,
-      "kept_regex": 15,
+      "lines": 95968,
+      "kept_black": 95820,
+      "kept_allow": 110,
+      "kept_regex": 14,
       "skipped": {
-        "total": 183002,
-        "kept": 182621,
-        "comment": 9,
+        "total": 95968,
+        "kept": 95944,
+        "comment": 6,
         "element": 0,
         "js": 0,
-        "path": 11,
-        "modifier": 7,
-        "ip": 72,
-        "invalid": 282
+        "path": 0,
+        "modifier": 18,
+        "ip": 0,
+        "invalid": 0
       }
     },
     "https://raw.githubusercontent.com/badmojr/1Hosts/master/Lite/domains.txt": {
@@ -153,25 +172,6 @@
         "modifier": 0,
         "ip": 0,
         "invalid": 25
-      }
-    },
-    "https://raw.githubusercontent.com/privacy-protection-tools/anti-AD/master/anti-ad-easylist.txt": {
-      "is_allow_source": false,
-      "ok": true,
-      "lines": 95968,
-      "kept_black": 95820,
-      "kept_allow": 110,
-      "kept_regex": 14,
-      "skipped": {
-        "total": 95968,
-        "kept": 95944,
-        "comment": 6,
-        "element": 0,
-        "js": 0,
-        "path": 0,
-        "modifier": 18,
-        "ip": 0,
-        "invalid": 0
       }
     },
     "https://raw.githubusercontent.com/8680/GOODBYEADS/master/data/rules/dns.txt": {
@@ -215,13 +215,13 @@
     "https://big.oisd.nl/": {
       "is_allow_source": false,
       "ok": true,
-      "lines": 243945,
-      "kept_black": 243934,
+      "lines": 243937,
+      "kept_black": 243926,
       "kept_allow": 0,
       "kept_regex": 0,
       "skipped": {
-        "total": 243945,
-        "kept": 243934,
+        "total": 243937,
+        "kept": 243926,
         "comment": 10,
         "element": 0,
         "js": 0,
@@ -256,14 +256,14 @@
     "strict_conflict": true
   },
   "dedup": {
-    "blacklist": 436529,
+    "blacklist": 436549,
     "allowlist": 2941,
     "regex": 55,
-    "total": 439525
+    "total": 439545
   },
   "output": {
     "rules_file": "dist/adguard-home-rules.txt",
-    "rules_count": 436584,
+    "rules_count": 436604,
     "allow_file": "dist/adguard-home-allowlist.txt",
     "allow_count": 2941,
     "hosts_file": null,
