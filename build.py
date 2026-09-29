@@ -65,6 +65,7 @@ CONFIG = {
     "timeout": 30,             # 单次下载超时（秒）
     "retries": 3,              # 单源连续重试次数
     "retry_wait": 10,          # 第一轮失败后，第二轮补拉前的等待秒数（网络抖动多为时间窗口性）
+    "retry_backoff": 1.5,      # 单源内连续重试的退避基数：sleep(retry_backoff * (attempt+1))
     "max_source_bytes": 100 * 1024 * 1024,  # 单源下载上限（100MB），防异常响应撑爆内存
     "user_agents": [
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
@@ -108,11 +109,6 @@ DOMAIN_CHARS = re.compile(r"^[a-zA-Z0-9_\-.*]+$")
 HOSTS_IP_PREFIX = re.compile(
     r"^\s*(?:0\.0\.0\.0|127\.0\.0\.1|255\.255\.255\.255|::1|::)\s+",
     re.IGNORECASE
-)
-# hosts 行：可选 IP 前缀 + 单域名（兼容旧逻辑，实际多主机名由 HOSTS_IP_PREFIX 拆分）
-HOSTS_LINE = re.compile(
-    r"^\s*(?:0\.0\.0\.0|127\.0\.0\.1|255\.255\.255\.255|::|::1)\s+"
-    r"([a-zA-Z0-9_\-.*]+\.[a-zA-Z0-9_\-.*]+)(?:\s+#.*)?\s*$", re.IGNORECASE
 )
 IPV4_RE = re.compile(r"^\d{1,3}(\.\d{1,3}){3}$")
 # 正则规则：/xxx/ 或 /xxx/$mod
@@ -319,12 +315,12 @@ def fetch_source(source: str):
             if attempt >= CONFIG["retries"] - 1:
                 log(f"  ✗ 下载失败（{CONFIG['retries']} 次）: {source}  (HTTP {e.code})")
                 return None
-            time.sleep(1.5 * (attempt + 1))
+            time.sleep(CONFIG["retry_backoff"] * (attempt + 1))
         except Exception as e:
             if attempt >= CONFIG["retries"] - 1:
                 log(f"  ✗ 下载失败（{CONFIG['retries']} 次）: {source}  ({str(e)[:80]})")
                 return None
-            time.sleep(1.5 * (attempt + 1))
+            time.sleep(CONFIG["retry_backoff"] * (attempt + 1))
     return None
 
 
@@ -345,8 +341,10 @@ def _sanitize_mods(mods: str) -> str:
     return mods.strip().rstrip("^").strip()
 
 
-def check_modifiers(mods: str) -> bool:
-    """校验修饰符列表是否全部被 AGH 支持且值合法；任一异常返回 False"""
+def check_modifiers(mods: str, is_exception: bool = False) -> bool:
+    """校验修饰符列表是否全部被 AGH 支持且值合法；任一异常返回 False。
+    is_exception=True（@@ 白名单规则）时，允许无值的 dnsrewrite：
+    官方语法 @@||x^$dnsrewrite 表示「解除该域所有 dnsrewrite 规则」。"""
     mods = _sanitize_mods(mods)
     if not mods:
         return True
@@ -366,9 +364,9 @@ def check_modifiers(mods: str) -> bool:
         # 未知修饰符：保守起见也剔除（宁可少杀，不可让 AGH 解析告警）
         if name not in SUPPORTED_MODIFIERS:
             return False
-        # 无值修饰符只允许布尔型；client/dnstype/dnsrewrite/ctag/denyallow 必须有值
+        # 无值修饰符：只允许布尔型；白名单额外允许无值 dnsrewrite（解除该域所有 rewrite）
         if not sep:
-            if name not in BOOL_MODS:
+            if name not in BOOL_MODS and not (is_exception and name == "dnsrewrite"):
                 return False
             continue
         # 布尔修饰符不允许带值（badfilter=xxx / important=xxx 非法，AGH 不识别）
@@ -414,7 +412,7 @@ def normalize_mods(mods: str) -> str:
             continue  # 跳过空项（尾部逗号、双逗号）
         name, sep, value = item.partition("=")
         if not sep:
-            parts.append(item)
+            parts.append(name.lstrip("~").lower())
             continue
         # ~ 排除前缀不影响值大小写策略（~client=MyPhone 与 client=MyPhone 同样保持原样）
         nm = name.lstrip("~").lower()
@@ -429,6 +427,37 @@ def normalize_mods(mods: str) -> str:
         else:
             parts.append(f"{lname}={value.lower()}")
     return ",".join(parts)
+
+
+def split_regex_mods(inner: str, is_exception: bool = False):
+    """
+    从正则规则中分离修饰符：/RE/ 或 /RE/$mods。
+    正则内容本身可含 $（如锚点 /^...$/），$ 不一定是修饰符分隔符，因此：
+      1. 从后往前找 $；
+      2. 若该 $ 之前不是闭合的正则（不以 / 结尾），则 $ 属于正则内容，整体按正则保留；
+      3. 若 $ 之前已闭合，则 $ 之后必须构成合法修饰符列表；非法则整条剔除（维持原行为）。
+    返回 (正则体, 修饰符)，其中：
+      - mods=None  → $ 是正则内容，整条原样保留
+      - mods=False → 正则已闭合但修饰符非法，整条剔除
+      - mods=""    → /RE/$ 尾部空修饰符，剥掉 $
+      - mods=str   → 合法修饰符串（已 sanitize，未 normalize）
+    修复原实现「/regex/ 内容含 $（如 ^...$ 锚点）时被 split('$', 1) 截断而误删」的问题。
+    """
+    for i in range(len(inner) - 1, -1, -1):
+        if inner[i] != "$":
+            continue
+        head, tail = inner[:i], inner[i + 1:]
+        if not head.endswith("/"):
+            # $ 前未闭合正规则 → $ 是正则内容的一部分，整体保留
+            return inner, None
+        mods = _sanitize_mods(tail)
+        if not mods:
+            return head, ""
+        if check_modifiers(mods, is_exception):
+            return head, mods
+        # 正则已闭合但 $ 后不是合法修饰符列表 → 整条无效（维持原剔除行为）
+        return head, False
+    return inner, None
 
 
 def clean_rule(line: str, keep_regex: bool):
@@ -459,16 +488,17 @@ def clean_rule(line: str, keep_regex: bool):
     if (line.startswith("/") or line.startswith("@@/")) and REGEX_RULE.match(inner):
         if not keep_regex:
             return []
-        # 校验正则规则上的修饰符；尾部空修饰符（/xxx/$）去掉 $
-        if "$" in inner:
-            mods = _sanitize_mods(inner.split("$", 1)[1])
-            if mods:
-                if not check_modifiers(mods):
-                    return []
-                inner = inner.split("$", 1)[0] + "$" + normalize_mods(mods)
-            else:
-                inner = inner.split("$", 1)[0]
-        return [("regex", ("@@" if line.startswith("@@") else "") + inner)]
+        prefix = "@@" if line.startswith("@@") else ""
+        body_re, mods = split_regex_mods(inner, line.startswith("@@"))
+        if mods is None:                 # $ 是正则内容（如 /^...$/ 锚点），整条原样保留
+            return [("regex", prefix + inner)]
+        if mods is False:                # 正则已闭合但修饰符非法 → 整条剔除（维持原行为）
+            return []
+        if mods:                         # 合法修饰符：归一化后拼接
+            inner = body_re + "$" + normalize_mods(mods)
+        else:                            # /xxx/$ 尾部空修饰符，剥掉 $
+            inner = body_re
+        return [("regex", prefix + inner)]
 
     # 4) 白名单 @@ 规则
     is_allow = line.startswith("@@")
@@ -476,6 +506,15 @@ def clean_rule(line: str, keep_regex: bool):
 
     # 5) hosts 行 / 纯域名行归一化（不含 || 前缀的普通行）
     if not body.startswith("||"):
+        # 5-0) 全局掩码 *$mod / @@*$mod（pattern=* 匹配所有主机名；官方示例 *$denyallow=com|net）
+        if body.startswith("*"):
+            gh = body[1:]
+            if gh.startswith("^"):
+                gh = gh[1:]
+            if gh.startswith("$"):
+                gmods = _sanitize_mods(gh[1:])
+                if gmods and check_modifiers(gmods, is_allow):
+                    return [("domain", ("@@" if is_allow else "") + "*$" + normalize_mods(gmods))]
         # 5a) |domain^ / |domain^$mod（| 为域名开头锚点，官方语法；DNS 层等价于 || 前缀）
         tmp = body
         if tmp.startswith("|") and not tmp.startswith("||"):
@@ -489,7 +528,7 @@ def clean_rule(line: str, keep_regex: bool):
                 "/" not in d and ":" not in d
                 and DOMAIN_CHARS.match(d) and "." in d
                 and not is_ip(d) and is_valid_domain(d)
-                and (not dmods or check_modifiers(dmods))
+                and (not dmods or check_modifiers(dmods, is_allow))
             ):
                 rule = ("@@" if is_allow else "") + f"||{d.lower()}^"
                 if dmods:
@@ -507,7 +546,7 @@ def clean_rule(line: str, keep_regex: bool):
                     "/" not in d and ":" not in d
                     and DOMAIN_CHARS.match(d) and "." in d
                     and not is_ip(d) and is_valid_domain(d)
-                    and (not dmods or check_modifiers(dmods))
+                    and (not dmods or check_modifiers(dmods, is_allow))
                 ):
                     rule = ("@@" if is_allow else "") + f"||{d.lower()}^"
                     if dmods:
@@ -535,6 +574,26 @@ def clean_rule(line: str, keep_regex: bool):
             d = line.rstrip(".")
             if not is_ip(d) and is_valid_domain(d):
                 return [("domain", ("@@" if is_allow else "") + f"||{d.lower()}^")]
+        # 5d-2) domain| 或 domain|$mods（| 为结尾锚点，官方合法，如 ample.org|）：
+        # 归一化为 ||domain^（有修饰符则保留）。
+        # 结尾锚点本是无边界字符串匹配（会误伤 notexample.org），||domain^ 有域名边界、
+        # 同样覆盖域名本身与所有子域，且排除无边界误配，属更安全的等价归一化。
+        if not body.startswith("|"):
+            d2 = body
+            d2mods = ""
+            if "$" in d2:
+                d2, d2mods = d2.split("$", 1)
+            if d2.endswith("|") and "/" not in d2 and ":" not in d2 and "#" not in d2:
+                d2 = d2[:-1].rstrip(".")
+                if (
+                    DOMAIN_CHARS.match(d2) and "." in d2 and not is_ip(d2)
+                    and is_valid_domain(d2)
+                    and (not d2mods or check_modifiers(d2mods, is_allow))
+                ):
+                    rule = ("@@" if is_allow else "") + f"||{d2.lower()}^"
+                    if d2mods:
+                        rule += f"${normalize_mods(d2mods)}"
+                    return [("domain", rule)]
         # 5e) @@domain / @@domain^ / @@domain$mod（无 || 前缀的白名单）归一化
         if is_allow:
             d = body
@@ -548,7 +607,7 @@ def clean_rule(line: str, keep_regex: bool):
                 "/" not in d and ":" not in d
                 and DOMAIN_CHARS.match(d) and "." in d
                 and not is_ip(d) and is_valid_domain(d)
-                and (not dmods or check_modifiers(dmods))
+                and (not dmods or check_modifiers(dmods, is_allow))
             ):
                 rule = f"@@||{d.lower()}^"
                 if dmods:
@@ -573,7 +632,7 @@ def clean_rule(line: str, keep_regex: bool):
     if not domain or not DOMAIN_CHARS.match(domain) or is_ip(domain) or not is_valid_domain(domain):
         return []
     if mods:
-        if not check_modifiers(mods):
+        if not check_modifiers(mods, is_allow):
             # 白名单降级：@@||x^$domain=y / $third-party 这类，$domain/$third-party 是浏览器层概念，
             # DNS 层不认识。若整条丢弃，会导致"本该放行的域名没放行"，反而误拦截。
             # 这里剥掉 AGH 不支持的修饰符、保留合法子集；剥光就退化为裸域名放行。
@@ -582,7 +641,7 @@ def clean_rule(line: str, keep_regex: bool):
                 kept = []
                 for item in mods.split(","):
                     probe = _sanitize_mods(item)
-                    if probe and check_modifiers(probe):
+                    if probe and check_modifiers(probe, is_allow):
                         kept.append(probe)
                 mods = ",".join(kept)
             else:
@@ -605,36 +664,66 @@ def _has_modifier(rule: str, name: str) -> bool:
                for m in rule.split("$", 1)[1].split(","))
 
 
+def _rule_modifier_names(rule: str) -> set:
+    """提取规则的修饰符「名」集合（不含值），如 ||x^$client=a,important → {'client','important'}。"""
+    if "$" not in rule:
+        return set()
+    return {
+        m.split("=", 1)[0].strip().lstrip("~").lower()
+        for m in rule.split("$", 1)[1].split(",") if m.strip()
+    }
+
+
+# 条件修饰符：带它们的规则只在「特定客户端 / 记录类型 / 客户端标签 / 排除域」下生效，
+# 不是无条件匹配整个域名。构建期做域名级冲突剔除时不处理这类规则，交给 AGH 运行时判定。
+CONDITIONAL_MODIFIERS = {"client", "dnstype", "ctag", "denyallow"}
+
+
 def filter_conflicts(blacklist: list, allowlist: list, strict: bool = True) -> list:
     """
-    白名单优先：剔除与白名单冲突的黑名单规则，并正确处理 $important 优先级。
-    - 裸域白名单 @@||example.com^：放行 example.com 本身及其所有子域
-    - 通配白名单 @@||*.example.com^：只放行其子域（不含裸域）
-    - strict=False（--no-strict）：仅精确匹配，不排除子域
-    - important 语义（AGH 官方）：||x^$important 拦截规则不向"普通白名单"让步，
-      只有同样带 $important 的白名单 @@||x^$important 才能解除它；普通黑名单则向
-      任意白名单（普通 + important）让步。
-    算法：后缀剥离（对每个黑名单域名检查所有后缀是否命中白名单），O(n·域名段数)
+    白名单优先：剔除与白名单冲突的黑名单规则，严格按 AGH 官方优先级与修饰符类别配对。
+
+    白名单分三类（各含 exact 裸域 / wild 左通配 / pat 中间通配 三种结构）：
+      - ordinary：纯裸域白名单 @@||example.com^，放行 example.com 及其子域
+      - powerful：important 白名单 @@||example.com^$important，可压过 important 拦截
+      - rewrite ：dnsrewrite 白名单 @@||example.com^$dnsrewrite，只解除 dnsrewrite 规则
+    带条件修饰符（client/dnstype/ctag/denyallow）的白名单不参与域名级剔除（运行时按条件判定）。
+
+    配对关系（AGH 官方语义；dnsrewrite 规则优先级高于其他规则）：
+      - 普通拦截    ||x^            向 ordinary + powerful 让步
+      - important 拦截 ||x^$important 仅向 powerful 让步（不向普通白名单让步）
+      - dnsrewrite 拦截 ||x^$dnsrewrite=... 仅向 rewrite 让步（普通/important 白名单不能解除）
+      - 带条件修饰符的拦截规则不做域名级剔除（运行时按条件判定）。
     """
     def build(rules):
-        exact, wild, pat = set(), set(), []
+        """单次遍历，返回 [ordinary, powerful, rewrite]，每个为 (exact, wild, pat)。"""
+        groups = [(set(), set(), []), (set(), set(), []), (set(), set(), [])]
         for r in rules:
             if not r.startswith("@@"):
                 continue
+            mods = _rule_modifier_names(r)
+            if mods & CONDITIONAL_MODIFIERS:
+                continue                       # 条件放行：运行时判定，不做全域名剔除
             d = extract_domain(r)
             if not d:
                 continue
+            if "dnsrewrite" in mods:
+                slot = 2
+            elif "important" in mods:
+                slot = 1
+            else:
+                slot = 0
+            exact, wild, pat = groups[slot]
             if d.startswith("*."):
                 wild.add(d[2:])
             elif "*" in d:
-                # 中间通配白名单（如 a*.example.com）：预编译 glob 正则（* 跨段，符合 AGH 子域语义）
+                # 中间通配白名单（如 a*.example.com）：预编译 glob（* 跨段，符合 AGH 子域语义）
                 pat.append(re.compile(fnmatch.translate(d)))
             else:
                 exact.add(d)
-        return exact, wild, pat
+        return groups
 
-    ordinary = build([r for r in allowlist if not _has_modifier(r, "important")])
-    powerful = build([r for r in allowlist if _has_modifier(r, "important")])
+    ordinary, powerful, rewrite = build(allowlist)
 
     def make_match(struct):
         exact, wild, pat = struct
@@ -655,16 +744,23 @@ def filter_conflicts(blacklist: list, allowlist: list, strict: bool = True) -> l
 
     hit_ordinary = make_match(ordinary)
     hit_powerful = make_match(powerful)
+    hit_rewrite = make_match(rewrite)
 
     kept, removed, imp_kept, removed_regex = [], 0, 0, 0
     for rule in blacklist:
+        is_imp = _has_modifier(rule, "important")   # 一次解析，循环内复用
         # 正则拦截规则（/regex/）：按其能提取出的域名候选判断是否与白名单冲突
         if rule.startswith("/"):
+            rmods = _rule_modifier_names(rule)
+            # 条件正则 / dnsrewrite 正则：运行时按条件或高优先级判定，不做构建期域名剔除
+            if rmods & CONDITIONAL_MODIFIERS or "dnsrewrite" in rmods:
+                kept.append(rule)
+                continue
             cands = regex_domain_candidates(rule)
             if not cands:
                 kept.append(rule)            # 无法可靠提取域名，保守保留
                 continue
-            if _has_modifier(rule, "important"):
+            if is_imp:
                 conflict = any(hit_powerful(c) for c in cands)
             else:
                 conflict = any(hit_ordinary(c) or hit_powerful(c) for c in cands)
@@ -674,26 +770,33 @@ def filter_conflicts(blacklist: list, allowlist: list, strict: bool = True) -> l
             else:
                 kept.append(rule)
             continue
+        mods = _rule_modifier_names(rule)
+        if mods & CONDITIONAL_MODIFIERS:
+            kept.append(rule)                # 条件拦截：运行时按条件判定，不做域名级剔除
+            continue
         d = extract_domain(rule)
         if not d:
             kept.append(rule)
             continue
-        if _has_modifier(rule, "important"):
+        if "dnsrewrite" in mods:
+            # dnsrewrite 拦截优先级最高，仅 dnsrewrite 白名单可解除
+            conflict = hit_rewrite(d)
+        elif is_imp:
             # important 拦截：仅 important 白名单可解除；普通白名单不能削弱
             conflict = hit_powerful(d)
             if not conflict:
                 imp_kept += 1
         else:
-            # 普通拦截：任意白名单（普通或 important）命中即放行
+            # 普通拦截：ordinary 或 important 白名单命中即放行
             conflict = hit_ordinary(d) or hit_powerful(d)
         if conflict:
             removed += 1
         else:
             kept.append(rule)
+    n_alw = sum(len(g[0]) + len(g[1]) + len(g[2]) for g in (ordinary, powerful, rewrite))
     log(f"白名单冲突剔除: {removed} 条黑名单规则（含正则 {removed_regex} 条，"
         f"{'严格' if strict else '精确'}匹配，"
-        f"白名单域名 {sum(len(s[0]) + len(s[1]) + len(s[2]) for s in (ordinary, powerful))} 个，"
-        f"保留 important 拦截 {imp_kept} 条）")
+        f"白名单域名 {n_alw} 个，保留 important 拦截 {imp_kept} 条）")
     return kept
 
 
@@ -800,7 +903,7 @@ def dedupe_covered_domains(rules: list, strict: bool = True):
                     return True
             return False
 
-        for base in sorted(leftwild):         # 左通配：裸域存在、或其父域被覆盖即冗余
+        for base in leftwild:                 # 左通配：裸域存在、或其父域被覆盖即冗余
             if base in plain or covered(base):
                 removed += 1
             else:
@@ -837,13 +940,21 @@ def sort_key(rule: str):
 
 def atomic_write(path: Path, text: str) -> None:
     """原子写入：先写同目录临时文件，再 os.replace 覆盖。
-    构建中断/进程被杀不会留下半截文件，dist 产物始终保持完整可读。"""
+    构建中断/进程被杀不会留下半截文件，dist 产物始终保持完整可读。
+    写失败时清理残留的 .tmp 文件，避免下次构建读到陈旧中间态。"""
     tmp = path.with_name(path.name + ".tmp")
-    with open(tmp, "w", encoding="utf-8") as f:
-        f.write(text)
-        f.flush()
-        os.fsync(f.fileno())
-    os.replace(tmp, path)
+    try:
+        with open(tmp, "w", encoding="utf-8") as f:
+            f.write(text)
+            f.flush()
+            os.fsync(f.fileno())
+        os.replace(tmp, path)
+    finally:
+        if tmp.exists():
+            try:
+                tmp.unlink()
+            except OSError:
+                pass
 
 
 def write_outputs(blacklist, allowlist, regex_rules, stats, hosts_source=None):
@@ -1030,6 +1141,46 @@ def process_source(source: str, stats: dict, is_allow_source: bool = False):
     return blk, alw, reg, ok
 
 
+def download_all(merged: list, stats: dict):
+    """
+    并发下载+清洗全部源，返回 (results, final_failed)。
+    results: {url: (blk, alw, reg)}；final_failed: [(url, is_allow), ...]
+    网络失败源等待一个退避窗口后整批补拉一轮（连续重试常撞上同一波抖动，
+    隔数十秒后网络往往已恢复）。
+    """
+    def run_round(sources):
+        """并发下载+清洗一批源，返回 (成功结果 dict{url:(blk,alw,reg)}, 失败 [(url,is_allow)])"""
+        results, failed = {}, []
+        with cf.ThreadPoolExecutor(max_workers=CONFIG["max_workers"]) as ex:
+            futures = {ex.submit(process_source, s, stats, is_allow): (s, is_allow)
+                       for s, is_allow in sources}
+            for fut in cf.as_completed(futures):
+                s, is_allow = futures[fut]
+                try:
+                    blk, alw, reg, ok = fut.result()
+                except Exception as e:
+                    failed.append((s, is_allow))
+                    log(f"✗ 处理源异常: {s}  ({str(e)[:100]})")
+                    continue
+                if ok:
+                    results[s] = (blk, alw, reg)
+                else:
+                    failed.append((s, is_allow))
+        return results, failed
+
+    results, failed = run_round(merged)
+    if failed:
+        log(f"⚠ 第一轮 {len(failed)} 个源失败，等待 {CONFIG['retry_wait']}s 后第二轮补拉…")
+        time.sleep(CONFIG["retry_wait"])
+        results2, failed = run_round(failed)
+        results.update(results2)
+        if results2:
+            log(f"✓ 第二轮补拉成功 {len(results2)} 个源")
+    if failed:
+        log(f"⚠ 最终仍有 {len(failed)} 个源失败（已跳过，不影响其他源）")
+    return results, failed
+
+
 def main():
     ap = argparse.ArgumentParser(description="AGH-Builder: 只适配 AdGuard Home 的规则合并器")
     ap.add_argument("--no-regex", action="store_true", help="不保留正则规则")
@@ -1073,39 +1224,8 @@ def main():
     log(f"去重后实际下载 {len(merged)} 个源（拦截 {len(black_sources)} + 仅白名单 {len(allow_only)}，"
         f"重复 {len(black_sources) + len(allow_sources) - len(merged)} 个）")
 
-    def run_round(sources):
-        """并发下载+清洗一批源，返回 (成功结果 dict{url:(blk,alw,reg)}, 失败 [(url,is_allow)])"""
-        results, failed = {}, []
-        with cf.ThreadPoolExecutor(max_workers=CONFIG["max_workers"]) as ex:
-            futures = {ex.submit(process_source, s, stats, is_allow): (s, is_allow)
-                       for s, is_allow in sources}
-            for fut in cf.as_completed(futures):
-                s, is_allow = futures[fut]
-                try:
-                    blk, alw, reg, ok = fut.result()
-                except Exception as e:
-                    failed.append((s, is_allow))
-                    log(f"✗ 处理源异常: {s}  ({str(e)[:100]})")
-                    continue
-                if ok:
-                    results[s] = (blk, alw, reg)
-                else:
-                    failed.append((s, is_allow))
-        return results, failed
-
-    # 第一轮并发下载
-    results, failed = run_round(merged)
-    # 第二轮补拉：仅对网络失败源，等待一个退避窗口后整批重试
-    # （连续重试常撞上同一波抖动；隔数十秒后网络往往已恢复）
-    if failed:
-        log(f"⚠ 第一轮 {len(failed)} 个源失败，等待 {CONFIG['retry_wait']}s 后第二轮补拉…")
-        time.sleep(CONFIG["retry_wait"])
-        results2, failed = run_round(failed)
-        results.update(results2)
-        if results2:
-            log(f"✓ 第二轮补拉成功 {len(results2)} 个源")
-    if failed:
-        log(f"⚠ 最终仍有 {len(failed)} 个源失败（已跳过，不影响其他源）")
+    # 并发下载+清洗全部源（网络失败源等待退避窗口后自动补拉一轮）
+    results, failed = download_all(merged, stats)
 
     # 按源清单顺序合并（保证跨平台构建结果确定性）
     for s, _ in merged:
