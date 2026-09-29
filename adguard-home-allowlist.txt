@@ -1,14 +1,11 @@
 ! Title: sofmed DNS（白名单）
 ! Homepage: sofmed DNS提供
-! Version: 2026-09-29 22:17:59（北京时间）
+! Version: 2026-09-30 00:18:56（北京时间）
 ! Expires: 12 hours
 ! Description: 由 sofmed DNS独家提供
-! Total count: 2941
+! Total count: 2936
 @@||dj.1688.com^$important
-@@||i.ytimg.com^$important
 @@||*.xunlei.com^$important
-@@||ipv4only.arpa^$important
-@@||iwd.skysrt.com^$important
 @@||unet.ucweb.com^$important
 @@||api.fqnovel.com^$important
 @@||jumpluna.58.com^$important
@@ -17,9 +14,7 @@
 @@||api.telegram.org^$important
 @@||mmocgame.qpic.cn^$important
 @@||xfr-ss.getui.com^$important
-@@||api.bajintech.com^$important
 @@||appsupport.qq.com^$important
-@@||bak.bajintech.com^$important
 @@||data.bilibili.com^$important
 @@||p*-ad.adukwai.com^$important
 @@||*.fqnovelstatic.com^$important
@@ -35,10 +30,8 @@
 @@||api3-normal-*.fqnovel.com^$important
 @@||api5-normal-*.fqnovel.com^$important
 @@||lf*-cdn-tos.bytegecko.com^$important
-@@||wifimodule.doubimeizhi.com^$important
 @@||lf*-cdn-tos.bytegeckoext.com^$important
 @@||lf-sourcecdn-tos.bytegecko.com^$important
-@@||msy59wz.mqtt.iot.gz.baidubce.com^$important
 @@||lf-normal-gr-sourcecdn.bytegecko.com^$important
 @@||prod-chat-kimi.tos-cn-beijing.volces.com^$important
 @@||t.co^
@@ -129,10 +122,12 @@
 @@||cdn-go.cn^
 @@||cdnjs.com^
 @@||ctrip.com^
+@@||daraz.com^
 @@||dfcfw.com^
 @@||dmm.co.jp^
 @@||duote.com^
 @@||ename.net^
+@@||ezodn.com^
 @@||flowus.cn^
 @@||g.msn.com^
 @@||ggpht.com^
@@ -274,7 +269,6 @@
 @@||sbfull.com^
 @@||sf.163.com^
 @@||sso.ele.me^
-@@||stripe.com^
 @@||surrit.com^
 @@||toonily.me^
 @@||tx.163.com^
@@ -431,6 +425,7 @@
 @@||ad.10010.com^
 @@||ad.azure.com^
 @@||ads.temu.com^
+@@||adsterra.com^
 @@||aegis.qq.com^
 @@||animerep.com^
 @@||api.agora.io^
@@ -557,6 +552,7 @@
 @@||www.54647.io^
 @@||www.9game.cn^
 @@||www.bmcx.com^
+@@||www.daraz.pk^
 @@||www.dell.com^
 @@||www.mcmod.cn^
 @@||www.mhzd.net^
@@ -860,7 +856,6 @@
 @@||cre.dp.sina.cn^
 @@||crl3.apple.com^
 @@||crl4.apple.com^
-@@||css.yhdmtu.xyz^
 @@||d.bilibili.com^
 @@||d.ifengimg.com^
 @@||da.mmarket.com^
@@ -1088,6 +1083,7 @@
 @@||callback.58.com^
 @@||cards.iqiyi.com^
 @@||cdn.ferrari.com^
+@@||cdn.taboola.com^
 @@||cdn2.jianshu.io^
 @@||cfg.imtt.qq.com^
 @@||chat.doubao.com^
@@ -1203,6 +1199,7 @@
 @@||skyapi.live.net^
 @@||skyworthiot.com^
 @@||spring-plus.net^
+@@||statcounter.com^
 @@||static.e.189.cn^
 @@||static.mcmod.cn^
 @@||static.qiyi.com^
@@ -1301,6 +1298,7 @@
 @@||api.ximalaya.com^
 @@||app.bilibili.com^
 @@||app.biligame.com^
+@@||app.crazyegg.com^
 @@||apps.game.qq.com^
 @@||assets.sb-cd.com^
 @@||assets.youlai.cn^
@@ -1554,6 +1552,7 @@
 @@||cm-10-*.getui.com^
 @@||cn-*.bilivideo.cn^
 @@||code.bdstatic.com^
+@@||core.crazyegg.com^
 @@||credit.heytap.com^
 @@||cstore.koubei.com^
 @@||data.bilibili.com^
@@ -1883,6 +1882,7 @@
 @@||account.oneplus.com^
 @@||accounts.google.com^
 @@||adashx.m.taobao.com^
+@@||affiliate.notion.so^
 @@||aider-res.meizu.com^
 @@||ajax.googleapis.com^
 @@||analysis.chatglm.cn^
@@ -1916,7 +1916,6 @@
 @@||cnlogin.cainiao.com^
 @@||contacts.icloud.com^
 @@||defaultts.tc.qq.com^
-@@||developer.apple.com^
 @@||dir.minigame.qq.com^
 @@||disneyplus.bn5x.net^
 @@||download.alicdn.com^
@@ -2138,6 +2137,7 @@
 @@||www.unionpayintl.com^
 @@||www.xiaomiyoupin.com^
 @@||www1.pconline.com.cn^
+@@||www3.doubleclick.net^
 @@||xiaoshida.taobao.com^
 @@||youtube-nocookie.com^
 @@||*-misc-lf.fqnovel.com^
@@ -2592,7 +2592,6 @@
 @@||apd-vlive.apdcdn.tc.qq.com^
 @@||api-shoulei-ssl.xunlei.com^
 @@||api.hoisin.hw.coocaatv.com^
-@@||api.nocturnal-narwhal.buzz^
 @@||api.sandbox.push.apple.com^
 @@||bitsumactivationserver.com^
 @@||castatic.fengkongcloud.com^
@@ -2706,7 +2705,6 @@
 @@||upos-*-mirror*.akamaized.net^
 @@||upos-*-mirror*.bilivideo.com^
 @@||*.captcha-open-b.aliyuncs.com^
-@@||aliyun.com^$client='10.0.0.99'
 @@||apd-ugcvlive.apdcdn.tc.qq.com^
 @@||blogger.googleusercontent.com^
 @@||broadcastlv.chat.bilibili.com^
@@ -2746,11 +2744,9 @@
 @@||sf6-cdn-tos.bdxiguastatic.com^
 @@||sf6-cdn-tos.toutiaostatic.com^
 @@||store.steamchina.queniuam.com^
-@@||taobao.com^$client='10.0.0.99'
 @@||vod-settings.bytedanceapi.com^
 @@||xn--vhq3x51dn9bivas49nfps.com^
 @@||activity.browser.intl.miui.com^
-@@||alibaba.com^$client='10.0.0.99'
 @@||cdn1d-static-shared.phncdn.com^
 @@||click.mailing.ticketmaster.com^
 @@||dualstack-a.apilocate.amap.com^
@@ -2781,7 +2777,6 @@
 @@||skydrivesync.policies.live.net^
 @@||ydlunacommon-cdn.nosdn.127.net^
 @@||zconfig.alibabausercontent.com^
-@@||aliyuncs.com^$client='10.0.0.99'
 @@||api-n0vadp-static.hoyoverse.com^
 @@||assets.oneweb.mercedes-benz.com^
 @@||browser.pipe.aria.microsoft.com^
