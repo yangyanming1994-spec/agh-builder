@@ -733,7 +733,7 @@ HOSTS_DOMAIN_CHARS = re.compile(
 )
 
 
-def _split_escaped(value: str, sep: str) -> list[str] | None:
+def _split_escaped(value: str, sep: str):
     """按未转义分隔符切分，支持反斜杠转义；遇到悬空转义返回 None。"""
     out, buf = [], []
     escaped = False
@@ -767,7 +767,7 @@ def _split_escaped(value: str, sep: str) -> list[str] | None:
     return out
 
 
-def _split_modifier_items(mods: str) -> list[str]:
+def _split_modifier_items(mods: str):
     """按逗号切分 modifier，同时尊重引号和反斜杠转义。"""
     parts = _split_escaped(mods, ",")
     return parts if parts is not None else [mods]
@@ -791,7 +791,7 @@ def _is_valid_quoted_client(value: str) -> bool:
     return not escaped
 
 
-def _split_client_values(value: str) -> list[str] | None:
+def _split_client_values(value: str):
     """按未转义、且位于引号外的 | 切分 client 列表。"""
     out, buf = [], []
     quote = None
@@ -853,7 +853,7 @@ def _validate_client_value(value: str) -> bool:
     return True
 
 
-def _split_pipe_values(value: str) -> list[str] | None:
+def _split_pipe_values(value: str):
     parts = _split_escaped(value, "|")
     if parts is None or not parts or any(not p for p in parts):
         return None
@@ -1200,7 +1200,7 @@ def _parse_rule_modifiers(rule: str):
     return head, [m.strip() for m in _split_modifier_items(mods) if m.strip()]
 
 
-def _modifier_items(rule: str) -> list[str]:
+def _modifier_items(rule: str):
     _, mods = _parse_rule_modifiers(rule)
     return [] if mods is None else mods
 
