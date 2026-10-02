@@ -1,18 +1,18 @@
 {
   "builder": "AGH-Builder",
   "version": "2.6",
-  "generated_at": "2026-10-02 12:17:30",
+  "generated_at": "2026-10-02 14:21:13",
   "sources": {
     "https://big.oisd.nl/": {
       "is_allow_source": false,
       "ok": true,
-      "lines": 244730,
-      "kept_black": 244719,
+      "lines": 244716,
+      "kept_black": 244705,
       "kept_allow": 0,
       "kept_regex": 0,
       "skipped": {
-        "total": 244730,
-        "kept": 244719,
+        "total": 244716,
+        "kept": 244705,
         "comment": 10,
         "element": 0,
         "js": 0,
@@ -139,13 +139,13 @@
     "https://adguardteam.github.io/HostlistsRegistry/assets/filter_1.txt": {
       "is_allow_source": false,
       "ok": true,
-      "lines": 177468,
-      "kept_black": 177056,
+      "lines": 177495,
+      "kept_black": 177083,
       "kept_allow": 31,
       "kept_regex": 22,
       "skipped": {
-        "total": 177468,
-        "kept": 177109,
+        "total": 177495,
+        "kept": 177136,
         "comment": 9,
         "element": 0,
         "js": 0,
@@ -158,13 +158,13 @@
     "https://raw.githubusercontent.com/8680/GOODBYEADS/master/data/rules/dns.txt": {
       "is_allow_source": false,
       "ok": true,
-      "lines": 114067,
-      "kept_black": 113777,
+      "lines": 114217,
+      "kept_black": 113927,
       "kept_allow": 0,
       "kept_regex": 0,
       "skipped": {
-        "total": 114067,
-        "kept": 113777,
+        "total": 114217,
+        "kept": 113927,
         "comment": 6,
         "element": 0,
         "js": 0,
@@ -257,14 +257,14 @@
     "strict_conflict": true
   },
   "dedup": {
-    "blacklist": 436594,
+    "blacklist": 436596,
     "allowlist": 2936,
     "regex": 82,
-    "total": 439612
+    "total": 439614
   },
   "output": {
     "rules_file": "dist/adguard-home-rules.txt",
-    "rules_count": 436676,
+    "rules_count": 436678,
     "allow_file": "dist/adguard-home-allowlist.txt",
     "allow_count": 2936,
     "hosts_file": null,
