@@ -48,7 +48,6 @@
 #clicli动漫
 @@||xn--vhq3x51dn9bivas49nfps.com^
 #豆包APP
-@@||log.snssdk.com^
 @@||tnc3-alisc1.snssdk.com^
 @@||content-open.douyin.com^
 #KiMiAPP
@@ -129,7 +128,6 @@
 #Bilibili的放行规则
 @@||grpc.biliapi.net^
 #小米云备份
-@@||a0.app.xiaomi.com^
 #快手极速版领取金币
 @@||hdns.ksyun.com^
 @@||api.kuaishouzt.com^
@@ -323,8 +321,6 @@
 @@||sl.hpplay.cn^
 @@||conf.hpplay.cn^
 ##菜鸟裹裹
-@@||wgo.mmstat.com^
-@@||gm.mmstat.com^
 @@||cainiao-app-logs.cn-zhangjiakou.log.aliyuncs.com^
 @@||na61-na62.wagbridge.alibaba.tanx.com^
 ##快手
@@ -530,3 +526,4 @@
 @@||amazon.cn^
 @@||amazonaws.com.cn^
 @@||cloudfront.net^
+@@||test.com^
