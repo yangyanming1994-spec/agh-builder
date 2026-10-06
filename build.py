@@ -1738,10 +1738,13 @@ def dedupe_covered_domains(rules: list, strict: bool = True):
         single_pre = "@@|" if is_alw else "|"
 
         def covered(dom: str) -> bool:
+            # 只有域规则（d，覆盖子域）与左通配（*.base）才算覆盖；
+            # 单主机规则（s，|host| 只匹配该主机名本身）绝不覆盖子域，
+            # 否则 |snssdk.com| 会误删 ||log.snssdk.com^ 等子域黑名单（或对应子域白名单）。
             parts = dom.split(".")
             for i in range(1, len(parts)):    # i>=1：只比对严格父后缀
                 suf = ".".join(parts[i:])
-                if suf in plain or suf in leftwild:
+                if suf in leftwild or plain.get(suf) == "d":
                     return True
             return False
 
@@ -2105,12 +2108,16 @@ def main():
         return 1
 
     # 按源清单顺序合并（保证跨平台构建结果确定性）
+    manual_alw = []
     for s, _ in merged:
         if s in results:
             blk, alw, reg = results[s]
             all_blk += blk
             all_alw += alw
             all_reg += reg
+            _sname = str(s)
+            if "wan.txt" in _sname or "whitelist.txt" in _sname:
+                manual_alw += alw
 
     log(f"下载+清洗完成，耗时 {time.time()-t0:.1f}s。"
         f"合并前：黑名单 {len(all_blk)} / 白名单 {len(all_alw)} / 正则 {len(all_reg)}")
@@ -2132,6 +2139,56 @@ def main():
     if blk_bf or alw_bf:
         log(f"badfilter 解析: 禁用黑名单 {blk_bf} 条、白名单 {alw_bf} 条（悬空指令 "
             f"{blk_dangle + alw_dangle} 条，无对应规则，已丢弃）")
+
+    # ===== 强制拦截：AGH allowlist 永远优先于 denylist（含 $important），要拦只能从白名单侧删。
+    # 必须先于 filter_conflicts 剔除，否则这些白名单会把对应黑名单误杀。=====
+    HARD_BLOCK_WL = {
+        "gdfp.gifshow.com", "adukwai.com", "adkwai.com",
+        "miaozhen.com", "adv.sec.miui.com", "data.mistat.xiaomi.com",
+        "data.mistat.intl.xiaomi.com", "metrics.data.hicloud.com", "metrics2.data.hicloud.com",
+        "cnzz.com", "sigmob.cn",
+        "log.snssdk.com", "mcs.snssdk.com", "mon.snssdk.com",
+        "log1.cmpassport.com", "btrace.qq.com",
+        "pgdt.gtimg.cn",
+        "360.cn", "sina.com.cn", "kuwo.cn", "kugou.com", "weibo.com",
+    }
+    _hb_file = BASE_DIR / "local" / "hardblock.txt"
+    if _hb_file.exists():
+        with open(_hb_file, encoding="utf-8") as _f:
+            for _l in _f:
+                _l = _l.strip()
+                if _l and not _l.startswith("#"):
+                    HARD_BLOCK_WL.add(_l.split()[0])
+
+
+    def _is_hard_blocked_wl(rule):
+        d = rule.lstrip("@").lstrip("|").split("$", 1)[0].strip().lower().rstrip("^").rstrip(".")
+        for hb in HARD_BLOCK_WL:
+            if d == hb or d.endswith("." + hb):
+                return True
+            if "*" in d:
+                if d.startswith("*."):
+                    suffix = d[2:]
+                    if hb == suffix or hb.endswith("." + suffix):
+                        return True
+                elif d.endswith(".*"):
+                    prefix = d[:-2]
+                    if hb.startswith(prefix + ".") or hb == prefix:
+                        return True
+                else:
+                    dp_ = d.split(".")
+                    hp_ = hb.split(".")
+                    if len(dp_) == len(hp_):
+                        if all((a == b) or (a.startswith("*") and b.endswith(a[1:]))
+                               for a, b in zip(dp_, hp_)):
+                            return True
+        return False
+    _before_wl = len(all_alw)
+    all_alw = {r for r in all_alw if not _is_hard_blocked_wl(r)}
+    if manual_alw:
+        all_alw = all_alw | set(manual_alw)
+    if len(all_alw) != _before_wl:
+        log(f"强制拦截白名单剔除: {_before_wl - len(all_alw)} 条（广告联盟域，AGH allowlist 优先必须删）")
 
     # 白名单冲突处理（--no-strict 时退化为精确匹配，仍生效）。
     # 正则仅在全部候选域名都被白名单覆盖时才删除（见 filter_conflicts）。
