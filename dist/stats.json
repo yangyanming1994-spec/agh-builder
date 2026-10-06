@@ -1,18 +1,18 @@
 {
   "builder": "AGH-Builder",
   "version": "2.6",
-  "generated_at": "2026-10-06 20:20:38",
+  "generated_at": "2026-10-06 22:18:33",
   "sources": {
     "https://big.oisd.nl/": {
       "is_allow_source": false,
       "ok": true,
-      "lines": 240684,
-      "kept_black": 240673,
+      "lines": 240781,
+      "kept_black": 240770,
       "kept_allow": 0,
       "kept_regex": 0,
       "skipped": {
-        "total": 240684,
-        "kept": 240673,
+        "total": 240781,
+        "kept": 240770,
         "comment": 10,
         "element": 0,
         "js": 0,
@@ -82,13 +82,13 @@
     "https://adrules.top/dns.txt": {
       "is_allow_source": false,
       "ok": true,
-      "lines": 198254,
-      "kept_black": 198217,
+      "lines": 198364,
+      "kept_black": 198327,
       "kept_allow": 0,
       "kept_regex": 27,
       "skipped": {
-        "total": 198254,
-        "kept": 198244,
+        "total": 198364,
+        "kept": 198354,
         "comment": 9,
         "element": 0,
         "js": 0,
@@ -139,13 +139,13 @@
     "https://adguardteam.github.io/HostlistsRegistry/assets/filter_1.txt": {
       "is_allow_source": false,
       "ok": true,
-      "lines": 178836,
-      "kept_black": 178424,
+      "lines": 178856,
+      "kept_black": 178444,
       "kept_allow": 31,
       "kept_regex": 22,
       "skipped": {
-        "total": 178836,
-        "kept": 178477,
+        "total": 178856,
+        "kept": 178497,
         "comment": 9,
         "element": 0,
         "js": 0,
@@ -276,14 +276,14 @@
     "strict_conflict": true
   },
   "dedup": {
-    "blacklist": 467751,
+    "blacklist": 467887,
     "allowlist": 3105,
     "regex": 82,
-    "total": 470938
+    "total": 471074
   },
   "output": {
     "rules_file": "dist/adguard-home-rules.txt",
-    "rules_count": 467833,
+    "rules_count": 467969,
     "allow_file": "dist/adguard-home-allowlist.txt",
     "allow_count": 3105,
     "hosts_file": null,
