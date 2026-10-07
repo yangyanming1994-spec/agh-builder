@@ -1,18 +1,18 @@
 {
   "builder": "AGH-Builder",
   "version": "2.6",
-  "generated_at": "2026-10-08 04:16:59",
+  "generated_at": "2026-10-08 06:14:38",
   "sources": {
     "https://big.oisd.nl/": {
       "is_allow_source": false,
       "ok": true,
-      "lines": 240374,
-      "kept_black": 240363,
+      "lines": 240451,
+      "kept_black": 240440,
       "kept_allow": 0,
       "kept_regex": 0,
       "skipped": {
-        "total": 240374,
-        "kept": 240363,
+        "total": 240451,
+        "kept": 240440,
         "comment": 10,
         "element": 0,
         "js": 0,
@@ -139,13 +139,13 @@
     "https://adguardteam.github.io/HostlistsRegistry/assets/filter_1.txt": {
       "is_allow_source": false,
       "ok": true,
-      "lines": 179245,
-      "kept_black": 178833,
+      "lines": 179260,
+      "kept_black": 178848,
       "kept_allow": 31,
       "kept_regex": 22,
       "skipped": {
-        "total": 179245,
-        "kept": 178886,
+        "total": 179260,
+        "kept": 178901,
         "comment": 9,
         "element": 0,
         "js": 0,
@@ -196,13 +196,13 @@
     "https://raw.githubusercontent.com/217heidai/adblockfilters/main/rules/adblockdns.txt": {
       "is_allow_source": false,
       "ok": true,
-      "lines": 226024,
-      "kept_black": 225760,
+      "lines": 226036,
+      "kept_black": 225772,
       "kept_allow": 197,
       "kept_regex": 0,
       "skipped": {
-        "total": 226024,
-        "kept": 225957,
+        "total": 226036,
+        "kept": 225969,
         "comment": 10,
         "element": 0,
         "js": 0,
@@ -276,14 +276,14 @@
     "strict_conflict": true
   },
   "dedup": {
-    "blacklist": 468672,
+    "blacklist": 468523,
     "allowlist": 3105,
     "regex": 82,
-    "total": 471859
+    "total": 471710
   },
   "output": {
     "rules_file": "dist/adguard-home-rules.txt",
-    "rules_count": 468754,
+    "rules_count": 468605,
     "allow_file": "dist/adguard-home-allowlist.txt",
     "allow_count": 3105,
     "hosts_file": null,
