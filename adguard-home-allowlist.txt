@@ -1,9 +1,9 @@
 ! Title: sofmed DNS（白名单）
 ! Homepage: sofmed DNS提供
-! Version: 2026-10-08 22:20:43（北京时间）
+! Version: 2026-10-09 00:20:41（北京时间）
 ! Expires: 12 hours
 ! Description: 由 sofmed DNS独家提供
-! Total count: 3105
+! Total count: 3106
 @@||dj.1688.com^$important
 @@||*.xunlei.com^$important
 @@||unet.ucweb.com^$important
@@ -2345,6 +2345,7 @@
 @@||security.zijieapi.com^
 @@||shenfenzheng.bmcx.com^
 @@||smsks1.cmpassport.com^
+@@||spartaindependent.com^
 @@||stars.shuqireader.com^
 @@||static-web.mimikko.cn^
 @@||stats.uptimerobot.com^
