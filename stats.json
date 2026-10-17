@@ -1,18 +1,18 @@
 {
   "builder": "AGH-Builder",
   "version": "2.6",
-  "generated_at": "2026-10-17 06:25:17",
+  "generated_at": "2026-10-17 08:33:49",
   "sources": {
     "https://big.oisd.nl/": {
       "is_allow_source": false,
       "ok": true,
-      "lines": 236011,
-      "kept_black": 236000,
+      "lines": 235996,
+      "kept_black": 235985,
       "kept_allow": 0,
       "kept_regex": 0,
       "skipped": {
-        "total": 236011,
-        "kept": 236000,
+        "total": 235996,
+        "kept": 235985,
         "comment": 10,
         "element": 0,
         "js": 0,
@@ -276,14 +276,14 @@
     "strict_conflict": true
   },
   "dedup": {
-    "blacklist": 475038,
+    "blacklist": 475026,
     "allowlist": 3106,
     "regex": 79,
-    "total": 478223
+    "total": 478211
   },
   "output": {
     "rules_file": "dist/adguard-home-rules.txt",
-    "rules_count": 475117,
+    "rules_count": 475105,
     "allow_file": "dist/adguard-home-allowlist.txt",
     "allow_count": 3106,
     "hosts_file": null,
