@@ -1,9 +1,9 @@
 ! Title: sofmed DNS（白名单）
 ! Homepage: sofmed DNS提供
-! Version: 2026-10-18 18:45:43（北京时间）
+! Version: 2026-10-18 23:42:18（北京时间）
 ! Expires: 12 hours
 ! Description: 由 sofmed DNS独家提供
-! Total count: 3106
+! Total count: 3089
 @@||dj.1688.com^$important
 @@||*.xunlei.com^$important
 @@||unet.ucweb.com^$important
@@ -453,14 +453,12 @@
 @@||bug.mcmod.cn^
 @@||c.duomai.com^
 @@||c.evidon.com^
-@@||c.office.com^
 @@||c.youdao.com^
 @@||c1.skype.com^
 @@||ccc-x.jd.com^
 @@||cdn.ping0.cc^
 @@||cdn.vivo.com^
 @@||cdn.wtzw.com^
-@@||click.avs.io^
 @@||cnnic.net.cn^
 @@||d.sinaimg.cn^
 @@||dd.myapp.com^
@@ -622,7 +620,6 @@
 @@||cdi.ofiii.com^
 @@||cdnfinder.xyz^
 @@||cf.aliyun.com^
-@@||cj.dotomi.com^
 @@||click-trk.com^
 @@||click.dji.com^
 @@||click.zoom.us^
@@ -837,7 +834,6 @@
 @@||ad.abchina.com^
 @@||ad.ourgame.com^
 @@||ad.vivo.com.cn^
-@@||admin.dable.io^
 @@||ads.alafish.cn^
 @@||ads.google.com^
 @@||ads.openai.com^
@@ -867,8 +863,6 @@
 @@||cdn.ark.qq.com^
 @@||cdn.atmedia.hu^
 @@||cdn.xunlei.com^
-@@||chaturbate.com^
-@@||cl.link-ag.net^
 @@||clarins.com.cn^
 @@||clickcease.com^
 @@||clickiocdn.com^
@@ -1958,8 +1952,6 @@
 @@||account.oneplus.com^
 @@||accounts.google.com^
 @@||adashx.m.taobao.com^
-@@||adblock.adguard.com^
-@@||admin.mailchimp.com^
 @@||affiliate.notion.so^
 @@||aider-res.meizu.com^
 @@||ajax.googleapis.com^
@@ -1989,7 +1981,6 @@
 @@||click*.experian.com^
 @@||click.chp.kohls.com^
 @@||click.justwatch.com^
-@@||clickattr.wayup.com^
 @@||clickdimensions.com^
 @@||clients1.google.com^
 @@||clients4.google.com^
@@ -2131,7 +2122,6 @@
 @@||calendars.icloud.com^
 @@||captcha.su.baidu.com^
 @@||cdnjs.cloudflare.com^
-@@||citiintl.122.2o7.net^
 @@||click.aliexpress.com^
 @@||click.allkeyshop.com^
 @@||click.e.safelite.com^
@@ -2260,13 +2250,11 @@
 @@||catchup.thisisdax.com^
 @@||ccportrait.yuewen.com^
 @@||cdn.myhuaweicloud.com^
-@@||classliving.lpages.co^
 @@||click.em.blizzard.com^
 @@||click.em.samsclub.com^
 @@||click.email.sonos.com^
 @@||click.linksynergy.com^
 @@||click.members.nra.org^
-@@||click.trafficguard.ai^
 @@||cms-bucket.ws.126.net^
 @@||community.oneplus.com^
 @@||conf-darwin.xycdn.com^
@@ -2393,7 +2381,6 @@
 @@||cloudpush.aliyuncs.com^
 @@||courier.push.apple.com^
 @@||data-hoisin.coocaa.com^
-@@||data.digital.costco.ca^
 @@||data.orders.costco.com^
 @@||dns-family.adguard.com^
 @@||download.jetbrains.com^
@@ -2503,7 +2490,6 @@
 @@||beacon-api.aliyuncs.com^
 @@||captcha.zt.kuaishou.com^
 @@||checkcoverage.apple.com^
-@@||cindyholbrook.lpages.co^
 @@||client.app.coc.10086.cn^
 @@||clientlog*music.163.com^
 @@||cm-beacon.nakanohito.jp^
@@ -2511,7 +2497,6 @@
 @@||console.huaweicloud.com^
 @@||content-open.douyin.com^
 @@||ctldl.windowsupdate.com^
-@@||data.digital.costco.com^
 @@||developer.extscreen.com^
 @@||down-tencent.huorong.cn^
 @@||edu-image.nosdn.127.net^
@@ -2740,7 +2725,6 @@
 @@||bitsumactivationserver.com^
 @@||castatic.fengkongcloud.com^
 @@||cdn.akamai.steamstatic.com^
-@@||click.virt.exacttarget.com^
 @@||computemaster.bxcearth.com^
 @@||d*-magic.static.yximgs.com^
 @@||download-cdn.jetbrains.com^
@@ -3009,7 +2993,6 @@
 @@||bgp.video-upload-v*.lf.bytelb.net^
 @@||chrome-infra-packages.appspot.com^
 @@||click.royalcaribbeanmarketing.com^
-@@||cloud.notification-naviextras.com^
 @@||cloudauth.cn-beijing.aliyuncs.com^
 @@||cos.na-siliconvalley.myqcloud.com^
 @@||credit-jfimage-cn.heytapimage.com^
