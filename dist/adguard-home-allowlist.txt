@@ -1,9 +1,9 @@
 ! Title: sofmed DNS（白名单）
 ! Homepage: sofmed DNS提供
-! Version: 2026-10-20 19:16:26（北京时间）
+! Version: 2026-10-21 00:41:10（北京时间）
 ! Expires: 12 hours
 ! Description: 由 sofmed DNS独家提供
-! Total count: 3093
+! Total count: 3104
 @@||dj.1688.com^$important
 @@||*.xunlei.com^$important
 @@||unet.ucweb.com^$important
@@ -453,6 +453,7 @@
 @@||bug.mcmod.cn^
 @@||c.duomai.com^
 @@||c.evidon.com^
+@@||c.office.com^
 @@||c.youdao.com^
 @@||c1.skype.com^
 @@||ccc-x.jd.com^
@@ -722,6 +723,7 @@
 @@||party.163.com^
 @@||pay.youku.com^
 @@||pc.xunlei.com^
+@@||pgpartner.com^
 @@||pic*.40017.cn^
 @@||pinduoduo.com^
 @@||pingjs.qq.com^
@@ -1012,7 +1014,6 @@
 @@||storage.jd.com^
 @@||store.oppo.com^
 @@||store.vivo.com^
-@@||taiga.maven.io^
 @@||teams.live.com^
 @@||thefantazy.com^
 @@||torproject.org^
@@ -1919,11 +1920,13 @@
 @@||stats.gc.apple.com^
 @@||steamcommunity.com^
 @@||survey.feelgood.cn^
+@@||tags.crwdcntrl.net^
 @@||tbsone.imtt.qq.com^
 @@||thumbs2.imgbox.com^
 @@||timon.zijieapi.com^
 @@||tlh.gedidigital.it^
 @@||tms.capitalone.com^
+@@||track.webgains.com^
 @@||union-click.jd.com^
 @@||up.cm.ksmobile.com^
 @@||update.360safe.com^
@@ -1954,6 +1957,8 @@
 @@||account.oneplus.com^
 @@||accounts.google.com^
 @@||adashx.m.taobao.com^
+@@||adblock.adguard.com^
+@@||admin.mailchimp.com^
 @@||affiliate.notion.so^
 @@||aider-res.meizu.com^
 @@||ajax.googleapis.com^
@@ -2426,6 +2431,8 @@
 @@||netatmo.commander1.com^
 @@||nineto5mac-d.openx.net^
 @@||oauth.secure.pixiv.net^
+@@||obituaries.thestar.com^
+@@||obituaries.toacorn.com^
 @@||onegoods.nosdn.127.net^
 @@||onekey1.cmpassport.com^
 @@||outexp-beta.cdn.qq.com^
@@ -2444,6 +2451,7 @@
 @@||pixel.prime.amazon.dev^
 @@||play-fe.googleapis.com^
 @@||policy.video.iqiyi.com^
+@@||public-cis.exponea.com^
 @@||qappcenterv6.3g.qq.com^
 @@||readstatic.zhulang.com^
 @@||registry.npmmirror.com^
@@ -2494,6 +2502,7 @@
 @@||beacon-api.aliyuncs.com^
 @@||captcha.zt.kuaishou.com^
 @@||checkcoverage.apple.com^
+@@||cindyholbrook.lpages.co^
 @@||client.app.coc.10086.cn^
 @@||clientlog*music.163.com^
 @@||cm-beacon.nakanohito.jp^
@@ -2601,7 +2610,6 @@
 @@||dubaji-api.zhhainiao.com^
 @@||dubaji-vip.zhhainiao.com^
 @@||email.elitedangerous.com^
-@@||forum.notebookreview.com^
 @@||fs-im-kefu.7moor-fs1.com^
 @@||games.mobileapi.hupu.com^
 @@||h-adashx.ut.dingtalk.com^
@@ -2744,6 +2752,7 @@
 @@||lf9-mgsdk-sign.dailygn.com^
 @@||log5-applog-lf.fqnovel.com^
 @@||ma*-normal-lf.zijieapi.com^
+@@||obituaries.startribune.com^
 @@||oneplus.cdn.cloudflare.net^
 @@||p*-ecop-imagex.byteimg.com^
 @@||p*-sdbk2-media.byteimg.com^
@@ -2756,6 +2765,7 @@
 @@||site.tiantiantiaosheng.com^
 @@||smartcard.apps.coloros.com^
 @@||static-beta.curseforge.com^
+@@||unsubscribe.lhinsights.com^
 @@||upos-*-estg*.bilivideo.com^
 @@||v3-novelapp.fqnovelvod.com^
 @@||v5-novelapp.fqnovelvod.com^
@@ -2902,6 +2912,7 @@
 @@||ipolyfill-origin.bytedance.com^
 @@||lf-sourcecdn-tos.bytegecko.com^
 @@||lifemakeovermysg.archosaur.com^
+@@||media-consumer365.desigual.com^
 @@||microsoftazuresponsorships.com^
 @@||mobile.pipe.aria.microsoft.com^
 @@||msync-im1-vip6-std.easemob.com^
