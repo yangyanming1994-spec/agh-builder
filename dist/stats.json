@@ -1,18 +1,18 @@
 {
   "builder": "AGH-Builder",
   "version": "2.6",
-  "generated_at": "2026-10-20 12:22:53",
+  "generated_at": "2026-10-20 19:16:07",
   "sources": {
     "https://big.oisd.nl/": {
       "is_allow_source": false,
       "ok": true,
-      "lines": 235669,
-      "kept_black": 235658,
+      "lines": 233475,
+      "kept_black": 233464,
       "kept_allow": 0,
       "kept_regex": 0,
       "skipped": {
-        "total": 235669,
-        "kept": 235658,
+        "total": 233475,
+        "kept": 233464,
         "comment": 10,
         "element": 0,
         "js": 0,
@@ -82,13 +82,13 @@
     "https://adrules.top/dns.txt": {
       "is_allow_source": false,
       "ok": true,
-      "lines": 208472,
-      "kept_black": 208435,
+      "lines": 208609,
+      "kept_black": 208572,
       "kept_allow": 0,
       "kept_regex": 27,
       "skipped": {
-        "total": 208472,
-        "kept": 208462,
+        "total": 208609,
+        "kept": 208599,
         "comment": 9,
         "element": 0,
         "js": 0,
@@ -139,20 +139,20 @@
     "https://adguardteam.github.io/HostlistsRegistry/assets/filter_1.txt": {
       "is_allow_source": false,
       "ok": true,
-      "lines": 188594,
-      "kept_black": 188182,
+      "lines": 188688,
+      "kept_black": 188275,
       "kept_allow": 31,
       "kept_regex": 21,
       "skipped": {
-        "total": 188594,
-        "kept": 188234,
+        "total": 188688,
+        "kept": 188327,
         "comment": 9,
         "element": 0,
         "js": 0,
         "path": 11,
         "modifier": 0,
         "ip": 72,
-        "invalid": 268
+        "invalid": 269
       }
     },
     "https://raw.githubusercontent.com/8680/GOODBYEADS/master/data/rules/dns.txt": {
@@ -276,14 +276,14 @@
     "strict_conflict": true
   },
   "dedup": {
-    "blacklist": 480904,
+    "blacklist": 479683,
     "allowlist": 3093,
     "regex": 79,
-    "total": 484076
+    "total": 482855
   },
   "output": {
     "rules_file": "dist/adguard-home-rules.txt",
-    "rules_count": 480983,
+    "rules_count": 479762,
     "allow_file": "dist/adguard-home-allowlist.txt",
     "allow_count": 3093,
     "hosts_file": null,
