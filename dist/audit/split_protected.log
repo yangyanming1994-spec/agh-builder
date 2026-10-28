@@ -1,0 +1,13 @@
+# split_protected 剔除审计  2026-10-28 12:31:36
+# 共 10 条
+# 格式: category / rule / hit / src
+split_protected	@@||1music.cc^	hit=1music.cc	src=file:local/whitelist.txt
+split_protected	@@||akamaized.net^	hit=akamaized.net	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
+split_protected	@@||bootcdn.net^	hit=bootcdn.net	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
+split_protected	@@||cdn-go.cn^	hit=cdn-go.cn	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
+split_protected	@@||ctrip.com^	hit=ctrip.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
+split_protected	@@||googleadservices.com^	hit=googleadservices.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
+split_protected	@@||hpplay.cn^	hit=hpplay.cn	src=file:local/whitelist.txt
+split_protected	@@||quark.cn^	hit=quark.cn	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
+split_protected	@@||sm.cn^	hit=sm.cn	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
+split_protected	@@||zhuanzhuan.com^	hit=zhuanzhuan.com	src=file:local/whitelist.txt

@@ -1,18 +1,18 @@
 {
   "builder": "AGH-Builder",
-  "version": "2.6",
-  "generated_at": "2026-10-28 13:06:16",
+  "version": "2.8",
+  "generated_at": "2026-10-28 20:31:12",
   "sources": {
     "https://big.oisd.nl/": {
       "is_allow_source": false,
       "ok": true,
-      "lines": 234182,
-      "kept_black": 234171,
+      "lines": 234280,
+      "kept_black": 234269,
       "kept_allow": 0,
       "kept_regex": 0,
       "skipped": {
-        "total": 234182,
-        "kept": 234171,
+        "total": 234280,
+        "kept": 234269,
         "comment": 10,
         "element": 0,
         "js": 0,
@@ -82,13 +82,13 @@
     "https://adrules.top/dns.txt": {
       "is_allow_source": false,
       "ok": true,
-      "lines": 204634,
-      "kept_black": 204597,
+      "lines": 204740,
+      "kept_black": 204703,
       "kept_allow": 0,
       "kept_regex": 27,
       "skipped": {
-        "total": 204634,
-        "kept": 204624,
+        "total": 204740,
+        "kept": 204730,
         "comment": 9,
         "element": 0,
         "js": 0,
@@ -139,13 +139,13 @@
     "https://adguardteam.github.io/HostlistsRegistry/assets/filter_1.txt": {
       "is_allow_source": false,
       "ok": true,
-      "lines": 184739,
-      "kept_black": 184325,
+      "lines": 184856,
+      "kept_black": 184442,
       "kept_allow": 31,
       "kept_regex": 21,
       "skipped": {
-        "total": 184739,
-        "kept": 184377,
+        "total": 184856,
+        "kept": 184494,
         "comment": 9,
         "element": 0,
         "js": 0,
@@ -196,13 +196,13 @@
     "https://raw.githubusercontent.com/217heidai/adblockfilters/main/rules/adblockdns.txt": {
       "is_allow_source": false,
       "ok": true,
-      "lines": 241391,
-      "kept_black": 241131,
+      "lines": 241193,
+      "kept_black": 240933,
       "kept_allow": 197,
       "kept_regex": 0,
       "skipped": {
-        "total": 241391,
-        "kept": 241328,
+        "total": 241193,
+        "kept": 241130,
         "comment": 10,
         "element": 0,
         "js": 0,
@@ -262,31 +262,167 @@
     "retry_wait": 10,
     "retry_backoff": 1.5,
     "max_source_bytes": 104857600,
+    "max_cache_bytes": 67108864,
     "user_agents": [
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
       "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0",
-      "Mozilla/5.0 (compatible; AGH-Builder/2.6)"
+      "Mozilla/5.0 (compatible; AGH-Builder/2.8)"
     ],
     "title": "sofmed DNS",
     "homepage": "sofmed DNS提供",
     "keep_regex": true,
     "keep_hosts": false,
-    "strict_conflict": true
+    "strict_conflict": true,
+    "http_cache": true,
+    "cache_dir": "/home/runner/work/agh-builder/agh-builder/cache",
+    "diff": true,
+    "verify": true,
+    "max_drop_ratio": 0.3,
+    "version": "2.8",
+    "force_write": false
   },
   "dedup": {
-    "blacklist": 485460,
-    "allowlist": 3105,
+    "blacklist": 485156,
+    "allowlist": 3147,
     "regex": 79,
-    "total": 488644
+    "total": 488382
+  },
+  "sanitize": {
+    "never_allow_dropped": 1,
+    "never_allow_by_category": {
+      "abuse_tld": 1
+    },
+    "hardblock_dropped": 70,
+    "hardblock_derived_from_important": 91,
+    "protected_split_removed": 10
+  },
+  "diff": {
+    "black": {
+      "prev": 485539,
+      "now": 485235,
+      "added": 550,
+      "removed": 854,
+      "unchanged": 484685,
+      "added_samples": [
+        "|adgibbon.com|",
+        "|analytics-cdn.elperiodico.com|",
+        "|analytics-sessions-redirector.cs.madgexhosting.net|",
+        "|analytics.apache.org|",
+        "|analytics.apphero.co|",
+        "|analytics.cutetarots.com|",
+        "|analytics.economybookings.com|",
+        "|analytics.everyeye.it|",
+        "|analytics.freesound.org|",
+        "|analytics.hartfordhealthcare.org|",
+        "|analytics.ietf.org|",
+        "|analytics.mightyape.co.nz|",
+        "|analytics.pobo.space|",
+        "|analytics.stellic.com|",
+        "|analytics.ticketmaster.co.nz|",
+        "|analytics.x.com|",
+        "|api.metrics.eu-central-1.iris.apx.amazon.dev|",
+        "|apissug-sf.ucweb.com|",
+        "|apiuccenter.ucweb.com|",
+        "|apolloprogram.com|"
+      ],
+      "removed_samples": [
+        "|adex.redbutton.de|",
+        "|ads.hockeycalgary.ca|",
+        "|akseskaiko.cam|",
+        "|logagent-h5.centurygame.com|",
+        "|logger.zenmatchgame.com|",
+        "|logger3.playablefactory.app|",
+        "|logs.im-gb.com|",
+        "|mini.browser.360.cn|",
+        "|ov.cabretpardao.com|",
+        "||14czda0-system.esy.es^",
+        "||1800banners.com^",
+        "||1pt.co^",
+        "||2vmcuhbg.top^",
+        "||4love.info^",
+        "||789betpokar.com^",
+        "||8085oo.com^",
+        "||89q.sk^",
+        "||9xcloud.com^",
+        "||abcharityco.org^",
+        "||acctz.com^"
+      ]
+    },
+    "allow": {
+      "prev": 3105,
+      "now": 3147,
+      "added": 70,
+      "removed": 28,
+      "unchanged": 3077,
+      "added_samples": [
+        "@@||act.zhuanzhuan.com^",
+        "@@||api-album.quark.cn^",
+        "@@||api2-album.quark.cn^",
+        "@@||app.huabao.360.cn^",
+        "@@||app.zhuanzhuan.com^",
+        "@@||applog.lc.quark.cn^",
+        "@@||backend.1music.cc^",
+        "@@||browser.360.cn^",
+        "@@||cdn.bootcdn.net^",
+        "@@||conf.hpplay.cn^",
+        "@@||dot.360.cn^",
+        "@@||drive-h.quark.cn^",
+        "@@||drive-pc.quark.cn^",
+        "@@||drive.quark.cn^",
+        "@@||dw-data-channel.quark.cn^",
+        "@@||feconf.zhuanzhuan.com^",
+        "@@||feentry.zhuanzhuan.com^",
+        "@@||framework.cdn-go.cn^",
+        "@@||future.biz.weibo.com^",
+        "@@||h5offline.zhuanzhuan.com^"
+      ],
+      "removed_samples": [
+        "@@||1music.cc^",
+        "@@||admaster.com.cn^",
+        "@@||akamaized.net^",
+        "@@||bootcdn.net^",
+        "@@||c.cnzz.com^",
+        "@@||cdn-go.cn^",
+        "@@||ctrip.com^",
+        "@@||googleadservices.com^",
+        "@@||hpplay.cn^",
+        "@@||miaozhen.com^",
+        "@@||mobilist.kuwo.cn^",
+        "@@||ncomment.kuwo.cn^",
+        "@@||omofun.link^",
+        "@@||p*-ad.adukwai.com^$important",
+        "@@||p26-sign.bdxiguaimg.com^",
+        "@@||p3-sign.bdxiguaimg.com^",
+        "@@||p3.bdxiguaimg.com^",
+        "@@||qq.com^$client='10.0.0.99'",
+        "@@||quark.cn^",
+        "@@||s.mvconf.f.360.cn^"
+      ]
+    }
   },
   "output": {
     "rules_file": "dist/adguard-home-rules.txt",
-    "rules_count": 485539,
+    "rules_count": 485235,
     "allow_file": "dist/adguard-home-allowlist.txt",
-    "allow_count": 3105,
+    "allow_count": 3147,
     "hosts_file": null,
     "hosts_count": 0
+  },
+  "verify": {
+    "rules": {
+      "ok": true,
+      "errors": []
+    },
+    "allow": {
+      "ok": true,
+      "errors": []
+    },
+    "hosts": {
+      "ok": true,
+      "skipped": true,
+      "errors": []
+    }
   }
 }
