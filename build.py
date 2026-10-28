@@ -1,9 +1,25 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-AGH-Builder v2.6 — 本程序适配 AdGuard Home。
+AGH-Builder v2.8 — 本程序适配 AdGuard Home。
 
-v2.6 相对 v2.5 的修复（语义正确性 + 安全）：
+v2.8 相对 v2.7 的变更（审查修复 + 性能优化 + 功能增强）：
+  ✗ 修复通配否决域命中不对称：*.ga 类通配否决域此前只命中单段 TLD 与通配白名单，
+      普通子域白名单（@@||x.ga^）不命中导致 abuse TLD 兜底失效；现统一按正则匹配。
+  ✗ 修复 dnsrewrite HTTPS/SVCB/MX/SRV 的 "." 根目标被误拒（rstrip(".") 后与 "." 比较失效）。
+  ✗ 修复 _allow_rule_domain 对 @@|domain^ 前缀锚定形态误提取（现返回 ""，不再产出含 "|" 的伪域名）。
+  ✗ 修复 process_source 剔除原因统计中白名单规则误用非例外语境校验 modifier。
+  ✗ 修正 filter_conflicts 注释与实现不一致：无条件白名单可安全覆盖带条件修饰符的黑名单。
+  ✓ 新增 HTTP 增量缓存（ETag / Last-Modified → If-None-Match / If-Modified-Since，304 直读缓存，
+      存 cache/ 目录，--no-cache 关闭），频繁重建不再全量下载。
+  ✓ 新增构建差异统计（--no-diff 关闭）：与上次产物对比新增/移除规则数及样例，写入 stats.json。
+  ✓ 新增产物自检（--no-verify 关闭）：核对 Total count、空行、格式抽样，问题写入 stats.json。
+  ✓ 新增 CLI 运维参数：--timeout / --max-workers / --retries / --cache-dir。
+  ✓ 可选 Brotli 解压（import brotli 成功时自动启用）。
+  ✓ 性能：lru_cache 缓存规则修饰符解析与规范化键，消除重复正则/解析开销。
+  ✓ 代码卫生：版本号统一为 v2.8、删除重复注释块、清理死代码。
+
+v2.7 相对 v2.6 的修复：
   ✗ 修复裸域名 / hosts 行误扩子域：官方语义 example.org 与 0.0.0.0 example.org
       只匹配该主机名本身、不匹配子域；旧版写成 ||example.org^ 会扩大拦截到子域。
       现归一化为精确单主机 |example.org|。
@@ -14,9 +30,9 @@ v2.6 相对 v2.5 的修复（语义正确性 + 安全）：
       且丢弃可被前缀改变的首标签后，保证后缀全部被白名单覆盖才删除。
   ✗ 安全加固：HTTP 重定向只允许 http/https，且重定向目标不得解析到内网/环回/链路本地地址。
 
-v2.5 相对 v2.4 的修复：
+v2.6 相对 v2.5 的修复：
   ✗ domain| 无边界后缀误配（example.com| 误配 notexample.com）归一化为 ||example.com^
-  ✗ 正则白名单冲突从“一律保留”改为按可靠判定处理（v2.6 进一步收紧为零误删）
+  ✗ 正则白名单冲突从“一律保留”改为按可靠判定处理（v2.7 进一步收紧为零误删）
 
 原项目每次更新会生成 11 种格式（Clash/Quantumult X/Shadowrocket/SingBox…），
 本程序砍掉所有非目标格式，把全部精力放在一件事上：
@@ -39,19 +55,25 @@ v2.5 相对 v2.4 的修复：
     python3 build.py --no-regex      # 不保留正则规则
     python3 build.py --no-hosts      # 不生成 hosts 格式
     python3 build.py --no-strict     # 白名单冲突仅精确匹配（默认严格：子域名也剔除）
+    python3 build.py --no-cache      # 关闭 HTTP 增量缓存（默认启用，缓存存 cache/）
+    python3 build.py --no-diff       # 关闭构建差异统计（默认启用，写入 stats.json）
+    python3 build.py --no-verify     # 关闭产物自检（默认启用）
+    python3 build.py --timeout 60 --max-workers 4 --retries 5 --cache-dir /path/cache
 
 输出（dist/ 目录）：
     adguard-home-rules.txt      AGH 拦截规则（可直接作为 DNS 拦截列表订阅）
     adguard-home-allowlist.txt  AGH 白名单（可加入自定义过滤规则）
     hosts.txt                    hosts 格式（AGH 亦支持）
-    stats.json                   JSON 统计
+    stats.json                   JSON 统计（含 diff 差异与 verify 自检结果）
 """
 
 import argparse
 import concurrent.futures as cf
 import datetime
 import fnmatch
+import functools
 import gzip
+import hashlib
 import io
 import ipaddress
 import json
@@ -90,18 +112,25 @@ CONFIG = {
     "retry_wait": 10,          # 第一轮失败后，第二轮补拉前的等待秒数（网络抖动多为时间窗口性）
     "retry_backoff": 1.5,      # 单源内连续重试的退避基数：sleep(retry_backoff * (attempt+1))
     "max_source_bytes": 100 * 1024 * 1024,  # 单源下载上限（100MB），防异常响应撑爆内存
+    "max_cache_bytes": 64 * 1024 * 1024,    # 单源缓存文本上限（64MB），超出不缓存
     "user_agents": [
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
         "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0",
-        "Mozilla/5.0 (compatible; AGH-Builder/2.6)",
+        "Mozilla/5.0 (compatible; AGH-Builder/2.8)",
     ],
     "title": "sofmed DNS",
     "homepage": "sofmed DNS提供",
     "keep_regex": True,        # 保留 /regex/ 正则规则
     "keep_hosts": True,        # 同时输出 hosts 格式
     "strict_conflict": True,   # 白名单子域名也剔除对应黑名单
+    "http_cache": True,        # HTTP 增量缓存（ETag/Last-Modified → 304 直读缓存）
+    "cache_dir": BASE_DIR / "cache",
+    "diff": True,              # 构建差异统计（对比上次产物）
+    "verify": True,            # 产物自检
+    "max_drop_ratio": 0.30,    # 规则数骤降保护：降幅超此值视为源异常，中止写盘
+    "version": "2.8",
 }
 
 # AdGuard Home DNS 过滤官方支持的修饰符（adguard-dns.io/kb/general/dns-filtering-syntax/）
@@ -176,6 +205,363 @@ MAIL_AUTH_LABELS = {
     "_domainkey", "_dmarc", "_spf", "_amazonses", "_mta-sts", "_dkim",
     "_autodiscover", "_autoconfig", "_imap", "_smtp", "_pop", "_pop3",
 }
+
+# ============================================================
+# 注册域提取（eTLD+1 近似）
+# ============================================================
+MULTI_PART_TLD = frozenset({
+    "com.cn", "net.cn", "org.cn", "gov.cn", "edu.cn", "ac.cn", "mil.cn",
+    "com.hk", "com.tw", "com.sg", "com.my", "co.uk", "co.jp", "co.kr",
+    "com.au", "com.br", "com.tr", "co.in", "com.mx",
+})
+
+
+def registrable_domain(domain: str) -> str:
+    """提取注册域。com.cn 类二级后缀取三段，其余取两段。
+    含通配符、单标签、空串返回 ''。"""
+    d = (domain or "").strip().lower().rstrip(".")
+    if not d or "*" in d or "." not in d:
+        return ""
+    parts = d.split(".")
+    if len(parts) >= 3 and f"{parts[-2]}.{parts[-1]}" in MULTI_PART_TLD:
+        return ".".join(parts[-3:])
+    if len(parts) < 2:
+        return ""
+    return ".".join(parts[-2:])
+
+
+# ============================================================
+# 白名单规则域名提取
+# ============================================================
+# 覆盖三种整域放行形态：@@||d^  /  @@|d|  /  @@d^
+# 分组内禁止 |，防止前缀锚定形态（@@|d^）被第三分支捕获出含 | 的伪域名。
+_ALLOW_HEAD = re.compile(r"^@@(?:\|\|([^|]+?)\^|\|([^|]+?)\||([^|]+?)\^)$")
+
+
+def _allow_rule_domain(rule: str) -> str:
+    """从白名单规则提取域名主体，保留通配符；无法解析返回 ''。
+    取代 rule.lstrip('@').lstrip('|') —— lstrip 按字符集剥离，
+    遇到 | 开头的域名会剥过头，且 @@|d| 的尾部 | 需额外 rstrip 补救。"""
+    head, _ = _parse_rule_modifiers(rule)
+    m = _ALLOW_HEAD.match(head)
+    if not m:
+        return ""
+    d = next((g for g in m.groups() if g), "")
+    d = d.strip().lower().rstrip(".")
+    # 含 | 或 / 的串不是可整域放行的域名（如 @@|d^ 前缀锚定），不能用于命中判定
+    if "|" in d or "/" in d:
+        return ""
+    return d
+
+
+# @@|host| 单主机精确白名单：仅放行 host 本身，官方语义不含任何子域。
+# 与 @@||host^（整域含全部子域）语义不同，做否决/拆分判定时必须区分。
+_SINGLE_HOST_ALLOW = re.compile(r"^@@\|[^|]+\|$")
+
+
+def _is_single_host_allow(rule: str) -> bool:
+    """判断是否为 @@|host| 单主机精确白名单（可带 modifier，如 $important）。"""
+    head, _ = _parse_rule_modifiers(rule)
+    return bool(_SINGLE_HOST_ALLOW.match(head))
+
+
+# ============================================================
+# hardblock / never_allow 共用索引
+# ============================================================
+class HardBlockIndex:
+    """域名否决索引：精确 / 子域 / 父域 / 段内通配 四类分表。
+
+    非通配否决域走集合索引（exact / suffixes / ancestors），查询期 O(域名深度)，
+    取代旧 _is_hard_blocked_wl 的 O(N×M×K) 全表扫描 + 内层动态编译正则；
+    含通配否决域与通配白名单沿用"白名单域驱动 + 正则缓存"，与旧版逐分支
+    严格等价（双向后缀、整段 * 跨点、段内 * 不跨点）。
+    """
+
+    __slots__ = ("exact", "suffixes", "ancestors", "wildcards", "entire",
+                 "categories", "_all_hb", "_patcache")
+
+    def __init__(self, domains, entire=(), categories=None):
+        self.exact = set()
+        self.suffixes = set()
+        self.ancestors = {}
+        self.wildcards = []
+        self.entire = {e.strip().lower().rstrip(".") for e in entire if e.strip()}
+        self.categories = dict(categories or {})
+        self._patcache = {}
+        for hb0 in domains:
+            hb = str(hb0).strip().lower().rstrip(".")
+            if not hb:
+                continue
+            if "*" in hb:
+                self.wildcards.append(hb)
+            else:
+                self.exact.add(hb)
+                self.suffixes.add(hb)
+                parts = hb.split(".")
+                # 非通配否决域的所有严格父域：白名单若整域放行该父域，会覆盖此否决域，必须剔除
+                for i in range(1, len(parts)):
+                    self.ancestors.setdefault(".".join(parts[i:]), hb)
+        self._all_hb = list(self.exact) + list(self.wildcards)
+
+    @staticmethod
+    def _pat_for_wild_allow(d):
+        """通配白名单域名 → 正则。与旧版 _is_hard_blocked_wl 的 _pat 逐字等价：
+        段分隔符不转义（正则里的点），整段 * 用 .*（跨点），段内 * 用 [^.]*（不跨点）。"""
+        segs = []
+        for a in d.split("."):
+            if a == "*":
+                segs.append(".*")
+            else:
+                segs.append("[^.]*".join(re.escape(x) for x in a.split("*")))
+        return re.compile(".".join(segs))
+
+    def category_of(self, hit):
+        return self.categories.get(hit, "uncategorized")
+
+    def hit(self, d):
+        """返回命中的否决域名（供审计），未命中返回 ''。"""
+        if not d:
+            return ""
+        d = d.strip().lower().rstrip(".")
+        if d in self.entire:
+            return d
+        if "*" not in d:
+            if d in self.exact:
+                return d
+            parts = d.split(".")
+            # 子域方向：d 是 hb 本身/子域（d 的某父后缀命中精确否决域）
+            for i in range(1, len(parts)):
+                suf = ".".join(parts[i:])
+                if suf in self.suffixes:
+                    return suf
+            # 父域方向：存在否决域是 d 的严格子域（如 @@||data.hicloud.com^ 被 metrics.data.hicloud.com 否决）
+            if d in self.ancestors:
+                return self.ancestors[d]
+            # 通配否决域（如 *.ga）与非通配 d 的字符串三条件（单段 d=ga 时 *.ga 也会命中）
+            for hb in self.wildcards:
+                if d == hb or d.endswith("." + hb) or hb.endswith("." + d):
+                    return hb
+            # 通配否决域的正则整名匹配：*.ga 命中 x.ga、tos*.snssdk.com 命中 tosx.snssdk.com。
+            # （v2.8 修复：此前仅通配白名单走正则路径，普通子域白名单对通配否决域全部漏判，
+            #   导致 *.ga 这类 abuse TLD 兜底对 @@||x.ga^ 完全失效。）
+            for hb in self.wildcards:
+                pat = self._patcache.get(hb)
+                if pat is None:
+                    pat = self._pat_for_wild_allow(hb)
+                    self._patcache[hb] = pat
+                if pat.fullmatch(d):
+                    return hb
+            return ""
+        # 通配白名单：沿用旧版逐分支（对每个否决域判定）
+        hbs = self._all_hb
+        if d.startswith("*."):
+            suffix = d[2:]
+            for hb in hbs:
+                if d == hb or d.endswith("." + hb) or hb.endswith("." + d):
+                    return hb
+                if hb == suffix or hb.endswith("." + suffix):
+                    return hb
+            return ""
+        if d.endswith(".*"):
+            prefix = d[:-2]
+            for hb in hbs:
+                if d == hb or d.endswith("." + hb) or hb.endswith("." + d):
+                    return hb
+                if hb.startswith(prefix + ".") or hb == prefix:
+                    return hb
+            return ""
+        dp = d.split(".")
+        pat = self._patcache.get(d)
+        if pat is None:
+            pat = self._pat_for_wild_allow(d)
+            self._patcache[d] = pat
+        for hb in hbs:
+            if d == hb or d.endswith("." + hb) or hb.endswith("." + d):
+                return hb
+            hp = hb.split(".")
+            # 段数相同逐段匹配（含段内前缀通配，如 tos*.snssdk.com）
+            if len(dp) == len(hp) and all(
+                    (a == b) or (a.startswith("*") and b.endswith(a[1:]))
+                    for a, b in zip(dp, hp)):
+                return hb
+            # 段内通配正则对 hb 的任意父后缀匹配
+            for i in range(len(hp)):
+                if pat.fullmatch(".".join(hp[i:])):
+                    return hb
+        return ""
+
+    def hit_exact_host(self, d):
+        """仅判定主机名 d 本身是否被否决（供 @@|d| 单主机精确白名单）。
+
+        与 hit() 的唯一区别：不做 ancestors 父域方向判定。单主机白名单只放行
+        d 本身、不含任何子域，因此"存在 d 的广告子域被否决"（如 d=baidu.com、
+        否决域是 sofire.baidu.com）不构成剔除理由；若仍按父域方向剔除，会导致
+        裸域永久误拦（#99）。
+        保留 entire / exact / 子域方向 / 通配覆盖，确保 d 自身落在否决范围时
+        不漏判（如 d=log.umeng.com 父域 umeng.com 被否决、d=x.ga 命中 *.ga）。
+        """
+        if not d:
+            return ""
+        d = d.strip().lower().rstrip(".")
+        if d in self.entire:
+            return d
+        if "*" in d:
+            # 单主机白名单的 d 不含通配；走到这里按完整 hit 兜底
+            return self.hit(d)
+        if d in self.exact:
+            return d
+        parts = d.split(".")
+        # 子域方向：d 本身落在某否决域之下（d 是广告域本体或其子域）
+        for i in range(1, len(parts)):
+            suf = ".".join(parts[i:])
+            if suf in self.suffixes:
+                return suf
+        # 通配否决域：d 本身被覆盖（如 x.ga 命中 *.ga）
+        for hb in self.wildcards:
+            pat = self._patcache.get(hb)
+            if pat is None:
+                pat = self._pat_for_wild_allow(hb)
+                self._patcache[hb] = pat
+            if pat.fullmatch(d):
+                return hb
+        # 刻意不检查 self.ancestors（父域方向：被否决的是 d 的子域，与单主机放行无关）
+        return ""
+
+
+# ============================================================
+# 策略否决层（never_allow）
+# ============================================================
+POLICY_CATEGORIES = ("encrypted_dns", "ad_platform", "tracker", "adult",
+                     "abuse_tld", "uncategorized")
+
+# 内置兜底：即使 local/never_allow.txt 不存在，滥用高发 TLD 的整 TLD 通配放行
+# （@@||*.ga^ 等）仍会被剔除。与旧 ABUSE_TLD_WL 行为等价，避免升级即失效。
+ABUSE_TLD_DEFAULT = ("ga", "gq", "ml", "cf", "tk", "pw", "bid", "cfd", "gdn",
+                     "ooo", "sbs", "loan", "agency", "discount", "click", "link")
+
+
+def load_never_allow():
+    """加载 local/never_allow.txt。
+
+    格式：每行一个纯域名（可含 * 通配）；
+         "! @category=xxx" 切换后续行类别；# 或 ! 开头为注释。
+    返回 (domains:list, categories:dict)。文件缺失时返回内置兜底。
+    """
+    path = BASE_DIR / "local" / "never_allow.txt"
+    domains, categories, category = [], {}, "uncategorized"
+    if not path.exists():
+        log("ℹ 未找到 local/never_allow.txt，仅启用内置滥用 TLD 兜底")
+        for tld in ABUSE_TLD_DEFAULT:
+            domains.append(f"*.{tld}")
+            categories[f"*.{tld}"] = "abuse_tld"
+        return domains, categories
+
+    for raw in path.read_text(encoding="utf-8").splitlines():
+        line = raw.strip()
+        if not line:
+            continue
+        if line.startswith("!") or line.startswith("#"):
+            # 仅 "! @category=xxx" 指令行切换类别；# 开头说明（即便文字里写了
+            # @category=xxx 示例）与不含 @category 的普通 ! 注释都直接跳过，
+            # 避免把文档示例误当成类别指令。
+            if line.startswith("!"):
+                m = re.search(r"@category\s*=\s*([a-z_]+)", line)
+                if m:
+                    c = m.group(1)
+                    if c not in POLICY_CATEGORIES:
+                        log(f"⚠ never_allow.txt 未知类别 {c}，按 uncategorized 处理")
+                        category = "uncategorized"
+                    else:
+                        category = c
+            continue
+        d = line.split()[0].lower().rstrip(".")
+        if not d:
+            continue
+        if d.startswith("@@") or d.startswith("||") or d.startswith("|"):
+            log(f"⚠ never_allow.txt 应填纯域名而非规则，已跳过: {line}")
+            continue
+        domains.append(d)
+        categories[d] = category
+    # 内置兜底始终叠加（用户文件里若已写同 TLD，dict 覆盖不影响结果）
+    for tld in ABUSE_TLD_DEFAULT:
+        p = f"*.{tld}"
+        if p not in categories:
+            domains.append(p)
+            categories[p] = "abuse_tld"
+    return domains, categories
+
+
+def apply_never_allow(allowlist, index):
+    """策略否决层：命中 never_allow 的白名单一律剔除，$important 也不例外。
+    （AGH 中 allowlist 永远优先于 denylist，要拦只能从白名单侧删。）
+    返回 (保留集合, {被剔规则: (category, hit_domain)})。"""
+    kept, dropped = set(), {}
+    for r in allowlist:
+        d = _allow_rule_domain(r)
+        # 单主机白名单 @@|d| 只放行 d 本身：只判 d 自身是否被否决，
+        # 不因子域（d 的下级）被否决而误删裸域白名单（#99）。
+        if _is_single_host_allow(r):
+            hit = index.hit_exact_host(d)
+        else:
+            hit = index.hit(d)
+        if hit:
+            dropped[r] = (index.category_of(hit), hit)
+        else:
+            kept.add(r)
+    return kept, dropped
+
+
+# ============================================================
+# 审计输出
+# ============================================================
+NL = chr(10)
+
+
+def _write_audit(kind, dropped, results):
+    """被剔除的白名单条目连同来源 URL 写入 dist/audit/<kind>.log。"""
+    if not dropped:
+        return
+    try:
+        audit_dir = DIST_DIR / "audit"
+        audit_dir.mkdir(parents=True, exist_ok=True)
+        origin = {}
+        for src, triple in (results or {}).items():
+            try:
+                for r in triple[1]:
+                    origin.setdefault(r, []).append(str(src))
+            except Exception:
+                continue
+        buf = []
+        buf.append("# " + kind + " 剔除审计  "
+                   + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        buf.append("# 共 " + str(len(dropped)) + " 条")
+        buf.append("# 格式: category / rule / hit / src")
+        for rule in sorted(dropped):
+            meta = dropped[rule]
+            cat, hit = meta if isinstance(meta, tuple) else ("uncategorized", meta)
+            srcs = ";".join(origin.get(rule, ("<unknown>",)))
+            buf.append(cat + "	" + rule + "	hit=" + hit + "	src=" + srcs)
+        atomic_write(audit_dir / (kind + ".log"), NL.join(buf) + NL)
+        log("📝 审计日志: " + audit_dir.name + "/" + kind + ".log（" + str(len(dropped)) + " 条）")
+    except Exception as e:
+        log("⚠ 审计日志写入失败(不影响构建): " + str(e))
+
+
+# ============================================================
+# manual 白名单源识别（basename 精确匹配，取代子串 in 判断）
+# ============================================================
+MANUAL_ALLOW_BASENAMES = frozenset({"wan.txt", "whitelist.txt"})
+
+# $important 强制拦截域名自动推导（支持通配符与非 ASCII/IDN 标签）
+_IMPORTANT_BLK = re.compile(r"^\|\|([a-z0-9\u0080-\uffff.\-*]+)\^\$important$")
+
+
+def _is_manual_allow_source(source) -> bool:
+    try:
+        name = Path(urlsplit(str(source)).path).name
+    except Exception:
+        name = ""
+    return name in MANUAL_ALLOW_BASENAMES
 
 
 def is_mail_auth_record(domain: str) -> bool:
@@ -571,10 +957,72 @@ class _SafeRedirectHandler(urllib.request.HTTPRedirectHandler):
 
 _OPENER = urllib.request.build_opener(_SafeRedirectHandler())
 
+# 能力协商：只声明运行时确实能解压的编码。若未安装 brotli 却在 Accept-Encoding 里声明 br，
+# 内容协商型源（如 adrules.top）会只返回 br，导致该源永久失败。按实际能力声明即可拿到 gzip。
+try:
+    import brotli as _brotli_probe  # noqa: F401
+    _HAS_BROTLI = True
+except ImportError:
+    _HAS_BROTLI = False
+_ACCEPT_ENCODING = "gzip, deflate, br" if _HAS_BROTLI else "gzip, deflate"
+
+
+# ============================================================
+# HTTP 增量缓存（v2.8 新增）
+# ============================================================
+def _cache_paths(url: str):
+    """缓存键 = URL 的 SHA256，正文与元数据分开存储。"""
+    key = hashlib.sha256(url.encode("utf-8")).hexdigest()
+    cdir = Path(CONFIG["cache_dir"])
+    return cdir / (key + ".txt"), cdir / (key + ".json")
+
+
+def _load_cache(url: str):
+    """读取缓存：(text, etag, last_modified)；无缓存 / 元数据损坏 / URL 不符返回 None。"""
+    if not CONFIG.get("http_cache", True):
+        return None
+    body_path, meta_path = _cache_paths(url)
+    try:
+        if not body_path.exists() or not meta_path.exists():
+            return None
+        meta = json.loads(meta_path.read_text(encoding="utf-8"))
+        if meta.get("url") != url:
+            return None
+        text = body_path.read_text(encoding="utf-8")
+    except (OSError, ValueError, TypeError):
+        return None
+    return text, meta.get("etag") or "", meta.get("last_modified") or ""
+
+
+def _save_cache(url: str, text: str, etag, last_modified) -> None:
+    """原子写入缓存正文与元数据；失败静默（缓存只是加速，不影响构建正确性）。"""
+    try:
+        body_path, meta_path = _cache_paths(url)
+        body_path.parent.mkdir(parents=True, exist_ok=True)
+        atomic_write(body_path, text)
+        meta = {
+            "url": url,
+            "etag": etag or "",
+            "last_modified": last_modified or "",
+            "fetched_at": datetime.datetime.now(
+                datetime.timezone(datetime.timedelta(hours=8))
+            ).isoformat(),
+            "chars": len(text),
+        }
+        atomic_write(meta_path, json.dumps(meta, ensure_ascii=False))
+    except OSError as e:
+        log(f"⚠ 缓存写入失败(不影响构建): {e}")
+
+
+def _serve_from_cache(source: str, cached_text: str) -> list:
+    log(f"  ✓ 304 未变更，使用缓存: {source}")
+    return cached_text.splitlines()
+
 
 def fetch_source(source: str):
     """
     读取一个源：file: 本地文件 或 http(s) 网络地址，返回按行分割的文本。
+    网络源启用增量缓存：携带 If-None-Match / If-Modified-Since，304 时直读缓存正文。
     返回值约定：
       - list  读取成功（含空内容）
       - FETCH_PERMANENT_FAILURE 确定性失败，不参与第二轮补拉
@@ -609,15 +1057,34 @@ def fetch_source(source: str):
             log(f"  ✗ 读取本地文件失败 {source}: {e}")
             return FETCH_PERMANENT_FAILURE
 
+    cache_enabled = bool(CONFIG.get("http_cache", True))
+    cached = _load_cache(source) if cache_enabled else None
+    cached_text = cached[0] if cached is not None else None
+    headers = {
+        "User-Agent": random.choice(CONFIG["user_agents"]),
+        "Accept-Encoding": _ACCEPT_ENCODING,
+    }
+    if cached is not None:
+        if cached[1]:
+            headers["If-None-Match"] = cached[1]
+        if cached[2]:
+            headers["If-Modified-Since"] = cached[2]
+
     for attempt in range(CONFIG["retries"]):
         try:
-            req = urllib.request.Request(
-                source, headers={
-                    "User-Agent": random.choice(CONFIG["user_agents"]),
-                    "Accept-Encoding": "gzip, deflate",
-                }
-            )
+            req = urllib.request.Request(source, headers=headers)
             with _OPENER.open(req, timeout=CONFIG["timeout"]) as resp:
+                status = getattr(resp, "status", 200)
+                if status == 304:
+                    if cached_text is not None:
+                        return _serve_from_cache(source, cached_text)
+                    # 服务器要求条件请求但本地无缓存：去掉条件头再拉一次
+                    headers.pop("If-None-Match", None)
+                    headers.pop("If-Modified-Since", None)
+                    if attempt == 0:
+                        continue
+                    log(f"  ✗ 服务器返回 304 但本地无缓存: {source}")
+                    return FETCH_PERMANENT_FAILURE
                 # 先限制压缩后的网络响应大小，再限制解压后的大小。
                 # 两层限制同时防止普通大响应和 gzip/deflate 压缩炸弹撑爆内存。
                 chunks, total = [], 0
@@ -637,8 +1104,21 @@ def fetch_source(source: str):
                 except ValueError as e:
                     log(f"  ✗ 解压后源过大或压缩数据损坏，已拒绝: {source} ({e})")
                     return FETCH_PERMANENT_FAILURE
-            return decode_text(raw).splitlines()
+            text = decode_text(raw)
+            if cache_enabled and len(text) <= CONFIG.get("max_cache_bytes", 64 * 1024 * 1024):
+                _save_cache(source, text, resp.headers.get("ETag"),
+                            resp.headers.get("Last-Modified"))
+            return text.splitlines()
         except HTTPError as e:
+            if e.code == 304:
+                if cached_text is not None:
+                    return _serve_from_cache(source, cached_text)
+                headers.pop("If-None-Match", None)
+                headers.pop("If-Modified-Since", None)
+                if attempt == 0:
+                    continue
+                log(f"  ✗ 服务器返回 304 但本地无缓存: {source}")
+                return FETCH_PERMANENT_FAILURE
             # 4xx（除 429 限流）是永久性错误，重试与第二轮补拉都无意义，直接放弃（不补拉）
             if 400 <= e.code < 500 and e.code != 429:
                 log(f"  ✗ 下载失败（HTTP {e.code}，永久错误不重试）: {source}")
@@ -718,6 +1198,24 @@ def decompress_limited(raw: bytes, encoding: str, max_bytes: int) -> bytes:
             return inflate(zlib.MAX_WBITS)
         except zlib.error:
             return inflate(-zlib.MAX_WBITS)
+
+    if enc == "br":
+        # 可选 Brotli：安装了 brotli 库才支持；未安装时明确报错而非静默损坏。
+        try:
+            import brotli as _brotli
+        except ImportError:
+            raise ValueError("Content-Encoding=br 需要安装 brotli（pip install brotli）")
+        dec = _brotli.Decompressor()
+        pos = 0
+        while pos < len(raw):
+            chunk = raw[pos:pos + 64 * 1024]
+            pos += len(chunk)
+            add_chunk(dec.process(chunk))
+        try:
+            add_chunk(dec.finish())
+        except Exception:
+            pass  # finish 异常仅意味着流不完整，已取出的输出仍受 max_bytes 限制
+        return b"".join(chunks)
 
     raise ValueError(f"不支持 Content-Encoding={enc!r}")
 
@@ -953,22 +1451,26 @@ def _validate_dnsrewrite_full(value: str) -> bool:
         m = re.fullmatch(r"(\d{1,5})[ \t]+(.+)", data)
         if not m:
             return False
-        priority, target = int(m.group(1)), m.group(2).rstrip(".")
-        return priority <= 65535 and (target == "." or _is_valid_modifier_domain(target, allow_single=True))
+        priority, raw = int(m.group(1)), m.group(2)
+        target = raw.rstrip(".")
+        # "." 表示根/空目标（RFC 要求），需在 rstrip 前判定
+        return priority <= 65535 and (raw == "." or _is_valid_modifier_domain(target, allow_single=True))
     if rr == "SRV":
         m = re.fullmatch(r"(\d{1,5})[ \t]+(\d{1,5})[ \t]+(\d{1,5})[ \t]+(.+)", data)
         if not m:
             return False
         priority, weight, port = (int(m.group(i)) for i in (1, 2, 3))
-        target = m.group(4).rstrip(".")
+        raw = m.group(4)
+        target = raw.rstrip(".")
         return all(x <= 65535 for x in (priority, weight, port)) and (
-            target == "." or _is_valid_modifier_domain(target, allow_single=True))
+            raw == "." or _is_valid_modifier_domain(target, allow_single=True))
     if rr in {"HTTPS", "SVCB"}:
         toks = data.split()
         if len(toks) < 2 or not re.fullmatch(r"\d+", toks[0]) or int(toks[0]) > 65535:
             return False
-        target = toks[1].rstrip(".")
-        if target != "." and not _is_valid_modifier_domain(target, allow_single=True):
+        raw_target = toks[1]
+        # "." 表示根目标（如 "1 . alpn=h2"），允许；其余目标去尾点后校验域名
+        if raw_target != "." and not _is_valid_modifier_domain(raw_target.rstrip("."), allow_single=True):
             return False
         for param in toks[2:]:
             if any(c in param for c in ('"', "\n", "\r", "\x00", "\x01", "\x02", "\x03", "\x04", "\x05", "\x06", "\x07", "\x08", "\x09")):
@@ -1086,11 +1588,10 @@ def normalize_mods(mods: str) -> str:
         if not sep:
             parts.append(name.lower())
             continue
-        nm = name.lstrip("~").lower()
         lname = name.lower()
-        if nm in {"dnsrewrite", "client"}:
+        if lname in {"dnsrewrite", "client"}:
             parts.append(f"{lname}={value}")
-        elif nm in {"dnstype", "ctag", "denyallow"}:
+        elif lname in {"dnstype", "ctag", "denyallow"}:
             values = _split_pipe_values(value)
             if values is not None:
                 vals = []
@@ -1098,12 +1599,12 @@ def normalize_mods(mods: str) -> str:
                 positives = []
                 for v in values:
                     token = v.lstrip("~")
-                    if nm == "dnstype":
+                    if lname == "dnstype":
                         token = token.upper()
                     else:
                         token = token.lower()
                     (negatives if v.startswith("~") else positives).append(token)
-                if nm == "dnstype" and positives:
+                if lname == "dnstype" and positives:
                     # ~A|AAAA is semantically equivalent to AAAA; emit the canonical form.
                     vals = positives
                 else:
@@ -1183,8 +1684,10 @@ def split_regex_mods(inner: str, is_exception: bool = False):
     return inner, False
 
 
+@functools.lru_cache(maxsize=262144)
 def _parse_rule_modifiers(rule: str):
-    """返回 (无 modifier 的主体, modifier 列表)。对 regex 正确识别第一个未转义关闭 /。"""
+    """返回 (无 modifier 的主体, modifier 列表)。对 regex 正确识别第一个未转义关闭 /。
+    已用 lru_cache 缓存（规则串数量有限，命中率极高）；调用方只读返回的 mods 列表，不得修改。"""
     prefix = "@@" if rule.startswith("@@") else ""
     inner = rule[2:] if prefix else rule
     if inner.startswith("/"):
@@ -1227,6 +1730,7 @@ def _rule_modifier_names(rule: str) -> set:
     }
 
 
+@functools.lru_cache(maxsize=262144)
 def _rule_key(rule: str) -> str:
     """规则规范化键；modifier 顺序不影响 badfilter 精确配对。"""
     head, mods = _parse_rule_modifiers(rule)
@@ -1446,7 +1950,10 @@ def clean_rule(line: str, keep_regex: bool):
 
 
 # 条件修饰符：带它们的规则只在「特定客户端 / 记录类型 / 客户端标签 / 排除域」下生效，
-# 不是无条件匹配整个域名。构建期做域名级冲突剔除时不处理这类规则，交给 AGH 运行时判定。
+# 不是无条件匹配整个域名。
+# 匹配器构建时排除带条件修饰符的白名单（条件不同则无法在构建期判定覆盖关系）；
+# 黑名单侧：被无条件白名单覆盖时删除是安全的（AGH 中 allowlist 无条件生效，覆盖全部条件分支），
+# 其余情况（条件白名单 vs 任意黑名单）一律保留，交给 AGH 运行时判定。
 CONDITIONAL_MODIFIERS = {"client", "dnstype", "ctag", "denyallow"}
 
 
@@ -1804,6 +2311,21 @@ def atomic_write(path: Path, text: str) -> None:
                 pass
 
 
+def _prev_rule_count(path):
+    """读取现有产物头部的 ! Total count: N（文件不存在或无该行则返回 None）"""
+    try:
+        with open(str(path), "r", encoding="utf-8", errors="ignore") as f:
+            for _ in range(8):
+                ln = f.readline()
+                if not ln:
+                    break
+                if ln.startswith("! Total count:"):
+                    return int(ln.split(":", 1)[1].strip())
+    except Exception:
+        pass
+    return None
+
+
 def write_outputs(blacklist, allowlist, regex_rules, stats, hosts_source=None):
     DIST_DIR.mkdir(exist_ok=True)
 
@@ -1812,6 +2334,19 @@ def write_outputs(blacklist, allowlist, regex_rules, stats, hosts_source=None):
     regex = sorted(set(regex_rules), key=sort_key)
     all_blk = blk + regex
     alw = sorted(set(allowlist), key=sort_key)
+
+    # 安全保护：规则数骤降通常意味着某个大源临时失败（其余小源仍成功，
+    # 前面的「全部源失败」检查拦不住）。此时若照常写盘，全部用户的拦截率会静默骤降。
+    # 故写盘前与现有产物比对，降幅超阈值即中止并保留现有产物。
+    _prev = _prev_rule_count(CONFIG["out_rules"])
+    if _prev and not CONFIG.get("force_write"):
+        _ratio = 1.0 - (len(all_blk) / float(_prev))
+        _limit = CONFIG.get("max_drop_ratio", 0.30)
+        if _ratio > _limit:
+            log("✗ 规则数骤降 %d -> %d（降幅 %.1f%% > %.0f%%），判定为源异常，"
+                "中止写盘并保留现有产物。确认无误可加 --force 强制写入"
+                % (_prev, len(all_blk), _ratio * 100.0, _limit * 100.0))
+            return False
 
     # 1) AGH 拦截规则
     atomic_write(CONFIG["out_rules"], header(CONFIG["title"], len(all_blk)) + "\n".join(all_blk) + "\n")
@@ -1877,6 +2412,136 @@ def write_outputs(blacklist, allowlist, regex_rules, stats, hosts_source=None):
     }
     atomic_write(CONFIG["out_stats"], json.dumps(stats, indent=2, ensure_ascii=False))
     log(f"✅ {CONFIG['out_stats'].name} 已写入")
+
+
+# ============================================================
+# 产物自检（v2.8 新增）
+# ============================================================
+def _verify_rule_line(ln: str) -> str:
+    """单行规则格式抽查（AGH 规则 / 白名单）；返回问题描述，无问题返回 ''。"""
+    if not ln:
+        return "空行"
+    if ln != ln.strip():
+        return "首尾空白"
+    if " " in ln or "\t" in ln:
+        # 允许引号内的空白（如 client='My Phone' 带空格的引用值）
+        outside = re.sub(r"'[^']*'|\"[^\"]*\"", "", ln)
+        if not (" " in outside or "\t" in outside):
+            return ""
+        return "含空白"
+    if not (ln.startswith("||") or ln.startswith("|") or ln.startswith("@@")
+            or ln.startswith("/") or ln.startswith("*")):
+        return f"未知形态: {ln[:40]}"
+    return ""
+
+
+def verify_outputs(stats: dict) -> dict:
+    """自检 dist 产物：Total count 与实际规则数一致、无空行、规则格式抽查。
+    不阻断构建；问题汇总写入 stats['verify'] 并输出警告。"""
+    result = {}
+    specs = (("rules", CONFIG["out_rules"], False),
+             ("allow", CONFIG["out_allow"], False),
+             ("hosts", CONFIG["out_hosts"], True))
+    for kind, path, is_hosts in specs:
+        entry = {"ok": True, "errors": []}
+        if kind == "hosts" and not CONFIG.get("keep_hosts", True):
+            result[kind] = {"ok": True, "skipped": True, "errors": []}
+            continue
+        total, rule_lines = None, 0
+        capped = False
+        try:
+            if not path.exists():
+                entry["ok"] = False
+                entry["errors"].append("文件不存在")
+            else:
+                lines = path.read_text(encoding="utf-8").splitlines()
+                if not lines:
+                    entry["ok"] = False
+                    entry["errors"].append("文件为空")
+                for i, ln in enumerate(lines):
+                    if is_hosts:
+                        if ln.startswith("#"):
+                            m = re.match(r"^# Total count:\s*(\d+)\s*$", ln)
+                            if m:
+                                total = int(m.group(1))
+                            continue
+                        if ln.startswith("0.0.0.0 "):
+                            rule_lines += 1
+                            host = ln[len("0.0.0.0 "):]
+                            if " " in host or not host or not is_valid_hosts_hostname(host):
+                                entry["ok"] = False
+                                entry["errors"].append(f"第{i+1}行 hosts 条目非法: {host[:40]}")
+                        else:
+                            entry["ok"] = False
+                            entry["errors"].append(f"第{i+1}行 hosts 格式非法: {ln[:40]}")
+                        continue
+                    if ln.startswith("!"):
+                        m = re.match(r"^! Total count:\s*(\d+)\s*$", ln)
+                        if m:
+                            total = int(m.group(1))
+                        continue
+                    rule_lines += 1
+                    issue = _verify_rule_line(ln)
+                    if issue:
+                        entry["ok"] = False
+                        entry["errors"].append(f"第{i+1}行 {issue}")
+                        if len(entry["errors"]) >= 10:
+                            capped = True
+                            break
+                if total is None:
+                    entry["ok"] = False
+                    entry["errors"].append("缺少 Total count 头部")
+                elif total != rule_lines:
+                    entry["ok"] = False
+                    entry["errors"].append(
+                        f"Total count={total} 与实际规则数 {rule_lines} 不一致")
+        except OSError as e:
+            entry["ok"] = False
+            entry["errors"].append(f"读取失败: {e}")
+        if capped:
+            entry["errors"].append("（错误超过 10 条已截断）")
+        result[kind] = entry
+        if not entry["ok"]:
+            log(f"⚠ 产物自检失败 {kind}: " + "; ".join(entry["errors"][:5]))
+        else:
+            log(f"✓ 产物自检通过 {kind}")
+    stats["verify"] = result
+    return result
+
+
+# ============================================================
+# 构建差异统计（v2.8 新增）
+# ============================================================
+def compute_diff(prev_path: Path, current: set) -> dict:
+    """与上次产物比较：返回新增/移除/不变统计与样例（供误封审核）。"""
+    prev = set()
+    if prev_path.exists():
+        try:
+            for ln in prev_path.read_text(encoding="utf-8").splitlines():
+                ln = ln.strip()
+                if not ln or ln.startswith("!"):
+                    continue
+                prev.add(ln)
+        except OSError:
+            prev = set()
+    added = current - prev
+    removed = prev - current
+    unchanged = prev & current
+    return {
+        "prev": len(prev),
+        "now": len(current),
+        "added": len(added),
+        "removed": len(removed),
+        "unchanged": len(unchanged),
+        "added_samples": sorted(added)[:20],
+        "removed_samples": sorted(removed)[:20],
+    }
+
+
+def log_diff_summary(diff: dict) -> None:
+    b, a = diff["black"], diff["allow"]
+    log(f"构建差异: 黑名单 +{b['added']}/-{b['removed']}（不变 {b['unchanged']}），"
+        f"白名单 +{a['added']}/-{a['removed']}（不变 {a['unchanged']}）")
 
 
 # ============================================================
@@ -1973,7 +2638,8 @@ def process_source(source: str, stats: dict, is_allow_source: bool = False):
             host_part = host_part[-1] if host_part else ""
             if "/" in body0 and not body0.startswith("/"):
                 s["path"] += 1
-            elif "$" in raw and not check_modifiers(raw.split("$", 1)[1]):
+            elif "$" in raw and not check_modifiers(raw.split("$", 1)[1],
+                                                    is_exception=raw.startswith("@@")):
                 s["modifier"] += 1
             elif is_ip(host_part):
                 s["ip"] += 1
@@ -2051,18 +2717,39 @@ def download_all(merged: list, stats: dict):
     return results, failed
 
 def main():
-    ap = argparse.ArgumentParser(description="AGH-Builder: 只适配 AdGuard Home 的规则合并器")
+    ap = argparse.ArgumentParser(
+        description=f"AGH-Builder v{CONFIG.get('version', '2.8')}: 只适配 AdGuard Home 的规则合并器")
     ap.add_argument("--no-regex", action="store_true", help="不保留正则规则")
     ap.add_argument("--no-hosts", action="store_true", help="不生成 hosts 文件")
     ap.add_argument("--no-strict", action="store_true", help="白名单冲突仅精确匹配（默认含子域名）")
+    ap.add_argument("--no-policy", action="store_true", help="跳过策略否决层（调试用，勿在生产使用）")
+    ap.add_argument("--no-cache", action="store_true", help="关闭 HTTP 增量缓存（默认启用，缓存存 cache/）")
+    ap.add_argument("--no-diff", action="store_true", help="关闭构建差异统计（默认启用）")
+    ap.add_argument("--no-verify", action="store_true", help="关闭产物自检（默认启用）")
+    ap.add_argument("--force", action="store_true", help="跳过规则数骤降保护，强制写盘")
+    ap.add_argument("--timeout", type=int, default=None, help="单源下载超时秒数（默认 30）")
+    ap.add_argument("--max-workers", type=int, default=None, help="并发下载数（默认 8）")
+    ap.add_argument("--retries", type=int, default=None, help="单源连续重试次数（默认 3）")
+    ap.add_argument("--cache-dir", default=None, help="HTTP 缓存目录（默认 程序目录/cache）")
     ap.add_argument("--sources", default=None, help="自定义黑名单源文件")
     ap.add_argument("--allow-sources", default=None, help="自定义白名单源文件")
     args = ap.parse_args()
 
-    # main() 可能在测试/嵌入场景中被重复调用；每次以 CLI 参数为准，避免上一次调用的 flag 泄漏。
     CONFIG["keep_regex"] = not args.no_regex
     CONFIG["keep_hosts"] = not args.no_hosts
     CONFIG["strict_conflict"] = not args.no_strict
+    CONFIG["http_cache"] = not args.no_cache
+    CONFIG["diff"] = not args.no_diff
+    CONFIG["verify"] = not args.no_verify
+    CONFIG["force_write"] = bool(args.force)
+    if args.timeout and args.timeout > 0:
+        CONFIG["timeout"] = args.timeout
+    if args.max_workers and args.max_workers > 0:
+        CONFIG["max_workers"] = args.max_workers
+    if args.retries and args.retries > 0:
+        CONFIG["retries"] = args.retries
+    if args.cache_dir:
+        CONFIG["cache_dir"] = Path(args.cache_dir).resolve()
 
     black_sources = load_sources(resolve_path(args.sources) if args.sources else CONFIG["sources_file"])
     allow_sources = load_sources(resolve_path(args.allow_sources) if args.allow_sources else CONFIG["allow_sources_file"])
@@ -2070,7 +2757,7 @@ def main():
 
     stats = {
         "builder": "AGH-Builder",
-        "version": "2.6",
+        "version": CONFIG.get("version", "2.8"),
         "generated_at": datetime.datetime.now(
             datetime.timezone(datetime.timedelta(hours=8))
         ).strftime("%Y-%m-%d %H:%M:%S"),
@@ -2083,19 +2770,15 @@ def main():
 
     t0 = time.time()
     all_blk, all_alw, all_reg = [], [], []
-    # 去重合并源列表：同一 URL 若同时出现在拦截与白名单列表（如茯苓白名单），
-    # 只下载处理一次，避免重复下载、stats 源记录被覆盖、计数翻倍。
     black_set = set(black_sources)
     allow_only = [s for s in allow_sources if s not in black_set]
     merged = [(s, False) for s in black_sources] + [(s, True) for s in allow_only]
     log(f"去重后实际下载 {len(merged)} 个源（拦截 {len(black_sources)} + 仅白名单 {len(allow_only)}，"
         f"重复 {len(black_sources) + len(allow_sources) - len(merged)} 个）")
 
-    # 并发下载+清洗全部源（网络失败源等待退避窗口后自动补拉一轮）
     results, failed = download_all(merged, stats)
 
-    # 安全保护：如果一个角色下的所有“有效源”都失败，不生成该角色的空列表，
-    # 防止网络故障把已有黑名单/白名单整批冲掉。重复出现在黑名单与白名单的源按黑名单角色处理。
+    # 安全保护：某角色下所有有效源都失败时，不生成该角色的空列表
     effective_black = [s for s, is_allow in merged if not is_allow]
     effective_allow = [s for s, is_allow in merged if is_allow]
     successful_black = [s for s in effective_black if s in results]
@@ -2115,33 +2798,34 @@ def main():
             all_blk += blk
             all_alw += alw
             all_reg += reg
-            _sname = str(s)
-            if "wan.txt" in _sname or "whitelist.txt" in _sname:
+            if _is_manual_allow_source(s):
                 manual_alw += alw
 
     log(f"下载+清洗完成，耗时 {time.time()-t0:.1f}s。"
         f"合并前：黑名单 {len(all_blk)} / 白名单 {len(all_alw)} / 正则 {len(all_reg)}")
 
-    # 空结果保护：全部源失败/为空时，不覆盖已有产物
     if not all_blk and not all_alw and not all_reg:
         log("✗ 所有源均为空或全部失败，中止构建（保留 dist/ 现有产物）")
         return 1
 
-    # 去重
     all_blk, all_alw, all_reg = set(all_blk), set(all_alw), set(all_reg)
 
-    # 解析 $badfilter：黑名单域名 + 黑名单正则统一处理；白名单独立处理。
+    # $badfilter 解析
     blk_kept, blk_bf, blk_dangle = apply_badfilter(list(all_blk) + list(all_reg))
-    all_blk = set(r for r in blk_kept if not r.startswith("/"))
-    all_reg = set(r for r in blk_kept if r.startswith("/"))
+    all_blk = {r for r in blk_kept if not r.startswith("/")}
+    all_reg = {r for r in blk_kept if r.startswith("/")}
     alw_kept, alw_bf, alw_dangle = apply_badfilter(list(all_alw))
     all_alw = set(alw_kept)
     if blk_bf or alw_bf:
         log(f"badfilter 解析: 禁用黑名单 {blk_bf} 条、白名单 {alw_bf} 条（悬空指令 "
             f"{blk_dangle + alw_dangle} 条，无对应规则，已丢弃）")
 
-    # ===== 强制拦截：AGH allowlist 永远优先于 denylist（含 $important），要拦只能从白名单侧删。
-    # 必须先于 filter_conflicts 剔除，否则这些白名单会把对应黑名单误杀。=====
+    # ============================================================
+    # 白名单净化（顺序敏感，勿调整）
+    #   1. 收集强制拦截域  2. 合并 manual 白名单
+    #   3. 策略否决层      4. hardblock 剔除   5. 知名域整域拆分
+    # 必须在 filter_conflicts 之前完成，否则这些白名单会把对应黑名单误杀。
+    # ============================================================
     HARD_BLOCK_WL = {
         "gdfp.gifshow.com", "adukwai.com", "adkwai.com",
         "miaozhen.com", "adv.sec.miui.com", "data.mistat.xiaomi.com",
@@ -2150,62 +2834,91 @@ def main():
         "log.snssdk.com", "mcs.snssdk.com", "mon.snssdk.com",
         "log1.cmpassport.com", "btrace.qq.com",
         "pgdt.gtimg.cn",
-        "360.cn", "sina.com.cn", "kuwo.cn", "kugou.com", "weibo.com",
+        "kuwo.cn", "kugou.com",
     }
+    # 注：weibo.com 裸域已从强拦集合移除（#99）：微博主站裸域必须放行，
+    # 其广告子域 ad/ads/adx.weibo.com 仍由 local/hardblock.txt 独立强拦，
+    # 单主机白 @@|weibo.com| 不再被误剔。
+    # 自动推导：黑名单中 ||xxx^$important 的域名，其对应白名单必须剔除
+    derived = 0
+    for _r in all_blk:
+        _m = _IMPORTANT_BLK.match(_r)
+        if _m:
+            HARD_BLOCK_WL.add(_m.group(1).lower())
+            derived += 1
     _hb_file = BASE_DIR / "local" / "hardblock.txt"
     if _hb_file.exists():
-        with open(_hb_file, encoding="utf-8") as _f:
-            for _l in _f:
+        try:
+            for _l in _hb_file.read_text(encoding="utf-8").splitlines():
                 _l = _l.strip()
-                if _l and not _l.startswith("#"):
-                    HARD_BLOCK_WL.add(_l.split()[0])
+                if _l and not _l.startswith("#") and not _l.startswith("!"):
+                    HARD_BLOCK_WL.add(_l.split()[0].lower().rstrip("."))
+        except OSError as e:
+            log(f"⚠ 读取 local/hardblock.txt 失败: {e}")
 
+    # 整域剔除：@@||sina.com.cn^ / @@|360.cn| 这类"放行整个域"必须剔除
+    HARD_BLOCK_WL_ENTIRE = {"sina.com.cn", "360.cn"}
 
-    def _is_hard_blocked_wl(rule):
-        d = rule.lstrip("@").lstrip("|").split("$", 1)[0].strip().lower().rstrip("^").rstrip(".")
-        for hb in HARD_BLOCK_WL:
-            if d == hb or d.endswith("." + hb):
-                return True
-            if "*" in d:
-                if d.startswith("*."):
-                    suffix = d[2:]
-                    if hb == suffix or hb.endswith("." + suffix):
-                        return True
-                elif d.endswith(".*"):
-                    prefix = d[:-2]
-                    if hb.startswith(prefix + ".") or hb == prefix:
-                        return True
-                else:
-                    dp_ = d.split(".")
-                    hp_ = hb.split(".")
-                    if len(dp_) == len(hp_):
-                        if all((a == b) or (a.startswith("*") and b.endswith(a[1:]))
-                               for a, b in zip(dp_, hp_)):
-                            return True
-        return False
-    _before_wl = len(all_alw)
-    all_alw = {r for r in all_alw if not _is_hard_blocked_wl(r)}
+    # manual 白名单先合并，再做全部剔除（否则 wan.txt 会把剔掉的域名加回）
     if manual_alw:
-        all_alw = all_alw | set(manual_alw)
-    if len(all_alw) != _before_wl:
-        log(f"强制拦截白名单剔除: {_before_wl - len(all_alw)} 条（广告联盟域，AGH allowlist 优先必须删）")
+        all_alw |= set(manual_alw)
 
-    # 白名单冲突处理（--no-strict 时退化为精确匹配，仍生效）。
-    # 正则仅在全部候选域名都被白名单覆盖时才删除（见 filter_conflicts）。
+    # --- 3. 策略否决层 ---
+    na_dropped, by_cat = {}, {}
+    if args.no_policy:
+        log("⚠ --no-policy：已跳过策略否决层（仅调试用）")
+    else:
+        na_domains, na_categories = load_never_allow()
+        na_index = HardBlockIndex(na_domains, categories=na_categories)
+        all_alw, na_dropped = apply_never_allow(all_alw, na_index)
+        for _r, (_c, _h) in na_dropped.items():
+            by_cat.setdefault(_c, 0)
+            by_cat[_c] += 1
+        if na_dropped:
+            log(f"策略否决层剔除白名单 {len(na_dropped)} 条: "
+                + ", ".join(f"{c} {n}" for c, n in sorted(by_cat.items())))
+            _write_audit("never_allow", na_dropped, results)
+
+    # --- 4. hardblock 剔除 ---
+    hb_index = HardBlockIndex(HARD_BLOCK_WL, entire=HARD_BLOCK_WL_ENTIRE)
+    _before_wl = len(all_alw)
+    hb_dropped = {}
+    _kept_alw = set()
+    for r in all_alw:
+        d = _allow_rule_domain(r)
+        # 单主机白名单 @@|d| 只放行 d 本身、不含子域：只判 d 自身是否为广告/遥测域，
+        # 不因子域被否决（ancestors 父域方向）而误删裸域白名单（#99）。
+        if _is_single_host_allow(r):
+            hit = hb_index.hit_exact_host(d)
+        else:
+            hit = hb_index.hit(d)
+        if hit:
+            hb_dropped[r] = ("hardblock", hit)
+        else:
+            _kept_alw.add(r)
+    all_alw = _kept_alw
+    if hb_dropped:
+        log(f"强制拦截白名单剔除: {len(hb_dropped)} 条"
+            f"（广告联盟/遥测域，含自动推导 {derived} 条；AGH allowlist 优先必须删）")
+        _write_audit("hardblock", hb_dropped, results)
+
+    # --- 白名单冲突处理 ---
     _combined = list(all_blk) + list(all_reg)
     _kept = set(filter_conflicts(_combined, list(all_alw), strict=CONFIG["strict_conflict"]))
-    all_blk = set(r for r in _kept if not r.startswith("/"))
-    all_reg = set(r for r in _kept if r.startswith("/"))
+    all_blk = {r for r in _kept if not r.startswith("/")}
+    all_reg = {r for r in _kept if r.startswith("/")}
+
+    # --- 5. 知名域整域白名单自动拆分 ---
+    all_alw, split_dropped = split_protected_allowlist(all_alw)
+    removed_split = len(split_dropped)
+    if split_dropped:
+        _write_audit("split_protected", split_dropped, results)
 
     # hosts 用完整集（hosts 无子域继承，必须逐主机名枚举）；在父域去重前快照
     blk_for_hosts = set(all_blk)
 
-    # 父域覆盖去重（无修饰符子域规则被父域规则完全覆盖，删除不改变 AGH 拦截范围）
     blk_dedup, cov_removed = dedupe_covered_domains(sorted(all_blk))
     all_blk = set(blk_dedup)
-    # 白名单同样按子域继承去重（@@||example.com^ 已放行整个域，子域放行规则冗余）；
-    # 放在黑名单冲突判断之后，用完整白名单做完冲突剔除再精简，放行范围不变。
-    # --no-strict 精确模式下父域白名单不放行子域，子域白名单不冗余，跳过白名单去重。
     alw_dedup, alw_cov = dedupe_covered_domains(sorted(all_alw), strict=CONFIG["strict_conflict"])
     all_alw = set(alw_dedup)
     if cov_removed or alw_cov:
@@ -2218,15 +2931,97 @@ def main():
         "regex": len(all_reg),
         "total": len(all_blk) + len(all_alw) + len(all_reg),
     }
+    stats["sanitize"] = {
+        "never_allow_dropped": len(na_dropped),
+        "never_allow_by_category": dict(sorted(by_cat.items())),
+        "hardblock_dropped": len(hb_dropped),
+        "hardblock_derived_from_important": derived,
+        "protected_split_removed": removed_split,
+    }
 
-    # stats.json 也按源清单顺序稳定输出，避免并发完成顺序导致无意义 diff。
     stats["sources"] = {
         s: stats["sources"][s] for s, _ in merged if s in stats["sources"]
     }
-    write_outputs(all_blk, all_alw, all_reg, stats, hosts_source=blk_for_hosts)
+
+    # --- 构建差异（v2.8）：必须在写产物前读取上次产物，否则读到的是刚覆盖的本轮结果 ---
+    if CONFIG.get("diff", True):
+        diff = {
+            "black": compute_diff(CONFIG["out_rules"], all_blk | all_reg),
+            "allow": compute_diff(CONFIG["out_allow"], all_alw),
+        }
+        stats["diff"] = diff
+
+    if write_outputs(all_blk, all_alw, all_reg, stats, hosts_source=blk_for_hosts) is False:
+        return 1
+
+    # --- 产物自检（v2.8，可用 --no-verify 关闭） ---
+    if CONFIG.get("verify", True):
+        verify_outputs(stats)
+    if CONFIG.get("diff", True):
+        log_diff_summary(stats["diff"])
+    # 补写含 verify / diff 的完整统计（write_outputs 已写过一版，此处覆盖为完整版）
+    atomic_write(CONFIG["out_stats"], json.dumps(stats, indent=2, ensure_ascii=False))
+
+    try:
+        import sys as _sys
+        if str(BASE_DIR) not in _sys.path:
+            _sys.path.insert(0, str(BASE_DIR))
+        import rule_audit
+        rule_audit.run(results, merged, stats, DIST_DIR)
+    except Exception as _ra_e:
+        log(f"⚠ 规则审计快照失败(不影响构建): {_ra_e}")
+
     log("=" * 56)
     log(f"完成！最终规则: 拦截 {len(all_blk) + len(all_reg)} 条 + 白名单 {len(all_alw)} 条")
+    log(f"净化统计: 策略否决 {len(na_dropped)} / hardblock {len(hb_dropped)} / 整域拆分 {removed_split}")
     log(f"输出目录: {DIST_DIR}")
+
+# ===== 知名域整域白名单自动拆分（固化到构建，自愈）=====
+# AGH 规则: allowlist 永远优先于 denylist（含 $important）。
+# 因此若某知名业务域存在整域白名单（@@||domain^ / @@|domain|），会覆盖其全部子域拦截
+# （含广告子域 important）。本函数自动将"已配置精确业务子域白名单"的知名域的整域
+# 白名单降级为仅精确子域：业务子域放行 + 广告子域仍可被黑名单拦截，无需手动维护。
+# 判定: 注册域 d 若在 local/whitelist.txt 中已有精确业务子域白名单(@@||sub.d^)，
+#       则移除其整域白名单(@@||d^)，避免覆盖广告拦截。
+# 返回 (新白名单集合, 移除条数)。
+def split_protected_allowlist(allowlist):
+    wl_file = BASE_DIR / "local" / "whitelist.txt"
+    root_exact = {}
+    if wl_file.exists():
+        try:
+            for line in wl_file.read_text(encoding="utf-8").splitlines():
+                line = line.strip()
+                if not line or line.startswith("#") or line.startswith("!"):
+                    continue
+                m = re.match(r"^@@\|\|([a-z0-9\u0080-\uffff\-]+(?:\.[a-z0-9\u0080-\uffff\-]+)+)\^$", line)
+                if not m:
+                    continue
+                sub = m.group(1).lower()
+                root = registrable_domain(sub)
+                # 只认"真正的子域"（root != sub），避免 whitelist.txt 里的整域行自证
+                if root and root != sub:
+                    root_exact.setdefault(root, set()).add(sub)
+        except OSError as e:
+            log(f"⚠ 读取 local/whitelist.txt 失败: {e}")
+
+    removed_rules, new_alw = {}, set()
+    for r in allowlist:
+        # 仅 @@||d^（整域放行、含全部子域）才需拆分：它可能放过广告子域。
+        # @@|d| 是单主机精确放行（只放行 d 本身、不含子域），不会放过广告子域，
+        # 必须原样保留，否则会造成裸域永久误拦（#99）。
+        m = re.match(r"^@@\|\|([a-z0-9\u0080-\uffff.\-]+)\^$", r)
+        if m:
+            body = m.group(1).lower().rstrip(".")
+            root = registrable_domain(body)
+            # 仅当 body 本身就是注册域、且该注册域已有精确业务子域白名单时才移除
+            if root and root == body and root in root_exact:
+                removed_rules[r] = ("split_protected", root)
+                continue
+        new_alw.add(r)
+    if removed_rules:
+        log(f"知名域整域白名单自动拆分: 移除 {len(removed_rules)} 条整域放行"
+            f"（已由 {len(root_exact)} 个注册域的精确业务子域白名单覆盖，防广告子域被放行）")
+    return new_alw, removed_rules
 
 
 if __name__ == "__main__":
