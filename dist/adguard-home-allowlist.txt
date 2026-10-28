@@ -1,9 +1,9 @@
 ! Title: sofmed DNS（白名单）
 ! Homepage: sofmed DNS提供
-! Version: 2026-10-28 20:31:39（北京时间）
+! Version: 2026-10-29 03:25:10（北京时间）
 ! Expires: 12 hours
 ! Description: 由 sofmed DNS独家提供
-! Total count: 3147
+! Total count: 3156
 @@||dj.1688.com^$important
 @@||*.xunlei.com^$important
 @@||unet.ucweb.com^$important
@@ -198,6 +198,7 @@
 @@||aizhan.com^
 @@||amazon.com^
 @@||api.jdl.cn^
+@@||app.mi.com^
 @@||cc.163.com^
 @@||cfm.jd.com^
 @@||cg.163.com^
@@ -1558,6 +1559,8 @@
 @@||www.nuomiphp.com^
 @@||www.pornlulu.com^
 @@||www.porntrex.com^
+@@||www.stardock.com^
+@@||www.stardock.net^
 @@||www.ximalaya.com^
 @@||zhan.vivo.com.cn^
 @@||zhidao.baidu.com^
@@ -2028,6 +2031,7 @@
 @@||cnlogin.cainiao.com^
 @@||contacts.icloud.com^
 @@||content.viralize.tv^
+@@||copilot.tencent.com^
 @@||defaultts.tc.qq.com^
 @@||dir.minigame.qq.com^
 @@||disneyplus.bn5x.net^
@@ -2035,6 +2039,8 @@
 @@||download.xunlei.com^
 @@||dreport.meituan.net^
 @@||emails.educause.edu^
+@@||forums.stardock.com^
+@@||forums.stardock.net^
 @@||framework.cdn-go.cn^
 @@||g-acs.m.goofish.com^
 @@||gamecenter.vivo.com^
@@ -2157,6 +2163,7 @@
 @@||api.tencentmusic.com^
 @@||apiwz.midukanshu.com^
 @@||app.snm0516.aisee.tv^
+@@||archive.stardock.com^
 @@||audid-api.taobao.com^
 @@||auth.huaweicloud.com^
 @@||bd1.zuimeitianqi.com^
@@ -2334,6 +2341,7 @@
 @@||haohuo.jinritemai.com^
 @@||hub5btmain.sandai.net^
 @@||hub5pn.wap.sandai.net^
+@@||identity.stardock.com^
 @@||iframe.arkoselabs.com^
 @@||images.nvidiagrid.net^
 @@||imasdk.googleapis.com^
@@ -2857,6 +2865,7 @@
 @@||p3-passport.byteacctimg.com^
 @@||smtp.focusgroupresearch.com^
 @@||static-captcha.aliyuncs.com^
+@@||update.appstore.vivo.com.cn^
 @@||update01.skyworth-cloud.com^
 @@||v26-novelapp.fqnovelvod.com^
 @@||www.data.mistat.*xiaomi.com^

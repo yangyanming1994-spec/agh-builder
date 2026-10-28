@@ -1,11 +1,12 @@
-# hardblock 剔除审计  2026-10-28 12:31:23
-# 共 70 条
+# hardblock 剔除审计  2026-10-28 19:24:57
+# 共 71 条
 # 格式: category / rule / hit / src
 hardblock	@@||*.hicloud.com^	hit=metrics2.data.hicloud.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 hardblock	@@||a0.app.xiaomi.com^	hit=a0.app.xiaomi.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 hardblock	@@||ad.doubleclick.net^	hit=ad.doubleclick.net	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 hardblock	@@||admaster.com.cn^	hit=admaster.com.cn	src=file:local/wan.txt
 hardblock	@@||adv.sec.miui.com^	hit=adv.sec.miui.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
+hardblock	@@||app.xiaomi.com^	hit=a0.app.xiaomi.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 hardblock	@@||bodian.kuwo.cn^	hit=kuwo.cn	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 hardblock	@@||btrace.qq.com^	hit=btrace.qq.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 hardblock	@@||c.cnzz.com^	hit=cnzz.com	src=file:local/whitelist.txt
@@ -35,10 +36,10 @@ hardblock	@@||mcs.snssdk.com^	hit=mcs.snssdk.com	src=https://raw.githubuserconte
 hardblock	@@||miaozhen.com^	hit=miaozhen.com	src=file:local/wan.txt
 hardblock	@@||mobilebasedata.kuwo.cn^	hit=kuwo.cn	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 hardblock	@@||mobilelog.kugou.com^	hit=kugou.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
-hardblock	@@||mobilist.kuwo.cn^	hit=kuwo.cn	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt;file:local/whitelist.txt
+hardblock	@@||mobilist.kuwo.cn^	hit=kuwo.cn	src=file:local/whitelist.txt;https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 hardblock	@@||mon.snssdk.com^	hit=mon.snssdk.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 hardblock	@@||musician.kugou.com^	hit=kugou.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
-hardblock	@@||ncomment.kuwo.cn^	hit=kuwo.cn	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt;file:local/whitelist.txt
+hardblock	@@||ncomment.kuwo.cn^	hit=kuwo.cn	src=file:local/whitelist.txt;https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 hardblock	@@||nmobi.kuwo.cn^	hit=kuwo.cn	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 hardblock	@@||p*-ad.adukwai.com^$important	hit=adukwai.com	src=file:local/wan.txt
 hardblock	@@||p1-lm.adukwai.com^	hit=adukwai.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
@@ -50,9 +51,9 @@ hardblock	@@||p4-ad.adukwai.com^	hit=adukwai.com	src=https://raw.githubuserconte
 hardblock	@@||packagebssdlbig.tx.kugou.com^	hit=kugou.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 hardblock	@@||pgdt.gtimg.cn^	hit=pgdt.gtimg.cn	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 hardblock	@@||pkgdown.kuwo.cn^	hit=kuwo.cn	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
-hardblock	@@||qq.com^$client='10.0.0.99'	hit=canvas-cdn.gdt.qq.com	src=file:local/wan.txt
+hardblock	@@||qq.com^$client='10.0.0.99'	hit=ii.gdt.qq.com	src=file:local/wan.txt
 hardblock	@@||s4.cnzz.com^	hit=cnzz.com	src=file:local/whitelist.txt
-hardblock	@@||search.kuwo.cn^	hit=kuwo.cn	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt;file:local/whitelist.txt
+hardblock	@@||search.kuwo.cn^	hit=kuwo.cn	src=file:local/whitelist.txt;https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 hardblock	@@||shoujipkgdown.kuwo.cn^	hit=kuwo.cn	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 hardblock	@@||sina.com.cn^	hit=sina.com.cn	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 hardblock	@@||ucweb.com^	hit=vs2.bjct.u3.ucweb.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
@@ -60,9 +61,9 @@ hardblock	@@||v2-tube.adukwai.com^$important	hit=adukwai.com	src=https://raw.git
 hardblock	@@||v4-tube.adukwai.com^$important	hit=adukwai.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 hardblock	@@||vehiclecdn.kuwo.cn^	hit=kuwo.cn	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 hardblock	@@||vip.kugou.com^	hit=kugou.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
-hardblock	@@||vip1.kuwo.cn^	hit=kuwo.cn	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt;file:local/whitelist.txt
+hardblock	@@||vip1.kuwo.cn^	hit=kuwo.cn	src=file:local/whitelist.txt;https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 hardblock	@@||vqq.admaster.com.cn^	hit=vqq.admaster.com.cn	src=file:local/wan.txt
-hardblock	@@||weibo.com^	hit=ad.weibo.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
+hardblock	@@||weibo.com^	hit=ads.weibo.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 hardblock	@@||www.kugou.com^	hit=kugou.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 hardblock	@@||www.kuwo.cn^	hit=kuwo.cn	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 hardblock	@@||www3.doubleclick.net^	hit=www3.doubleclick.net	src=https://adguardteam.github.io/HostlistsRegistry/assets/filter_1.txt
