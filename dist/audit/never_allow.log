@@ -1,4 +1,4 @@
-# never_allow 剔除审计  2026-10-28 23:57:31
+# never_allow 剔除审计  2026-10-29 05:34:24
 # 共 1 条
 # 格式: category / rule / hit / src
 abuse_tld	@@||omofun.link^	hit=*.link	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt

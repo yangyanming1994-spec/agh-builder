@@ -1,7 +1,7 @@
-# hardblock 剔除审计  2026-10-28 23:57:31
+# hardblock 剔除审计  2026-10-29 05:34:24
 # 共 71 条
 # 格式: category / rule / hit / src
-hardblock	@@||*.hicloud.com^	hit=metrics2.data.hicloud.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
+hardblock	@@||*.hicloud.com^	hit=metrics.data.hicloud.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 hardblock	@@||a0.app.xiaomi.com^	hit=a0.app.xiaomi.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 hardblock	@@||ad.doubleclick.net^	hit=ad.doubleclick.net	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 hardblock	@@||admaster.com.cn^	hit=admaster.com.cn	src=file:local/wan.txt
@@ -63,7 +63,7 @@ hardblock	@@||vehiclecdn.kuwo.cn^	hit=kuwo.cn	src=https://raw.githubusercontent.
 hardblock	@@||vip.kugou.com^	hit=kugou.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 hardblock	@@||vip1.kuwo.cn^	hit=kuwo.cn	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt;file:local/whitelist.txt
 hardblock	@@||vqq.admaster.com.cn^	hit=vqq.admaster.com.cn	src=file:local/wan.txt
-hardblock	@@||weibo.com^	hit=ads.weibo.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
+hardblock	@@||weibo.com^	hit=adx.weibo.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 hardblock	@@||www.kugou.com^	hit=kugou.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 hardblock	@@||www.kuwo.cn^	hit=kuwo.cn	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 hardblock	@@||www3.doubleclick.net^	hit=www3.doubleclick.net	src=https://adguardteam.github.io/HostlistsRegistry/assets/filter_1.txt
