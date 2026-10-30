@@ -1,13 +1,14 @@
-# split_protected 剔除审计  2026-10-30 05:18:18
-# 共 10 条
+# split_protected 剔除审计  2026-10-30 12:34:23
+# 共 11 条
 # 格式: category / rule / hit / src
 split_protected	@@||1music.cc^	hit=1music.cc	src=file:local/whitelist.txt
 split_protected	@@||akamaized.net^	hit=akamaized.net	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 split_protected	@@||bootcdn.net^	hit=bootcdn.net	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 split_protected	@@||cdn-go.cn^	hit=cdn-go.cn	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
+split_protected	@@||codebuddy.ai^	hit=codebuddy.ai	src=file:local/whitelist.txt
+split_protected	@@||codebuddy.cn^	hit=codebuddy.cn	src=file:local/whitelist.txt
 split_protected	@@||ctrip.com^	hit=ctrip.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
-split_protected	@@||googleadservices.com^	hit=googleadservices.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
-split_protected	@@||hpplay.cn^	hit=hpplay.cn	src=file:local/whitelist.txt
-split_protected	@@||quark.cn^	hit=quark.cn	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
-split_protected	@@||sm.cn^	hit=sm.cn	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
+split_protected	@@||hpplay.cn^	hit=hpplay.cn	src=file:local/wan.txt;file:local/whitelist.txt
+split_protected	@@||workbuddy.ai^	hit=workbuddy.ai	src=file:local/whitelist.txt
+split_protected	@@||workbuddy.cn^	hit=workbuddy.cn	src=file:local/whitelist.txt
 split_protected	@@||zhuanzhuan.com^	hit=zhuanzhuan.com	src=file:local/whitelist.txt
