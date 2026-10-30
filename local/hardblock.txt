@@ -238,6 +238,7 @@ hc-ssp.sm.cn
 px.ucweb.com
 
 
+
 adsterra.com
 
 taboola.com
@@ -320,7 +321,6 @@ f-cashloan.snssdk.com
 
 
 
-
 toblog.ctobsnssdk.com
 
 
@@ -334,7 +334,6 @@ beacon-api.aliyuncs.com
 
 pigeon.alicdn.com
 
-aeventlog.beacon.qq.com
 
 otheve.beacon.qq.com
 
@@ -465,3 +464,13 @@ w2.paykwai.com
 rz02-onepushconnector-cn-01.heytapmobi.com
 api-jits-cn.heytapmobi.com
 analytics.95516.com
+promotion-2.pddpic.com
+v4.oskwai.com
+w2.bpaykwai.com
+fystat-ans.chaoxing.com
+report.idqqimg.com
+v3.oskwai.com
+datasec-kmsex-cn.heytapmobi.com
+push-ads-cn.heytapmobi.com
+v20.events.data.microsoft.com
+bdimg7.qunliao.info
