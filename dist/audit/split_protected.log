@@ -1,4 +1,4 @@
-# split_protected 剔除审计  2026-10-30 19:06:34
+# split_protected 剔除审计  2026-10-30 23:33:49
 # 共 11 条
 # 格式: category / rule / hit / src
 split_protected	@@||1music.cc^	hit=1music.cc	src=file:local/whitelist.txt
@@ -8,7 +8,7 @@ split_protected	@@||cdn-go.cn^	hit=cdn-go.cn	src=https://raw.githubusercontent.c
 split_protected	@@||codebuddy.ai^	hit=codebuddy.ai	src=file:local/whitelist.txt
 split_protected	@@||codebuddy.cn^	hit=codebuddy.cn	src=file:local/whitelist.txt
 split_protected	@@||ctrip.com^	hit=ctrip.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
-split_protected	@@||hpplay.cn^	hit=hpplay.cn	src=file:local/whitelist.txt;file:local/wan.txt
+split_protected	@@||hpplay.cn^	hit=hpplay.cn	src=file:local/wan.txt;file:local/whitelist.txt
 split_protected	@@||workbuddy.ai^	hit=workbuddy.ai	src=file:local/whitelist.txt
 split_protected	@@||workbuddy.cn^	hit=workbuddy.cn	src=file:local/whitelist.txt
 split_protected	@@||zhuanzhuan.com^	hit=zhuanzhuan.com	src=file:local/whitelist.txt
