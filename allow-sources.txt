@@ -4,3 +4,4 @@
 
 file:local/wan.txt
 file:local/whitelist.txt
+file:local/user_allow.txt
