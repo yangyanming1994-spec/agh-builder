@@ -2,3 +2,4 @@
 # 每行一条 AdBlock 语法，例如: @@||ads.example.com^
 # 此文件由 status-server 自动维护，勿手改
 @@||bug-test-1.com^
+@@||example.com^
