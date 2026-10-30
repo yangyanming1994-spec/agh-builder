@@ -24,3 +24,4 @@ https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/pro.txt
 https://adguardteam.github.io/HostlistsRegistry/assets/filter_3.txt
 https://raw.githubusercontent.com/easylist/easylistchina/master/easylistchina.txt
 https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/AWAvenue-Ads-Rule.txt
+file:local/user_deny.txt # self-service deny
