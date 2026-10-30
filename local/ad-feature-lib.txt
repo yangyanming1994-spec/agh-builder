@@ -1,0 +1,113 @@
+# ============================================
+# 广告/追踪域名特征库 (ad-feature-lib)
+# 用法：
+#   1) 精确主域（无通配符，如 mmstat.com）→ 高置信，自动加入黑名单
+#   2) 通配特征（含 *，如 ads*.zijieapi.com）→ 用于 AI 审核辅助/候选加分，不自动拦截
+#   # 开头为注释；空行忽略；全程小写
+# 来源：2026-10-18 用户确认的字节/腾讯/阿里/百度等厂商广告主域整合
+# ============================================
+
+# ---- 字节跳动系（精确主域，自动拦截）----
+pangolin-sdk-toutiao.com
+pangolin-sdk-toutiao-b.com
+pangolin-sdk-toutiao1.com
+csjplatform.com
+
+# ---- 腾讯系（精确主域）----
+gdt.qq.com
+e.qq.com
+pgdt.gtimg.cn
+
+# ---- 阿里系（精确主域）----
+alimama.com
+mmstat.com
+# umeng.com 裸域整域升级 important 会误伤友盟官网（umeng.com/www.umeng.com），已移除；
+# 遥测子域 ar/aaid/alog/alogs/plbslog/oslogs 等由独立 important 与外部整域规则覆盖，裸域走 @@|umeng.com| 白名单。
+umengcloud.com
+tanx.com
+h-adashx.ut.taobao.com
+
+# ---- 百度系（精确主域）----
+mobads.baidu.com
+mobads-logs.baidu.com
+cpro.baidu.com
+
+# ---- Google / Unity 国际广告（精确主域）----
+doubleclick.net
+googlesyndication.com
+googleadservices.com
+googletagmanager.com
+googletagservices.com
+unityads.unity3d.com
+
+# ---- 国际移动广告变现/聚合 SDK（精确主域，整域为广告变现业务）----
+mintegral.com
+vungle.com
+ironsrc.com
+applovin.com
+inmobi.com
+chartboost.com
+adcolony.com
+tapjoy.com
+liftoff.io
+fyber.com
+sigmob.cn
+# ---- 移动广告归因/监测 MMP（广告链路追踪，非 App 核心功能）----
+adjust.com
+appsflyer.com
+kochava.com
+
+# ---- 终端厂商广告（精确主域/段）----
+ad.xiaomi.com
+admob.xiaomi.com
+adnet.vivo.com.cn
+adserver.vivo.com.cn
+adsfs.oppomobile.com
+adx.ads.oppomobile.com
+
+# ---- 媒体/工具类广告（精确主域/段）----
+ad.sohu.com
+adshow.58.com
+atm.youku.com
+ad.ximalaya.com
+ads.service.kugou.com
+adproxy.autohome.com.cn
+
+# ============================================
+# 通配特征（AI 审核辅助 + 候选加分，不自动拦截）
+# ============================================
+# 字节系：仅广告/日志/遥测子域；gecko/mssdk/ma/vcs/tnc/abtest/i/is/frontier 等功能域禁止入此表
+ads*.zijieapi.com
+mon*.zijieapi.com
+mcs*.zijieapi.com
+log*.zijieapi.com
+applog*.zijieapi.com
+timon*.zijieapi.com
+seraph*.zijieapi.com
+pc-mon*.zijieapi.com
+live-player-log*.zijieapi.com
+ibytedapm.com
+mon*.snssdk.com
+mcs*.snssdk.com
+xlog.snssdk.com
+log.snssdk.com
+ctobsnssdk.com
+isnssdk.com
+toblog*.ctobsnssdk.com
+*-ad-sign.byteimg.com
+*-be-pack-sign.pglstatp-toutiao.com
+dig*.bdurl.net
+ad*.qznovelvod.com
+tracking.miui.com
+tracking.intl.miui.com
+metrics-dra.dt.hicloud.com
+logbak.hicloud.com
+ck.ads.oppomobile.com
+bdapi.ads.oppomobile.com
+g1.ads.oppomobile.com
+sms.ads.heytapmobi.com
+adse.wsa.ximalaya.com
+adbehavior.wsa.ximalaya.com
+wmlog.meituan.com
+# 拼多多促销广告素材 CDN（仅 promotion-* 主机，正常商品图 pddpic 不拦）
+promotion-*.pddpic.com
