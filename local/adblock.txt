@@ -34,8 +34,6 @@ m.jd.com###appdlCon > div.modal
 ||coolapk.com/v6/feed/detail?$replace=/detailSponsorCard//
 !腾讯的广点通(优量汇)和字节跳动的穿山甲广告
 ||game.weixin.qq.com^
-||i.snssdk.com^
-||is.snssdk.com^
 ||sf3-ttcdn-tos.pstatp.com^
 ||dig.bdurl.net^
 ||in-addr.arpa^
@@ -52,15 +50,9 @@ m.jd.com###appdlCon > div.modal
 ||dm.toutiao.com^
 !字节
 ||haohuo.snssdk.com^
-||i.snssdk.com^
-||ib.snssdk.com^
-||ic.snssdk.com^
-||is.snssdk.com^
-||log.snssdk.com^
-||mcs.snssdk.com^
-||mon.snssdk.com^
-||vcs.snssdk.com^
-||verify.snssdk.com^
+||log.snssdk.com^$important
+||mcs.snssdk.com^$important
+||mon.snssdk.com^$important
 ||rup4a04-c02.tos-cn-hongkong.bytepluses.com^
 ||crashlytics.com^
 ||uril6.com^
@@ -68,21 +60,16 @@ m.jd.com###appdlCon > div.modal
 ||ahdohpiechei.com^
 ||cjjd14.com^
 ||homeborn.cn^
-||pitaya.bytedance.com^
 ||qtaeixd.com^
 ||ttwebview.com^
 ||volcsiriusbd.com^
 ||sealaly.net^
 ||vegslb.com^
 ||siomxity.com^
-||lf-fe.fqnovelstatic.com^
-||open.douyin.com^
 ||huixuanjiasu.com^
 ||mktm.jd.com^
-||life-service-open.zijieapi.com^
 ||zxid-api.mobileservice.cn^
 ||ietheivaicai.com^
-||abtestvm.bytedance.com^
 ||tapad-platform.tapimg.com^
 ||tap-dsp.iem.taptap.cn^
 ||statics.adanxing.com^
@@ -1059,7 +1046,6 @@ vacations.ctrip.com##.side_function
 ||moxiaoqihuoguo.com^
 ||mryshl.com^
 ||msg.ettoday.net^
-||msg.iqiyi.com^
 ||msg.video.qiyi.com^
 ||msite.baidu.com^
 ||muchenzhongguo.com^
@@ -1120,7 +1106,6 @@ vacations.ctrip.com##.side_function
 ||oxj8hcfg.xyz^
 ||oyxp.xyz^
 ||p0y.cn^
-||p1-feedback.byteimg.com^
 ||paradisemall.net^
 ||payoneok.com^
 ||pbaiyho.cn^
@@ -1342,7 +1327,6 @@ vacations.ctrip.com##.side_function
 ||trc.taboola.com^
 ||trustedcpmrevenue.com^
 ||truthfulsensor.com^
-||tsearch.snssdk.com^
 ||tsyndicate.com^
 ||tuhzjrr.cn^
 ||tuisong.baidu.com^
@@ -1649,7 +1633,6 @@ vacations.ctrip.com##.side_function
 ||as.weixin.qq.com^
 ||bossaudioandcomic-1252317822.image.myqcloud.com^
 ||c.etoolads.cn^
-||cards.iqiyi.com^
 ||chat-platform-open.kakamobi.cn^
 ||ctrmi.cn^
 ||default.cn.sz.wagbridge.ad.alibabacorp.com.gds.alibabadns.com^
@@ -1668,16 +1651,11 @@ vacations.ctrip.com##.side_function
 ||gsp0.baidu.com^
 ||guid.tpns.tencent.com^
 ||huichuan.sm.cn^
-||i-hl.snssdk.com^
 ||iadmusicmatvideo.music.126.net^
-||ib-hl.snssdk.com^
-||ib.snssdk.com^
 ||ii.gdt.qq.com^
 ||ios.bugly.qq.com^
 ||jiaxiao-awd.kakamobi.cn^
 ||lens.zhihu.com^
-||lf-cdn-tos.bytescm.com^
-||lf3-reading.fqnovelpic.com^
 ||maplehaze.cn^
 ||monitor.v2.tcyad.com^
 ||news-l.play.aiseet.atianqi.com^
@@ -1686,12 +1664,9 @@ vacations.ctrip.com##.side_function
 ||otheve.beacon.qq.com^
 ||peplle.cn^
 ||pgdt.gtimg.cn^
-||pic7.iqiyipic.com^
-||pre-cache.video.iqiyi.com^
 ||pro.bugly.qq.com^
 ||public.gdtimg.com^
 ||qttunion.com^
-||reading-hl.snssdk.com^
 ||remoteads.oss-cn-beijing.aliyuncs.com^
 ||securepubads.g.doubleclick.net^
 ||signaltower.gdt.qq.com^
@@ -1706,10 +1681,8 @@ vacations.ctrip.com##.side_function
 ||upos-sz-static.bilivideo.com^
 ||upos-sz-staticcos.bilivideo.com^
 ||v.gdt.qq.com^
-||v5-novelapp.fqnovelvod.com^
 ||vali-g1.cp31.ott.cibntv.net^
 ||w1.kskwai.com^
-||webcast-open.douyin.com^
 ||wkanx.com^
 ||wtradv.market.xiaomi.com^
 ||wximg.wxs.qq.com^
@@ -1720,14 +1693,11 @@ vacations.ctrip.com##.side_function
 ||cainiao-app-logs.cn-zhangjiakou.dualstack.log.aliyuncs.com^
 ||accscdn.m.taobao.com^
 ||admonitor-feedback.cn-hangzhou.log.aliyuncs.com^
-||polaris5-normal-hl.zijieapi.com^
 ||inbox.clashofclans.cn^
 ||coc-ws.broker.tplay.qq.com^
 ||jsonatm-wss.broker.tplay.qq.com^
 ||lives.l.aiseet.atianqi.com^
-||k0ub7yecy34y98z.djvod.ndcimgs.com^
 ||p2.eckwai.com^
-||djvod.ndcimgs.com^
 ||124124fgh56u34.e2y4h7.com^
 ||pick.isxyrzo.com^
 ||map.thb205.com^
@@ -2399,7 +2369,6 @@ vacations.ctrip.com##.side_function
 ||dreport.meituan.net^
 ||tec73.com^
 ||wmlog.meituan.com^
-||volces.com^
 ||logan.sankuai.com^
 ||appsflyersdk.com^
 ||catfront.dianping.com^
@@ -2567,7 +2536,6 @@ vacations.ctrip.com##.side_function
 ||dentsuchina.cn^
 ||voiceads.cn^
 ||somamobi.com^
-||ndcpp.com^
 #中国电信
 ||appupdate.189.cn^
 ||appupdates.189.cn^
@@ -2598,19 +2566,1332 @@ vacations.ctrip.com##.side_function
 #彩虹多多App
 ||yunxish.com^
 ||adxvip.com^
-
 # ===== 字节/番茄 精准广告拦截（$important 覆盖普通白名单；只拦广告子域，不影响内容/抖音）=====
 ||ad.zijieapi.com^$important
 ||ads*-normal-*.zijieapi.com^$important
-||*-reading-video.fqnovelvod.com^$important
-
 !修复拼多多域名误封(badfilter禁用过宽的通配符规则)
-||pinduoduo.*^$badfilter
-||yangkeduo.com^$badfilter
-||myangkeduo.com^$badfilter
-
 !修复明确误封域名(badfilter)
 ||pingan.com^$badfilter
 ||koolearn.com^$badfilter
 ||oschina.net^$badfilter
 ||canvas-cdn.gdt.qq.com^$important
+||no-such-test-verify.com^
+||ad.e.kuaishou.com^
+||ad.partner.gifshow.com^
+||api-p*.yksdks.com^
+||p*-lm.adukwai.com^
+||p*-ad.adukwai.com^
+||p*-lm.adkwai.com^
+||p*-ff.adkwai.com^
+||v4-lm.adukwai.com^
+||beta2-ad-open-api.gifshow.com^
+||log-sdk.ksapisrv.com^
+||log-sdk.gifshow.com^
+||ulog-sdk.gifshow.com^
+||ulogjs.gifshow.com^
+||frontend-perf-service.e.kuaishou.com^
+||gdfp.gifshow.com^$important
+||p*-ad.adukwai.com^$important
+||p*-lm.adukwai.com^$important
+||api.ad.xiaomi.com^
+||sdkconfig.ad.xiaomi.com^
+||data.mistat.xiaomi.com^
+||abtest.mistat.xiaomi.com^
+||adv.sec.miui.com^
+||tracking.miui.com^
+||cdn.ad.xiaomi.com^
+||zeus.ad.xiaomi.com^
+||api.ad.intl.xiaomi.com^
+||sdkconfig.ad.intl.xiaomi.com^
+||adx.ads.oppomobile.com^
+||adsfs.oppomobile.com^
+||uapi.ads.heytapmobi.com^
+||sms.ads.oppomobile.com^
+||pnrt-stsdk.vivo.com.cn^
+||brpnrt.stsdk.vivo.com.cn^
+||onrt-stsdk.vivo.com.cn^
+||metrics.data.hicloud.com^
+||metrics2.data.hicloud.com^
+||adx.qq.com^
+||gdt.qq.com^
+||pglstatp-toutiao.com^
+||api-access.pangolin-sdk-toutiao.com^
+||umengcloud.com^
+||mydas.mobi^
+||miaozhen.com^
+||mediav.com^
+||mobads.baidu.com^
+||mobads-logs.baidu.com^
+||pos.baidu.com^
+||cpro.baidu.com^
+||adlog.vivo.com.cn^
+||adsdk.vivo.com.cn^
+||sigmob.cn^
+||youmi.net^
+||api.domob.cn^
+||adview.cn^
+||log1.cmpassport.com^
+||adshmct.qq.com^
+||cm.e.qq.com^
+||ad.tencentmusic.com^
+||adclick.tencentmusic.com^
+||tmeadcomm.y.qq.com^
+||adx-open-service.youku.com^
+||ad.youku.com^
+||ykad-data.youku.com^
+||cad.youku.com^
+||track.mediav.com^
+||adwo.com^
+||adcolony.com^
+||applovin.com^
+||inmobi.cn^
+||ipinyou.com^
+||admaster.com.cn^
+||log.umsns.com^
+||api-access.pangolin-sdk-toutiao1.com^
+||ads0-normal-lq.zijieapi.com^
+||ads1-normal-lq.zijieapi.com^
+||ads2-normal-lq.zijieapi.com^
+||ads3-normal-lq.zijieapi.com^
+||ads4-normal-lq.zijieapi.com^
+||ads5-normal-lq.zijieapi.com^
+||cmshow.gtimg.cn^
+||newsad.ssp.qq.com^
+||mobads-pre-config.cdn.bcebos.com^
+||mobads-logs.bcebos.com^
+||ad.player.baidu.com^
+||aaid.umeng.com^
+||log.umeng.com^
+||umtrack.umeng.com^
+||open.e.kuaishou.cn^
+||open.kuaishouzt.com^
+||ads.oppomobile.com^
+||a0.app.xiaomi.com^
+||ad.51wnl.com^
+||ad.bn.netease.com^
+||ad.qingting.fm^
+||ad.ximalaya.com^
+||ad.zhangyue.com^
+||ad.weibo.com^
+||ad-api.4pyun.com^
+||ad-sdk-config.youdao.com^
+||ad.richmob.cn^
+||app.adjust.net.in^
+||app.adjust.world^
+||skadsdk.appsflyer.com^
+||stat.youku.com^
+||track.youku.com^
+||log.zhihu.com^
+||adapi.zhihu.com^
+||ad.ixigua.com^
+||adapi.ixigua.com^
+||stat.ixigua.com^
+||adapi.douyinpic.com^
+||beacon.douyinpic.com^
+||track.kuaishou.com^
+||stat.kuaishou.com^
+||beacon.kuaishou.com^
+||ad.kuaishouzt.com^
+||log.kuaishouzt.com^
+||ad.ksapisrv.com^
+||stat.ksapisrv.com^
+||ad.360.cn^
+||adstat.360.cn^
+||beacon.360.cn^
+||ad.so.com^
+||stat.so.com^
+||ad.sogou.com^
+||stat.sogou.com^
+||beacon.sogou.com^
+||ad.ifeng.com^
+||stat.ifeng.com^
+||beacon.ifeng.com^
+||ad.sina.com.cn^
+||stat.sina.com.cn^
+||beacon.sina.com.cn^
+||adapi.bilibili.com^
+||track.bilibili.com^
+||beacon.bilibili.com^
+||stat.bilibili.com^
+||ad.douban.com^
+||stat.douban.com^
+||beacon.douban.com^
+||ad.qqmusic.com^
+||stat.qqmusic.com^
+||beacon.qqmusic.com^
+||ad.kuwo.cn^
+||stat.kuwo.cn^
+||beacon.kuwo.cn^
+||ad.kugou.com^
+||stat.kugou.com^
+||beacon.kugou.com^
+||ad.aliyun.com^
+||adapi.aliyun.com^
+||stat.aliyun.com^
+||beacon.aliyun.com^
+||ad.tencent.com^
+||stat.tencent.com^
+||beacon.tencent.com^
+||ad.baidu.com^
+||beacon.baidu.com^
+||stat.baidu.com^
+||active.tc.skysrt.com^
+||ad.3.cn^
+||alog.umeng.com^
+||api.app.skysrt.com^
+||api.device.skysrt.com^
+||api.hoisin.hw.coocaatv.com^
+||api.home.skysrt.com^
+||api.skyworthiot.com^
+||api.upgrade.skysrt.com^
+||api-app.coocaa.ottcn.com^
+||api-home.coocaa.ottcn.com^
+||api-home.skysrt.com^
+||api-upgrade.coocaa.ottcn.com^
+||app.snm0516.aisee.tv^
+||btrace.play.t002.ottcn.com^
+||business.video.tc.skysrt.com^
+||cl-dl.cc0808.com^
+||clog.skysrt.com^
+||connect.play.aiseet.atianqi.com^
+||data-dl.skysrt.com^
+||data-hoisin.coocaa.com^
+||dl.skysrt.com^
+||dp3.play.t002.ottcn.com^
+||gs.getui.com^
+||hoisin.coocaa.com^
+||hoisin.coocaatv.com^
+||irs01.com^
+||kaola.com^
+||livep.l.t002.ottcn.com^
+||log.skysrt.com^
+||mdp-at.geely.com^
+||member.coocaa.com^
+||mtrace.play.t002.ottcn.com^
+||ocsp.int-x3.letsencrypt.org^
+||p.tencentmind.com^
+||play.t002.ottcn.com^
+||push.tc.skysrt.com^
+||push.tvos.skysrt.com^
+||puui.qpic.cn^
+||qr.coocaa.com^
+||res.hoisin.coocaatv.com^
+||rpc-tc.skysrt.com^
+||rpt-gdt.play.t002.ottcn.com^
+||s.jpush.cn^
+||sdk1xyajs.data.p2cdn.com^
+||sis.jpush.io^
+||sky.tvos.skysrt.com^
+||skyworthdigital.com^
+||skyworthiot.com^
+||stats.jpush.cn^
+||status.tvos.skysrt.com^
+||status2.tvos.skysrt.com^
+||sv.video.qq.com^
+||taps.net^
+||tq.skysrt.com^
+||tracker.appadhoc.com^
+||tvapp.hpplay.cn^
+||tvos.skysrt.com^
+||tx.ctrmi.cn^
+||umengacs.m.taobao.com^
+||uop.umeng.com^
+||update01.skyworth-cloud.com.wswebpic.com^
+||update01.skyworth-cloud.com^
+||vqq.admaster.com.cn^
+||webapp.skysrt.com^
+||bak.bajintech.com^$important^
+||iwd.skysrt.com^$important^
+||ipv4only.arpa^$important^
+||api.bajintech.com^$important^
+||wifimodule.doubimeizhi.com^$important^
+||msy59wz.mqtt.iot.gz.baidubce.com^$important^
+||i.ytimg.com^$important^
+||qq.com^$client='10.0.0.99'
+||baidu.com^$client='10.0.0.99'
+||aliyun.com^$client='10.0.0.99'^
+||taobao.com^$client='10.0.0.99'^
+||alibaba.com^$client='10.0.0.99'^
+||aliyuncs.com^$client='10.0.0.99'^
+||xp.apple.com^
+||mesu.apple.com^
+||gdmf.apple.com^
+||ocsp.apple.com^
+||appldnld.apple.com^
+||world-gen.g.aaplimg.com^
+||test.com^
+||activity-ag.awemeughun.com^
+||ad.toutiao.com^
+||ads-vp5.xhscdn.com^
+||ads0-normal-gr.zijieapi.com^
+||ads0-normal-hk.zijieapi.com^
+||ads0-normal-hl.zijieapi.com^
+||ads0-normal-lf.zijieapi.com^
+||ads0-normal-lq.zijieapi.com^
+||ads0-normal-sg.zijieapi.com^
+||ads0-normal-zj.zijieapi.com^
+||ads1-normal-gr.zijieapi.com^
+||ads1-normal-hk.zijieapi.com^
+||ads1-normal-hl.zijieapi.com^
+||ads1-normal-lf.zijieapi.com^
+||ads1-normal-lq.zijieapi.com^
+||ads1-normal-sg.zijieapi.com^
+||ads1-normal-zj.zijieapi.com^
+||ads2-normal-gr.zijieapi.com^
+||ads2-normal-hk.zijieapi.com^
+||ads2-normal-hl.zijieapi.com^
+||ads2-normal-lf.zijieapi.com^
+||ads2-normal-lq.zijieapi.com^
+||ads2-normal-sg.zijieapi.com^
+||ads2-normal-zj.zijieapi.com^
+||ads3-normal-gr.zijieapi.com^
+||ads3-normal-hk.zijieapi.com^
+||ads3-normal-hl.zijieapi.com^
+||ads3-normal-lf.zijieapi.com^
+||ads3-normal-lq.zijieapi.com^
+||ads3-normal-sg.zijieapi.com^
+||ads3-normal-zj.zijieapi.com^
+||ads4-normal-gr.zijieapi.com^
+||ads4-normal-hk.zijieapi.com^
+||ads4-normal-hl.zijieapi.com^
+||ads4-normal-lf.zijieapi.com^
+||ads4-normal-lq.zijieapi.com^
+||ads4-normal-sg.zijieapi.com^
+||ads4-normal-zj.zijieapi.com^
+||ads5-normal-gr.zijieapi.com^
+||ads5-normal-hk.zijieapi.com^
+||ads5-normal-hl.zijieapi.com^
+||ads5-normal-lf.zijieapi.com^
+||ads5-normal-lq.zijieapi.com^
+||ads5-normal-sg.zijieapi.com^
+||ads5-normal-zj.zijieapi.com^
+||apd-pcdnwxlogin.teg.tencent-cloud.net^
+||api-access.pangolin-sdk-toutiao1.com^
+||api.iegadp.qq.com^
+||apm-native.xiaohongshu.com^
+||cnlogs.umeng.com^
+||dig.bdurl.net^
+||errnewlog.umeng.com^
+||i-lq-snssdk.com^
+||l2-toutiao-quic-ipv6-ml.gslb.ksyuncdn.com^
+||lng.xiaohongshu.com^
+||log-api.pangolin-sdk-toutiao.com^
+||log5-applog-hl.fqnovel.com^
+||mcs.snssdk.com^
+||mon11-misc-hl.fqnovel.com^
+||msync-im1-vip6-std.easemob.com^
+||ossnt-errlog.umeng.com^
+||p3-ad-sign.byteimg.com^
+||p6-ad-sign.byteimg.com^
+||p9-ad-sign.byteimg.com^
+||praisewindow.ugsdk.cn^
+||rtlog3-applog-hl.fqnovel.com^
+||rtlog5-applog-hl.fqnovel.com^
+||sf3-ttcdn-tos.pstatp.com^
+||spider-tracker.xiaohongshu.com^
+||ulogs.umeng.com^
+||v100-bd-daily-reading-ad.qznovelvod.com^
+||v100-reading-ad.qznovelvod.com^
+||v100-se-daily-reading-ad.qznovelvod.com^
+||v100-se-sjy-daily-reading-ad.qznovelvod.com^
+||v26-bd-daily-reading-ad.qznovelvod.com^
+||v26-reading-ad.qznovelvod.com^
+||v26-se-daily-reading-ad.qznovelvod.com^
+||v26-se-sjy-daily-reading-ad.qznovelvod.com^
+||v5-bd-daily-reading-ad.qznovelvod.com^
+||v5-reading-ad.qznovelvod.com^
+||v5-se-daily-reading-ad.qznovelvod.com^
+||v5-se-sjy-daily-reading-ad-qznovelvod-qhwhu2.dizgslb.com^
+||v5-se-sjy-daily-reading-ad.qznovelvod.com^
+||v6-bd-daily-reading-ad.qznovelvod.com^
+||v6-reading-ad.qznovelvod.com^
+||v6-se-daily-reading-ad.qznovelvod.com^
+||v6-se-sjy-daily-reading-ad.qznovelvod.com^
+||v7-bd-daily-reading-ad.qznovelvod.com^
+||v7-reading-ad.qznovelvod.com^
+||v7-se-daily-reading-ad.qznovelvod.com^
+||v7-se-sjy-daily-reading-ad.qznovelvod.com^
+||v9-bd-daily-reading-ad.qznovelvod.com^
+||v9-reading-ad.qznovelvod.com^
+||v9-se-daily-reading-ad.qznovelvod.com^
+||v9-se-sjy-daily-reading-ad.qznovelvod.com^
+||v95-bd-daily-reading-ad.qznovelvod.com^
+||v95-reading-ad.qznovelvod.com^
+||v95-se-daily-reading-ad.qznovelvod.com^
+||v95-se-sjy-daily-reading-ad.qznovelvod.com^
+||v99-bd-daily-reading-ad.qznovelvod.com^
+||v99-reading-ad.qznovelvod.com^
+||v99-se-daily-reading-ad.qznovelvod.com^
+||v99-se-sjy-daily-reading-ad.qznovelvod.com^
+! ===== 2026-10-07 精准补强: 华为/荣耀/拼多多/360/搜狗/小红书等 =====
+! 只含明确广告/埋点/统计域名, 受白名单保护, 不误伤业务
+||acookie.alibaba.com^
+||ad.360.cn^
+||ad.jd.com^
+||ad.pinduoduo.com^
+||ad.so.com^
+||ad.sogou.com^
+||ad.sogoucdn.com^
+||ad.taobao.com^
+||ad.yangkeduo.com^
+||adclick.hicloud.com^
+||adrecovery.jd.com^
+||ads.alibaba.com^
+||ads.cdn.hicloud.com^
+||ads.hicloud.com^
+||ads.honor.com^
+||ads.huawei.com^
+||ads.xhscdn.com^
+||ads.yangkeduo.com^
+||adservice.huawei.com^
+||adstat.360.cn^
+||adv.sec.hicloud.com^
+||adv.sec.honor.com^
+||advertising.hicloud.com^
+||advertising.honor.com^
+||adwin.alibaba.com^
+||adx.huawei.com^
+||adx.taobao.com^
+||analytics.honor.com^
+||analytics.huawei.com^
+||analytics.yangkeduo.com^
+||apm-native.xiaohongshu.com^
+||apm.diditaxi.com^
+||apm.ele.me^
+||apm.meituan.com^
+||apm.yangkeduo.com^
+||appanalytics.huawei.com^
+||appmetrics.hicloud.com^
+||appmetrics1.hicloud.com^
+||appmetrics2.hicloud.com^
+||appmetrics3-dra.hicloud.com^
+||appmetrics3.hicloud.com^
+||appmetrics4-dra.hicloud.com^
+||appmetrics4.hicloud.com^
+||appmetrics5.hicloud.com^
+||appmetrics6.hicloud.com^
+||appmetrics7.hicloud.com^
+||appmetrics8.hicloud.com^
+||beacon.360.cn^
+||beacon.so.com^
+||beacon.sogou.com^
+||hicloud-ads.hicloud.com^
+||hwmobileads.hicloud.com^
+||jump.360.cn^
+||kstat.360.cn^
+||lng.xiaohongshu.com^
+||log.diditaxi.com^
+||log.ele.me^
+||log.huawei.com^
+||log.jd.com^
+||log.m.taobao.com^
+||log.meituan.com^
+||log.xhscdn.com^
+||log.xiaohongshu.com^
+||log.yangkeduo.com^
+||mapi.xhscdn.com^
+||marketing.huawei.com^
+||metrics.data.hicloud.com^
+||metrics.data.honor.com^
+||metrics.huawei.com^
+||metrics1.huawei.com^
+||metrics2.data.hicloud.com^
+||metrics2.huawei.com^
+||metrics3.data.hicloud.com^
+||mobads.pinduoduo.com^
+||mta.ele.me^
+||mtrace.meituan.com^
+||pos.baidu.com^
+||spider-tracker.xiaohongshu.com^
+||spider.yangkeduo.com^
+||stat.diditaxi.com^
+||stat.ele.me^
+||stat.jd.com^
+||stat.meituan.com^
+||stat.pinduoduo.com^
+||stat.so.com^
+||stat.sogou.com^
+||stat.xiaohongshu.com^
+||stat.yangkeduo.com^
+||trace.diditaxi.com^
+||trace.meituan.com^
+||trace.yangkeduo.com^
+||track.alibaba.com^
+||track.diditaxi.com^
+||track.ele.me^
+||track.jd.com^
+||track.meituan.com^
+||track.pinduoduo.com^
+||track.sogou.com^
+||track.taobao.com^
+||track.xhscdn.com^
+||track.xiaohongshu.com^
+||track.yangkeduo.com^
+||tracking.huawei.com^
+||ump.yangkeduo.com^
+||ads.yangkeduo.com^$important
+||ad.yangkeduo.com^$important
+||track.yangkeduo.com^$important
+||track.pinduoduo.com^$important
+||stat.yangkeduo.com^$important
+||stat.pinduoduo.com^$important
+||log.yangkeduo.com^$important
+||analytics.yangkeduo.com^$important
+||spider.yangkeduo.com^$important
+||trace.yangkeduo.com^$important
+||ump.yangkeduo.com^$important
+||apm.yangkeduo.com^$important
+||mobads.pinduoduo.com^$important
+||ad.pinduoduo.com^$important
+||abtk.pinduoduo.com^$important
+||at.pinduoduo.com^$important
+||districtm.com^
+||mmaplatform.com^
+||track.epicpc.com^
+# 驾考宝典广告SDK平台(木仓科技)
+||kakamobi.cn^
+||kakamobi.com^
+||ad.vivo.com.cn^$important
+! ===== 综合广告联盟补充 =====
+||union.163.com^
+||biz.ifeng.com^
+||media.jd.com^
+||9lianmeng.com^
+||duomai.cn^
+! ===== 字节跳动 / 穿山甲补充 =====
+||ads.toutiao.com^
+||ad.bytedance.com^
+! ===== 微博 / 新浪补充 =====
+||sinaads.sina.com.cn^
+! ===== 知乎 / B站 / 爱奇艺补充 =====
+||ad.zhihu.com^
+||ad.bilibili.com^
+||ads.iqiyi.com^
+! ===== 生活平台补充 =====
+||ad.meituan.com^
+||ad.autohome.com.cn^
+! ===== 用户补充:综合广告联盟缺失项 =====
+||alimama.com^
+||mmstat.com^
+||als.baidu.com^
+||adsduomai.cn^
+||union.vip.com^
+||shang.qq.com^
+||pingma.qq.com^
+||acs4baichuan.m.taobao.com^
+! ===== 用户补充:内容与社交平台缺失项 =====
+||sugar.zhihu.com^
+||ad.bn.netease.com^
+||n.3g.163.com^
+! ===== 用户补充:视频平台缺失项 =====
+||ad.iqiyi.com^
+||ad.v.qq.com^
+||vd6.l.qq.com^
+||vi.l.qq.com^
+||acs.youku.com^
+! ===== 用户补充:音乐工具类缺失项 =====
+||admusicpic.music.126.net^
+||iadmusicmat.music.126.net^
+! ===== 用户补充:其他缺失项 =====
+||ad.bytedance.com^
+||ad.meizu.com^
+! 知乎统计埋点(用户确认强制拦截,隐私保护)
+||sugar.zhihu.com^$important
+! ===== 用户补充二: 广告联盟/SDK/统计 =====
+||woyao998.com^
+||5iads.cn^
+||nsclick.baidu.com^
+||iadmusicmatvideo.music.126.net^
+||r.inews.qq.com^
+||de.pandora.xiaomi.com^
+||sa\d.tuisong.baidu.com^
+! 百度统计/小米分发(用户确认强制拦截)
+||nsclick.baidu.com^$important
+||de.pandora.xiaomi.com^$important
+||ads*.zijieapi.com^
+||adx.zijieapi.com^
+||mobads.bytedance.com^
+||analytics.bytedance.com^
+||trace.bytedance.com^
+||ads*.zijieapi.com^$important
+||adx.zijieapi.com^$important
+||mobads.bytedance.com^$important
+||ad.bytedance.com^$important
+||analytics.bytedance.com^$important
+||trace.bytedance.com^$important
+||dig.zjurl.cn^$important
+||ads-intl.hicloud.com^$important
+||adservice.dt.hicloud.com^$important
+||dfad.dt.hicloud.com^$important
+||adcdn.hicloud.com^$important
+||hads.dt.hicloud.com^$important
+||appmetrics-drcn.dt.hihonorcloud.com^$important
+||adservice-drcn.dt.hihonorcloud.com^$important
+||cn.ad.xiaomi.com^$important
+||engine.ad.xiaomi.com^$important
+||adapi.xiaomi.com^$important
+||adx.xiaomi.com^$important
+||mobads.xiaomi.com^$important
+||adsdk.oppomobile.com^$important
+||adapi.oppomobile.com^$important
+||adms.oppomobile.com^$important
+||metrics.oppomobile.com^$important
+||tracking.oppomobile.com^$important
+||adscdn.oppomobile.com^$important
+||iads.oppomobile.com^$important
+||mad.vivo.com.cn^$important
+||api.ad.vivo.com.cn^$important
+||napi.ad.vivo.com.cn^$important
+||sdkad.vivo.com.cn^$important
+||adengine.vivo.com.cn^$important
+||api-ad.meizu.com^$important
+||ad-api.meizu.com^$important
+||tracking.meizu.com^$important
+||ads.samsung.com^$important
+||ad.alimama.com^$important
+||acjs.ad.aliyun.com^$important
+||log.mmstat.com^$important
+||mstat.m.taobao.com^$important
+||adash.m.taobao.com^$important
+||union.jd.com^$important
+||ad.uc.cn^$important
+||api.ad.uc.cn^$important
+||ads.ucweb.com^$important
+||mssp.baidu.com^$important
+||unioncdn.baidu.com^$important
+||ads.hicloud.com^$important
+||metrics.hicloud.com^$important
+||tracking.miui.com^$important
+||media.jd.com^$important
+||adsmind.qq.com^$important
+||cm.e.qq.com^$important
+||advertisement.taobao.com^$important
+||stat.sohu.com^$important
+||ad.e.kuaishou.com^$important
+||adx.ads.oppomobile.com^$important
+||v*-dc-ad.ixigua.com^$important
+||qlp.qinlinad.com^$important
+||buyad.bi-xenon.cn^$important
+||ads.alafish.cn^$important
+||ads.smartmidea.net^$important
+||wxapp.lvyadx.cn^$important
+||localads.chengzijianzhan.cn^$important
+||ad-log-upload.mihoyo.com^$important
+||ads.privacy.qq.com^$important
+||adservice.baidu.com^$important
+||spcode.baidu.com^$important
+||sestat.baidu.com^$important
+||pos.baidu.com^$important
+||cpro.baidu.com^$important
+||mobads.baidu.com^$important
+||eclick.baidu.com^$important
+||eiv.baidu.com^$important
+||pangolin-sdk-tos.bytecdn.cn^$important
+||pangle.cn^$important
+||isnssdk.com^$important
+||mm.cn^$important
+||mmstat.com^$important
+||googleadservices.com^$important
+||app-measurement.com^$important
+||gdtimg.com^$important
+||v.gdt.qq.com^$important
+||na61-na62.wagbridge.alibaba.tanx.com^$important
+||na61-na62.wagbridge.advertisement.tanx.com^$important
+||log-api.pangolin-sdk-toutiao.com^$important
+||log-api.pangolin-sdk-toutiao-b.com^$important
+||partner.googleadservices.com^$important
+||pagead.l.doubleclick.net^$important
+||tpc.googlesyndication.com^$important
+||mediation.adnxs.com^$important
+||ads.x.com^$important
+||ads.vk.com^$important
+||ads.vk.ru^$important
+||ads.finance^$important
+||adnmb3.com^$important
+||pgdt.bytedance.com^$important
+||ads.bytedance.com^$important
+||adashx.m.taobao.com^$important
+||adash.taobao.com^$important
+||sascdn.com^$important
+||ads.snapchat.com^$important
+||ads.honor.cn^$important
+||ads.meizu.com^$important
+||ads.360.cn^$important
+||union.360.cn^$important
+||adv.uc.cn^$important
+||ads.uc.cn^$important
+||tangram.e.qq.com^$important
+||5471782.fls.doubleclick.net^$important
+! ai-discovered 2026-10-14
+! ai-discovered 2026-10-14
+||umdc.alibabachengdun.net^$important
+! ai-discovered 2026-10-14
+! ai-discovered 2026-10-14
+! ai-discovered 2026-10-14
+! ai-discovered 2026-10-14
+! ai-discovered 2026-10-14
+! ai-discovered 2026-10-14
+! ai-discovered 2026-10-15
+! ai-discovered 2026-10-15
+! ai-discovered 2026-10-15
+! ai-discovered 2026-10-15
+! ai-discovered 2026-10-15
+||mon0-misc-lf.amemv.com^$important
+! ai-discovered 2026-10-15
+||adsdk.zaimanhua.com^$important
+! ai-discovered 2026-10-15
+||sdk-log.partner.sm.cn^$important
+! ai-discovered 2026-10-15
+||hc-ssp.sm.cn^$important
+! ai-discovered 2026-10-15
+||px.ucweb.com^$important
+! ai-discovered 2026-10-16
+! ai-discovered 2026-10-16
+! splash-ad-permanent 2026-10-16
+||adashx.qq.com^$important
+||agrd.net^$important
+||pangolin-sdk-tos.com^$important
+! tieba-splash 2026-10-16 (百度贴吧开屏广告)
+||adpro.baidu.com^$important
+||applog.baidu.com^$important
+! wlclean-2026-10-16 A/B类广告豁免转强制拦截
+||adsterra.com^$important
+||ads.taboola.com^$important
+||cdn.taboola.com^$important
+||api.airpush.com^$important
+||clickiocdn.com^$important
+||ads.temu.com^$important
+||appgoad.189.cn^$important
+||bdad.123pan.cn^$important
+||dsp.fcbox.com^$important
+||klclick.com^$important
+||click-trk.com^$important
+||app.adjust.com^$important
+||go.adjust.com^$important
+||clicktale.net^$important
+||ehtracker.org^$important
+||click.pstmrk.it^$important
+||adash-emas.cn-hangzhou.aliyuncs.com^$important
+||adashx.ut.dingtalk.com^$important
+||h-adashx.ut.taobao.com^$important
+||h-adashx.ut.dingtalk.com^$important
+||jp.ad.gameley.com^
+||ca.iadsdk.apple.com^
+||tr.iadsdk.apple.com^
+||data.flurry.com^$important  # Flurry 广告分析网络(原巴哈姆特放行,纯第三方统计无功能依赖) [wlaudit 2026-10-16]
+||diagnosis.ad.xiaomi.com^$important  # 小米广告诊断上报 [wlaudit 2026-10-16]
+! ai-discovered 2026-10-16
+||uc-track-gl.heytapmobi.com^$important
+! ai-discovered 2026-10-16
+||adsbdfs.heytapdownload.com^$important
+||www.google-analytics.com^
+||adx.ads.heytapmobi.com^
+||dm.toutiao.com^
+||dm.toutiao.com^
+||ad-experience.bytedance.com^
+||lf-ad-convert-feedback.oceanengine.com^
+||f-cashloan.snssdk.com^
+||toblog.ctobsnssdk.com^
+||open.e.kuaishou.com^
+||tube.e.kuaishou.com^
+||umengjmacs.m.taobao.com^
+||umc.danuoyi.alicdn.com^
+||beacon-api.aliyuncs.com^
+||aeventlog.beacon.qq.com^
+||rdelivery.qq.com^
+||app.appsflyer.com^
+||google-analytics.com^
+||piwik.proxmox.com^
+||79423.analytics.edgekey.net^
+||ma135-r.analytics.edgekey.net^
+||cmp.inmobi.com^
+||tsis.jpush.cn^
+||xfr-ss.getui.com^
+||push1.91cloud.net^
+||at.umeng.com^
+||imgx.mediav.com^
+||klclick*.com^
+||mmt-log-report.zijieapi.com^
+||www3.doubleclick.net^
+||gromore.com^
+||pangolin-sdk-toutiao.com^
+||pangolin-sdk-toutiao-b.com^
+||p1-luckycatopen.byteimg.com^
+||click.simba.taobao.com^
+||click.mz.simba.taobao.com^
+||union-click.jd.com^
+||clickserve.dartsearch.net^
+||app.crazyegg.com^
+||core.crazyegg.com^
+||pixel.prime.amazon.dev^
+||cm-beacon.nakanohito.jp^
+||support-beacon.nakanohito.jp^
+||track.webgains.com^
+||track.rutarget.ru^
+||tracker.didistatic.com^
+||collect.hupu.com^
+||fexclick.baidu.com^
+||clickcease.com^
+||click.trafficguard.ai^
+||personaclick.com^
+||clickdimensions.com^
+||intercom-clicks.com^
+||clicks.trx-hub.com^
+||clicks.pipaffiliates.com^
+||target.clickfunnels.com^
+||pangolin-sdk-toutiao1.com^
+||1rtb.com^
+||1rtb.net^
+||audid.umeng.com^
+||pglstatp-toutiao1.com^
+||dig.bdurl.ne^
+||dig.bdurl.net^
+! ai-discovered 2026-10-17
+||web.tabbit.com^$important
+||cl-data.ads.heytapmobi.com^
+||bd-ad.a.yximgs.com^
+||stg-data.ads.heytapmobi.com^
+||sms.ads.heytapmobi.com^
+||b1-data.ads.heytapmobi.com^
+! ai-discovered 2026-10-18
+! ai-discovered 2026-10-18
+||newoseh5.letaocm.top^$important
+! ai-discovered 2026-10-18
+||log-vip-ssl.xunlei.com^$important
+||log-vip-ssl.xunlei.com^
+||js-ad.a.yximgs.com^
+||adx-data-u1.ubixioe.com^
+! ai-discovered 2026-10-18
+||mon0-misc-lq.amemv.com^$important
+! ===== 永久黑名单追加 2026-10-18 (186 条新增) =====
+||ads3-normal.zijieapi.com^$important
+||mon11-misc.fqnovel.com^$important
+||p3-ad-sign.byteimg.com^$important
+||*-ad-sign.byteimg.com^$important
+! ==========================================
+! 字节跳动 (ByteDance) 广告与追踪强制拦截规则
+! 【1. 核心广告请求（穿山甲 / Pangle / 巨量引擎）】
+||api-access.pangolin-sdk-toutiao.com^$important
+||pangolin-sdk-toutiao.com^$important
+||pangolin-sdk-toutiao-b.com^$important
+||pangolin-sdk-toutiao1.com^$important
+||*.pglstatp-toutiao.com^$important
+||csjplatform.com^$important
+||ad.toutiao.com^$important
+! 【2. 广告素材签名与防盗链（ByteImg）】
+||*-be-pack-sign.pglstatp-toutiao.com^$important
+||lf-ad-nhs-pos.byteimg.com^$important
+! 【3. 追踪、埋点与监控（Zijieapi / Snssdk）】
+||log*.zijieapi.com^$important
+||mon*.snssdk.com^$important
+||mcs*.snssdk.com^$important
+||xlog.snssdk.com^$important
+||ctobsnssdk.com^$important
+! 【4. 伪装跳转与边缘链路（Queniu 变种）】
+! 【5. 番茄小说 / 今日头条专属配置】
+! 【6. 火山引擎 APM 监控与第三方聚合（优量汇）】
+||ibytedapm.com^$important
+||apmplus.volces.com^$important
+||gdt.qq.com^$important
+||log*-applog.fqnovel.com^$important
+/^p\d+-(ad|be-pack)-sign\.byteimg\.com/$important
+! 其他厂商广告与追踪强制拦截规则（纯新增版）
+! 【腾讯 (Tencent) 优量汇 / 广点通】
+||e.qq.com^$important
+||pingma.qq.com^$important
+||pingtcss.qq.com^$important
+||btrace.qq.com^$important
+||mtrace.qq.com^$important
+||ad.qq.com^$important
+||adsmind.tc.qq.com^$important
+||pgdt.gtimg.cn^$important
+||splashqqlive.gtimg.cn^$important
+||bugly.qq.com^$important
+||rqd.qq.com^$important
+! 【阿里巴巴 (Alibaba) 阿里妈妈 / 友盟】
+||alimama.com^$important
+||adash.man.aliyuncs.com^$important
+||nbsdk-baichuan.alicdn.com^$important
+||tunion-api.m.taobao.com^$important
+||alog.umeng.com^$important
+||alogs.umeng.com^$important
+||alog.umengcloud.com^$important
+||aaid.umeng.com^$important
+||ar.umeng.com^$important
+||plbslog.umeng.com^$important
+||ulogs.umengcloud.com^$important
+! 【百度 (Baidu) 联盟】
+||mobads-logs.baidu.com^$important
+||hmma.baidu.com^$important
+||afd.baidu.com^$important
+||als.baidu.com^$important
+||duclick.baidu.com^$important
+||hm.baidu.com^$important
+! 【快手 (Kuaishou) 联盟】
+||ad.partner.gifshow.com^$important
+||p1-lm.adkwai.com^$important
+! 【vivo 广告联盟与系统追踪】
+||adnet.vivo.com.cn^$important
+||adserver.vivo.com.cn^$important
+||adsdk.vivo.com.cn^$important
+||adlog.vivo.com.cn^$important
+||edmp.vivo.com.cn^$important
+||adreq.vivo.com.cn^$important
+||st-ads-jssdk.vivo.com.cn^$important
+||adx.vivo.com.cn^$important
+! 【终端厂商 (小米/华为/OPPO/三星等)】
+! 小米
+||ad.xiaomi.com^$important
+||api.ad.xiaomi.com^$important
+||sdkconfig.ad.xiaomi.com^$important
+||admob.xiaomi.com^$important
+||tracking.intl.miui.com^$important
+||stat.xiaomi.com^$important
+! 华为
+||logservice.hicloud.com^$important
+||metrics.data.hicloud.com^$important
+||metrics-dra.dt.hicloud.com^$important
+||logbak.hicloud.com^$important
+! OPPO / Realme
+||adsfs.oppomobile.com^$important
+||ck.ads.oppomobile.com^$important
+||data.ads.oppomobile.com^$important
+||g1.ads.oppomobile.com^$important
+||bdapi.ads.oppomobile.com^$important
+||dragate.dc.oppomobile.com^$important
+||sms.ads.heytapmobi.com^$important
+||data.sms.heytapmobi.com^$important
+! 三星
+||ad.samsungadhub.com^$important
+||samsungadhub.com^$important
+||smetrics.samsung.com^$important
+||nmetrics.samsung.com^$important
+! 【媒体与工具类 (搜狐/迅雷/UC/小红书/优酷等)】
+! 搜狐
+||ad.sohu.com^$important
+||ads.sohu.com^$important
+||track.sohu.com^$important
+||aty.sohu.com^$important
+||hui.sohu.com^$important
+! 迅雷
+||adsp.xunlei.com^$important
+||etl.xlmc.sandai.net^$important
+! UC / 阿里系
+||adtrack.ucweb.com^$important
+||track.uc.cn^$important
+! 小红书
+||t-ads.xiaohongshu.com^$important
+||apm-track.xiaohongshu.com^$important
+! 优酷
+||atm.youku.com^$important
+||ad.mobile.youku.com^$important
+||iyes.youku.com^$important
+! 喜马拉雅
+||ad.ximalaya.com^$important
+||adse.ximalaya.com^$important
+||adse.wsa.ximalaya.com^$important
+||adbehavior.wsa.ximalaya.com^$important
+! 同花顺 / 太平洋 / 汽车之家
+||adm.10jqka.com.cn^$important
+||stat.10jqka.com.cn^$important
+||ad-analysis.pconline.com.cn^$important
+||imgad0.pcauto.com.cn^$important
+||imgad0.pconline.com.cn^$important
+||iad0ssl.pcauto.com.cn^$important
+! 其他媒体
+||adshow.58.com^$important
+||track.58.com^$important
+||wmlog.meituan.com^$important
+||adproxy.autohome.com.cn^$important
+||da.mgtv.com^$important
+||log.hunantv.com^$important
+||ifacelog.iqiyi.com^$important
+||ads.service.kugou.com^$important
+||log.stat.kugou.com^$important
+! 【国际广告网络 (Google / Unity等)】
+||doubleclick.net^$important
+||googleads.g.doubleclick.net^$important
+||googlesyndication.com^$important
+||googletagmanager.com^$important
+||googletagservices.com^$important
+||unityads.unity3d.com^$important
+||ads.internal.unity3d.com^$important
+! 1. 抖音广告签名图床（限制前缀数字，放行普通图床）
+! 2. 番茄小说视频广告（限制 ad 特征，放行正常阅读与视频流）
+||ad*.qznovelvod.com^$important
+! 3. 字节性能归因与广告签名（限制特定前缀）
+||*-edge-perf.byte008.com^$important
+||dig*.bdurl.net^$important
+! 红果漫剧 & 字节系深度去广/防追踪整合版
+! 【1. 核心广告请求（穿山甲/第三方联盟）】
+||mi.gdt.qq.com^$important
+! 【2. 广告素材与签名（防盗链）】
+! 【3. 核心追踪与归因节点】
+||dig-edge-perf.byte008.com^$important
+||mon*.zijieapi.com^$important
+! 【4. 漫剧/小说专属广告CDN】
+! feature-lib 2026-10-18
+||tanx.com^$important
+
+! ai-auto 2026-10-18
+
+! ai-auto 2026-10-18
+
+! ai-discovered 2026-10-18
+
+! ai-discovered 2026-10-18
+
+! ai-discovered 2026-10-18
+||*-reading-video.fqnovelvod.com^$badfilter
+||v5-hl-hw-reading-video.fqnovelvod.com^$badfilter
+||v5-hl-ali-reading-video.fqnovelvod.com^$badfilter
+||v5-reading-video-b.qznovelvod.com^$badfilter
+||pinduoduo.*^$badfilter
+||pinduoduo.com^$badfilter
+||pinduoduo.cn^$badfilter
+||p*.bdxiguaimg.com^$important,badfilter
+||th.pinduoduo.com^$badfilter
+||th-a.pinduoduo.com^$badfilter
+||ta.pinduoduo.com^$badfilter
+||m-adnet.dutils.com^
+||m-adnet.hiaiabc.com^
+
+! ai-auto 2026-10-19
+!红果漫剧倒计时广告：快手广告API漏拦 2026-10-19
+||api.kuaishouzt.com^$important
+
+! ai-auto 2026-10-19
+!红果漫剧聚合广告兜底源(广点通/阿里tanx/百度) 2026-10-19
+||qzs.gdtimg.com^$important
+||df.tanx.com^$important
+||mobads.baidu.com^$important
+||mobads-logs.baidu.com^$important
+||cf.iadsdk.apple.com^
+||bdlog.tanx.com^
+||odm.app-ads-services.com^
+||win.gdt.qq.com^
+||adsmind.ugdtimg.com^
+||pgdt.ugdtimg.com^
+||t.gdt.qq.com^
+||ef-dongfeng.tanx.com^
+||rdstat.tanx.com^
+||v2.gdt.qq.com^
+
+! ai-auto 2026-10-19
+
+! ai-auto 2026-10-19
+||ipv4.gdt.qq.com^
+||p4-ad.adkwai.com^
+
+! manual-kuaishouylh-20261019193701
+||kuaishouzt.com^
+||ylh.qq.com^
+||zwtianshangm.com^
+||adlog.e.kuaishou.cn^
+||live-ifs.tanx.com^
+||v3.gdt.qq.com^
+||ifs.tanx.com^
+||rpt.gdt.qq.com^
+||kgb-ifs.tanx.com^
+||v2mi.gdt.qq.com^
+||c3.gdt.qq.com^
+||gromore.pangolin-sdk-toutiao.com^
+||www.pangolin-dsp-toutiao.com^
+||p66-ad.adkwai.com^
+||a.gdt.qq.com^
+||xs.gdt.qq.com^
+||de.ad.gameley.com^
+||dsp.ads.umeng.com^
+
+! ai-discovered 2026-10-20
+
+! ai-discovered 2026-10-20
+||events.telemetry.data.nvidia.cn^
+||track-sp.mediav.com^
+||track.mechrevo.com^
+||p5-ad.adkwai.com^
+||et.tanx.com^
+
+! ai-discovered 2026-10-21
+
+! ai-discovered 2026-10-21
+
+! ai-auto 2026-10-21
+
+! ai-auto 2026-10-21
+||om.tracking.miui.com^
+||p1-ad.adkwai.com^
+||p2-ad.adkwai.com^
+||api-ad1.adsdk1.cc^
+||api-ad5.adsdk5.cc^
+||api-ad4.adsdk4.cc^
+||api-ad3.adsdk3.cc^
+
+! ai-auto 2026-10-21
+||adx-api.zdmimg.com^$important
+||sdk-config.tanx.com^
+||impression.biligame.com^
+||adx.v3w.mojichina.com^
+
+! ai-auto 2026-10-21
+||seraph.zijieapi.com^$important
+||sdk.ad-scope.com.cn^
+||mmstl-tianhe.tanx.com^
+||cms.tanx.com^
+||c2.gdt.qq.com^
+||ads.cup.com.cn^
+||api.htp.ad-scope.com.cn^
+
+! ai-discovered 2026-10-22
+||met_metrics_mobile_meituan.dreport.meituan.net^
+||metrics-picture.dreport.meituan.net^
+||met_metrics_mobile.dreport.meituan.net^
+||adx-cfg-u1.ubixioe.com^
+||vr.gdt.qq.com^
+
+! ai-auto 2026-10-22
+||isrpt-vn.gdt.qq.com^
+
+! ai-auto 2026-10-23
+||mon0-misc-hl.amemv.com^$important
+
+! ai-auto 2026-10-23
+||mon3-misc-hl.fqnovel.com^$important
+! missfix 2026-10-23: 用户设备实测漏网广告
+||__sw.qq.com^
+||mayybnew.3g.qq.com^
+||pubapi5.bizport.cn^
+! hgad 2026-10-23: 用户设备实测漏网(18赚钱广告)
+||wifi-qnb.18zhuanqian.com^
+||m1.ad.10010.com^
+||cdn.tanx.com^
+||ecpm.tanx.com^
+
+! ai-auto 2026-10-24
+
+# ===== 字节遥测兜底(日志/监控/APM，原误加白名单，important 强制拦截)=====
+||mcs.zijieapi.com^$important
+||mon.zijieapi.com^$important
+||timon.zijieapi.com^$important
+||live-player-log.zijieapi.com^$important
+||sdk.e.qq.com^
+||diagnosis.ad.xiaomi.com^
+||tobapplog.ctobsnssdk.com^
+||sdkreport.e.qq.com^
+||resolve.umeng.com^
+||cnlogs.umengcloud.com^
+||ipm.atm.youku.com^
+||sdkquic.e.qq.com^
+
+! feature-lib 2026-10-24
+||mintegral.com^$important
+||vungle.com^$important
+||ironsrc.com^$important
+||inmobi.com^$important
+||chartboost.com^$important
+||tapjoy.com^$important
+||liftoff.io^$important
+||fyber.com^$important
+
+! ai-auto 2026-10-24
+||applog-metrics.lanxin.cn^$important
+||utoken.umeng.com^
+||promotion-2.pddpic.com^
+||wgo.mmstat.com^
+||oslogs.umeng.com^
+
+! feature-lib 2026-10-24
+||www.googletagmanager.com^
+||lf3-short.ibytedapm.com^
+||muf.app-ads-services.com^
+||gm.mmstat.com^
+
+! ai-discovered 2026-10-24
+||tnc3-aliec2.zijieapi.com^$important
+
+! ai-discovered 2026-10-24
+||tnc3-alisc1.zijieapi.com^$important
+
+! ai-discovered 2026-10-24
+
+! ===== OPPO/欢太(ColorOS/OnePlus/Realme) 系统广告去广告 2026-10-24 仅纯广告/锁屏/营销, 不碰推送/商店/云/安全/更新 =====
+! 锁屏杂志服务
+||i.magazine.heytapmobi.com^
+! 锁屏杂志内容
+||magazine-staticapi-cn.heytapdownload.com^
+! 锁屏杂志图
+||cc-magezine-img.heytapimage.com^
+! CPC广告配置
+||cpc-setting-cn.oppomobile.com^
+! CPC广告资源
+||static-cpc.heytapimage.com^
+! 浏览器首页资讯流
+||ibrowser-feeds-cn.heytapmobi.com^
+! 浏览器内容流
+||i-browser-cn.heytapmobi.com^
+! 浏览器feed广告
+||ias.feeds.heytapmobi.com^
+! 浏览器feed资讯
+||ibrowser.feeds.heytapmobi.com^
+! 资讯/开屏营销
+||news.heytapdownload.com^
+! 应用商店推荐tips
+||static-apptips-cn.heytapdownload.com^
+! 负一屏营销卡片
+||iscreen-smartcard-cn.heytapmobi.com^
+! 广告实时归因/用户画像
+||rtsig-prod-cn.heytapmobi.com^
+||promotion-1.pddpic.com^
+
+! ai-discovered 2026-10-25
+||abtest3-misc-lq.zijieapi.com^$important
+
+! ai-discovered 2026-10-25
+||traffic-monitor-cn.allawntech.com^$important
+||d-gm.mmstat.com^
+||ws.mmstat.com^
+||metrics-picture.d.meituan.net^
+
+! ai-discovered 2026-10-25
+||cn-datareceiver.aki-game.com^$important
+||val.atm.youku.com^
+||dc.sigmob.cn^
+||tm.sigmob.cn^
+||adservice.sigmob.cn^
+||promotion-3.pddpic.com^
+
+! ai-discovered 2026-10-26
+||ma.zijieapi.com^$important
+
+! ai-discovered 2026-10-26
+||tnc3-bjlgy.zijieapi.com.w.kunluncan.com^$important
+
+! ai-discovered 2026-10-26
+||mssdk.zijieapi.com^$important
+
+! #100 cname-origin 2026-10-26
+||ad-sh-sz-zb.wagbridge.tanx.alimama.com^$important
+||default.cn.sz.wagbridge.ad.alibabacorp.com^$important
+||default.cn.wagbridge.ad.alibabacorp.com^$important
+||tnc3-bjlgy.zijieapi.com^$important
+
+
+||skan.singular.net^
+||stats.g.doubleclick.net^
+
+! ai-discovered 2026-10-27
+||2408-8710-1020-18db-1-0-0-1f8-ne79e83e.free-lbv6.idouyinvod.com^$important
+
+! ai-auto 2026-10-27
+||applog.pwesports.cn^$important
+||adx.anythinktech.com^
+||ms.applovin.com^
+||klink-jimu2.kuaishouzt.com^
+||klink-jimu1.kuaishouzt.com^
+
+! ai-discovered 2026-10-27
+||static.adtidy.org^$important
+
+! ai-discovered 2026-10-27
+||stat2.twinkstar.com^$important
+
+! ai-auto 2026-10-28
+||analytics-ios-tcp.rayjump.com^
+||adx-bj.anythinktech.com^
+||api16-access-wf-sg.pangle.io^
+||rt.applovin.com^
+||fd.ad.xiaomi.com^
+||odf.app-ads-services.com^
+||dfhs.tanx.com^
+||res.mmstat.com^
+
+! ai-discovered 2026-10-28
+||s1.dmgyta.com^$important
+
+! ai-discovered 2026-10-28
+||w2.paykwai.com^$important
+
+! ai-discovered 2026-10-28
+||rz02-onepushconnector-cn-01.heytapmobi.com^$important
+
+! ai-discovered 2026-10-28
+||api-jits-cn.heytapmobi.com^$important
+
+! ai-discovered 2026-10-28
+||analytics.95516.com^$important
+||rtbcallback.sigmob.cn^
+||ad-union.ssread.cn^
+||ck.ads.heytapmobi.com^
+||analytics.oceanengine.com^
+||inapps.appsflyer.com^
+||api-access.pangolin-sdk-toutiao-b.com^
+
+! ===== 国内广告/统计域名补充（2026-10-29，人工核实语义 + 查询日志佐证）=====
+! 【字节跳动】SDK 日志与埋点
+||toblog.ctobsnssdk.com^
+||ulog.snssdk.com^
+||log0-applog-lq.ixigua.com^
+||log5-applog-lq.ixigua.com^
+||live-player-log-service.bytedance.com^
+! 【快手】广告日志与行为埋点
+||adlog.e.kuaishou.com^
+||adlog.e.kuaishou.cn^
+||actionlog.kuaishou.com^
+||ads.kuaishou.com^
+||ulog.kuaishou.com^
+! 【腾讯广点通/优量汇】广告与埋点
+||adsmind.gdtimg.com^
+||sbt.qq.com^
+||tj.qq.com^
+! 【百度】广告与统计
+||vd.baidu.com^
+||dup.baidustatic.com^
+! 【阿里妈妈】tanx 广告交易
+||h.tanx.com^
+! 【小米】MIUI 统计上报
+||data.mistat.xiaomi.com^
+! 【华为】广告与统计
+||ad.hicloud.com^
+||metrics1.data.hicloud.com^
+! 【OPPO / vivo】广告平台
+||adx.adnet.oppo.com^
+||i.adnet.oppo.com^
+||adsview.oppo.com^
+||ads.vivo.com.cn^
+! 【友盟+】统计 SDK
+||ulogs.umeng.com^
+||oc.umeng.com^
+||audid.umeng.com^
+||cnlogs.umeng.com^
+! 【CNZZ/站长统计】
+||s.cnzz.com^
+! 【中国移动视频】事件上报（查询量最高的一条，180次/2天）
+||event.video.komect.com^
+
+! ai-discovered 2026-10-30
+||v4.oskwai.com^$important
+
+! ai-discovered 2026-10-30
+||w2.bpaykwai.com^$important
+
+! ai-discovered 2026-10-30
+||fystat-ans.chaoxing.com^$important
+
+! ai-discovered 2026-10-30
+||report.idqqimg.com^$important
+
+! ai-discovered 2026-10-30
+||v3.oskwai.com^$important
+
+! ai-discovered 2026-10-30
+||datasec-kmsex-cn.heytapmobi.com^$important
+
+! ai-discovered 2026-10-30
+||push-ads-cn.heytapmobi.com^$important
+||datasec-kmsex-cn.heytapmobi.com^
+
+! ai-discovered 2026-10-30
+||v20.events.data.microsoft.com^$important
+
+! ai-discovered 2026-10-30
+||bdimg7.qunliao.info^$important
