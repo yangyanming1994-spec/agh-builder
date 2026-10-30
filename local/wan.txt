@@ -580,7 +580,7 @@
 @@||sonar-mrs2-1.xx.fbcdn.net^
 @@||sonar-mrs2-2.xx.fbcdn.net^
 @@||sonar-mrs2-3.xx.fbcdn.net^
-@@||sonar-msp1-1.xx.fbcdn.net^
+@@||sonar-msp1-1.xx.ffcdn.net^
 @@||sonar-mty2-1.xx.fbcdn.net^
 @@||sonar-muc2-1.xx.fbcdn.net^
 @@||sonar-mxp2-1.xx.fbcdn.net^
@@ -703,7 +703,7 @@
 @@||gmscompliance-pa.googleapis.com^
 @@||imageoss.com.cdn.cloudflare.net^
 @@||live-cecom-image.cdn.bcebos.com^
-@@||logl.oss-cn-hangzhou.aliyuncs.com^
+@@||logl.oss-us-east-1.aliyuncs.com^
 @@||media-watchmen-delay.yximgs.com^
 @@||newrelic.com.cdn.cloudflare.net^
 @@||versmo.z13.web.core.windows.net^
@@ -800,7 +800,7 @@
 @@||manevio.shop^
 @@||trustbridgemarket.com^
 @@||redpaper-10006092.cos.myqcloud.com^
-@@||ry2ihs.oss-cn-shanghai.aliyuncs.com^
+@@||ry2ihs.oss-cn-beijing.aliyuncs.com^
 @@||sgtm.atraveo.es.cdn.cloudflare.net^
 @@||sgtm.dhgate.com.cdn.cloudflare.net^
 @@||ss2bjo.oss-cn-beijing.aliyuncs.com^
@@ -926,7 +926,7 @@
 @@||star-seo.oss-ap-northeast-1.aliyuncs.com^
 @@||sucursalgytport.z44.web.core.windows.net^
 @@||wise-novel-authority-logo.cdn.bcebos.com^
-@@||1oavsblobprodcus35.blob.core.windows.net^
+@@||1oavsblobprodcus350.blob.core.windows.net^
 @@||37bvsblobprodcus311.blob.core.windows.net^
 @@||accountsloginreview.blob.core.windows.net^
 @@||countly-api.mysugr.com.cdn.cloudflare.net^
@@ -944,11 +944,11 @@
 @@||af1f69020f2387294.awsglobalaccelerator.com^
 @@||amsweb-cdn-gz-1258344696.file.myqcloud.com^
 @@||api-event.falconnet.app.cdn.cloudflare.net^
-@@||baolongwes.oss-cn-southeast-1.aliyuncs.com^
+@@||baolongwes.oss-ap-southeast-1.aliyuncs.com^
 @@||blueness2polyodontal.blob.core.windows.net^
 @@||dongfang-2026.oss-cn-hangzhou.aliyuncs.com^
 @@||dreemdmbabys.oss-cn-guangzhou.aliyuncs.com^
-@@||gaode11223.oss-cn-southeast-7.aliyuncs.com^
+@@||gaode11223.oss-ap-southeast-7.aliyuncs.com^
 @@||mlpoo11-secondary.z13.web.core.windows.net^
 @@||pl.thecontentserver.com.cdn.cloudflare.net^
 @@||searchlabspartnerservice-pa.googleapis.com^
@@ -1476,7 +1476,7 @@
 @@||notifications.googleapis.com^
 @@||121893coinbase.com^
 @@||aanhangwagen-dispack.com^
-@@||access-portal.com^
+@@||acesso-portal.com^
 @@||ajtravelspune.com^
 @@||altkoenig-recht.de^
 @@||archivoanalogico.com^
@@ -1625,7 +1625,7 @@
 @@||cccchics.shop^
 @@||efektywnieexpert.pl^
 @@||budapestbrunchguide.com^
-@@||all-in-clean.com^
+@@||all-in-cleaning.com^
 @@||bartekmarket.shop^
 @@||cccspl.shop^
 @@||ccloudbeds.com^
