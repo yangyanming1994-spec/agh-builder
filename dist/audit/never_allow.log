@@ -1,4 +1,4 @@
-# never_allow 剔除审计  2026-10-31 05:00:37
+# never_allow 剔除审计  2026-10-31 11:59:59
 # 共 146 条
 # 格式: category / rule / hit / src
 abuse_tld	@@||*.agency^	hit=*.agency	src=https://raw.githubusercontent.com/5whys-adblock/AdGuardHome-rules/main/rules/output_medium.txt
@@ -30,7 +30,7 @@ tracker	@@||analysis.windows.net^	hit=analysis.windows.net	src=https://raw.githu
 ad_platform	@@||anythinktech.com^	hit=anythinktech.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 tracker	@@||api.tuisong.baidu.com^	hit=api.tuisong.baidu.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 tracker	@@||apm-native.xiaohongshu.com^	hit=apm-native.xiaohongshu.com	src=file:local/whitelist.txt
-ad_platform	@@||app-advertise.zhihuishu.com^	hit=app-advertise.zhihuishu.com	src=https://raw.githubusercontent.com/easylist/easylistchina/master/easylistchina.txt;https://raw.githubusercontent.com/217heidai/adblockfilters/main/rules/adblockdns.txt;https://adguardteam.github.io/HostlistsRegistry/assets/filter_1.txt;https://raw.githubusercontent.com/5whys-adblock/AdGuardHome-rules/main/rules/output_medium.txt
+ad_platform	@@||app-advertise.zhihuishu.com^	hit=app-advertise.zhihuishu.com	src=https://adguardteam.github.io/HostlistsRegistry/assets/filter_1.txt;https://raw.githubusercontent.com/easylist/easylistchina/master/easylistchina.txt;https://raw.githubusercontent.com/217heidai/adblockfilters/main/rules/adblockdns.txt;https://raw.githubusercontent.com/5whys-adblock/AdGuardHome-rules/main/rules/output_medium.txt
 tracker	@@||applog.lc.quark.cn^	hit=applog.lc.quark.cn	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt;file:local/whitelist.txt
 abuse_tld	@@||aptekaolmed-sale.sbs^	hit=*.sbs	src=file:local/wan.txt
 ad_platform	@@||artifactory.appodeal.com^	hit=artifactory.appodeal.com	src=https://raw.githubusercontent.com/217heidai/adblockfilters/main/rules/adblockdns.txt
