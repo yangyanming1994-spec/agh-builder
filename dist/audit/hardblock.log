@@ -1,4 +1,4 @@
-# hardblock 剔除审计  2026-10-31 11:59:59
+# hardblock 剔除审计  2026-10-31 17:13:36
 # 共 227 条
 # 格式: category / rule / hit / src
 hardblock	@@|360.cn|	hit=360.cn	src=file:local/wan.txt
@@ -7,11 +7,11 @@ hardblock	@@|kuwo.cn|	hit=kuwo.cn	src=file:local/wan.txt
 hardblock	@@|sina.com.cn|	hit=sina.com.cn	src=file:local/wan.txt
 hardblock	@@||*.95516.com^	hit=analytics.95516.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 hardblock	@@||*.allawntech.com^	hit=traffic-monitor-cn.allawntech.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
-hardblock	@@||*.dbankcloud.cn^	hit=metrics1-drcn.dt.dbankcloud.cn	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
+hardblock	@@||*.dbankcloud.cn^	hit=logservice.dbankcloud.cn	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 hardblock	@@||*.dbankcloud.com^	hit=huashan-datahub-drcn.emui.dbankcloud.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 hardblock	@@||*.heytapdownload.com^	hit=adsbdfs.heytapdownload.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
-hardblock	@@||*.hicloud.com^	hit=adcdn.hicloud.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
-hardblock	@@||*.top^	hit=newoseh5.letaocm.top	src=https://raw.githubusercontent.com/5whys-adblock/AdGuardHome-rules/main/rules/output_medium.txt
+hardblock	@@||*.hicloud.com^	hit=ads.hicloud.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
+hardblock	@@||*.top^	hit=tgoy162.top	src=https://raw.githubusercontent.com/5whys-adblock/AdGuardHome-rules/main/rules/output_medium.txt
 hardblock	@@||*.xunlei.com^$important	hit=adsp.xunlei.com	src=file:local/wan.txt
 hardblock	@@||5471782.fls.doubleclick.net^	hit=5471782.fls.doubleclick.net	src=https://raw.githubusercontent.com/217heidai/adblockfilters/main/rules/adblockdns.txt
 hardblock	@@||79423.analytics.edgekey.net^	hit=79423.analytics.edgekey.net	src=https://raw.githubusercontent.com/217heidai/adblockfilters/main/rules/adblockdns.txt
@@ -57,7 +57,7 @@ hardblock	@@||beta.partners.adsterra.com^	hit=adsterra.com	src=https://adguardte
 hardblock	@@||beta.publishers.adsterra.com^	hit=adsterra.com	src=https://adguardteam.github.io/HostlistsRegistry/assets/filter_1.txt;https://raw.githubusercontent.com/5whys-adblock/AdGuardHome-rules/main/rules/output_medium.txt
 hardblock	@@||bodian.kuwo.cn^	hit=kuwo.cn	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 hardblock	@@||btrace.qq.com^	hit=btrace.qq.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
-hardblock	@@||buyad.bi-xenon.cn^	hit=buyad.bi-xenon.cn	src=https://adguardteam.github.io/HostlistsRegistry/assets/filter_1.txt;https://raw.githubusercontent.com/easylist/easylistchina/master/easylistchina.txt;https://raw.githubusercontent.com/5whys-adblock/AdGuardHome-rules/main/rules/output_medium.txt
+hardblock	@@||buyad.bi-xenon.cn^	hit=buyad.bi-xenon.cn	src=https://raw.githubusercontent.com/easylist/easylistchina/master/easylistchina.txt;https://adguardteam.github.io/HostlistsRegistry/assets/filter_1.txt;https://raw.githubusercontent.com/5whys-adblock/AdGuardHome-rules/main/rules/output_medium.txt
 hardblock	@@||c.cnzz.com^	hit=cnzz.com	src=file:local/whitelist.txt
 hardblock	@@||cdn.taboola.com^	hit=cdn.taboola.com	src=https://adguardteam.github.io/HostlistsRegistry/assets/filter_1.txt;https://raw.githubusercontent.com/5whys-adblock/AdGuardHome-rules/main/rules/output_medium.txt
 hardblock	@@||click-trk.com^	hit=click-trk.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
@@ -161,12 +161,12 @@ hardblock	@@||p4-ad.adukwai.com^	hit=adukwai.com	src=https://raw.githubuserconte
 hardblock	@@||packagebssdlbig.tx.kugou.com^	hit=kugou.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 hardblock	@@||pagead.l.doubleclick.net^	hit=pagead.l.doubleclick.net	src=https://raw.githubusercontent.com/217heidai/adblockfilters/main/rules/adblockdns.txt
 hardblock	@@||partners.adsterra.com^	hit=adsterra.com	src=https://adguardteam.github.io/HostlistsRegistry/assets/filter_1.txt;https://raw.githubusercontent.com/5whys-adblock/AdGuardHome-rules/main/rules/output_medium.txt
-hardblock	@@||pcauto.com.cn^	hit=imgad0.pcauto.com.cn	src=file:local/wan.txt
+hardblock	@@||pcauto.com.cn^	hit=iad0ssl.pcauto.com.cn	src=file:local/wan.txt
 hardblock	@@||pddpic.com^	hit=promotion-2.pddpic.com	src=file:local/wan.txt
 hardblock	@@||personaclick.com^	hit=personaclick.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 hardblock	@@||pgdt.gtimg.cn^	hit=pgdt.gtimg.cn	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 hardblock	@@||pigeon.alicdn.com^	hit=pigeon.alicdn.com	src=file:local/wan.txt
-hardblock	@@||pinduoduo.com^	hit=abtk.pinduoduo.com	src=file:local/wan.txt
+hardblock	@@||pinduoduo.com^	hit=mobads.pinduoduo.com	src=file:local/wan.txt
 hardblock	@@||pingjs.qq.com^	hit=pingjs.qq.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 hardblock	@@||pingma.qq.com^	hit=pingma.qq.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 hardblock	@@||pingtas.qq.com^	hit=pingtas.qq.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
@@ -191,7 +191,7 @@ hardblock	@@||support-beacon.nakanohito.jp^	hit=support-beacon.nakanohito.jp	src
 hardblock	@@||t7z.cupid.iqiyi.com^	hit=t7z.cupid.iqiyi.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 hardblock	@@||tangram.e.qq.com^	hit=tangram.e.qq.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 hardblock	@@||target.clickfunnels.com^	hit=target.clickfunnels.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
-hardblock	@@||tnc*.zijieapi.com^$important	hit=tnc3-aliec2.zijieapi.com	src=file:local/wan.txt
+hardblock	@@||tnc*.zijieapi.com^$important	hit=tnc3-bjlgy.zijieapi.com	src=file:local/wan.txt
 hardblock	@@||tnc3-bjlgy.zijieapi.com^	hit=tnc3-bjlgy.zijieapi.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt;file:local/whitelist.txt
 hardblock	@@||track.rutarget.ru^	hit=track.rutarget.ru	src=https://raw.githubusercontent.com/217heidai/adblockfilters/main/rules/adblockdns.txt
 hardblock	@@||track.sohu.com^	hit=track.sohu.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
@@ -200,7 +200,7 @@ hardblock	@@||tracker.ai.xiaomi.com^	hit=tracker.ai.xiaomi.com	src=https://raw.g
 hardblock	@@||tracker.didistatic.com^	hit=tracker.didistatic.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 hardblock	@@||tsis.jpush.cn^	hit=tsis.jpush.cn	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 hardblock	@@||tube.e.kuaishou.com^	hit=tube.e.kuaishou.com	src=https://raw.githubusercontent.com/privacy-protection-tools/anti-AD/master/anti-ad-easylist.txt;https://raw.githubusercontent.com/qq5460168/666/master/rules.txt;https://raw.githubusercontent.com/5whys-adblock/AdGuardHome-rules/main/rules/output_medium.txt
-hardblock	@@||ucweb.com^	hit=adtrack.ucweb.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
+hardblock	@@||ucweb.com^	hit=px.ucweb.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 hardblock	@@||umc.danuoyi.alicdn.com^$important	hit=umc.danuoyi.alicdn.com	src=file:local/wan.txt
 hardblock	@@||umengjmacs.m.taobao.com^	hit=umengjmacs.m.taobao.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 hardblock	@@||union-click.jd.com^	hit=union-click.jd.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
@@ -213,7 +213,7 @@ hardblock	@@||vehiclecdn.kuwo.cn^	hit=kuwo.cn	src=https://raw.githubusercontent.
 hardblock	@@||video.da.mgtv.com^	hit=da.mgtv.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 hardblock	@@||vip.kugou.com^	hit=kugou.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 hardblock	@@||vip1.kuwo.cn^	hit=kuwo.cn	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt;file:local/whitelist.txt
-hardblock	@@||weibo.com^	hit=ads.weibo.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
+hardblock	@@||weibo.com^	hit=adx.weibo.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 hardblock	@@||wgo.mmstat.com^	hit=mmstat.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 hardblock	@@||www.googleadservices.com^	hit=googleadservices.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt;https://raw.githubusercontent.com/217heidai/adblockfilters/main/rules/adblockdns.txt
 hardblock	@@||www.kugou.com^	hit=kugou.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt;file:local/wan.txt
@@ -223,7 +223,7 @@ hardblock	@@||www3.doubleclick.net^	hit=www3.doubleclick.net	src=https://adguard
 hardblock	@@||wxapp.lvyadx.cn^	hit=wxapp.lvyadx.cn	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 hardblock	@@||x.kuwo.cn^	hit=kuwo.cn	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 hardblock	@@||xfr-ss.getui.com^$important	hit=xfr-ss.getui.com	src=file:local/wan.txt
-hardblock	@@||yangkeduo.com^	hit=ads.yangkeduo.com	src=file:local/wan.txt
+hardblock	@@||yangkeduo.com^	hit=ump.yangkeduo.com	src=file:local/wan.txt
 hardblock	@@||ydstatic.com^	hit=oimageb7.ydstatic.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 hardblock	@@||z3.cnzz.com^	hit=cnzz.com	src=file:local/whitelist.txt
 hardblock	@@||zhuanjistatic.kugou.com^	hit=kugou.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
