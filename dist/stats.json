@@ -1,18 +1,18 @@
 {
   "builder": "AGH-Builder",
   "version": "2.8",
-  "generated_at": "2026-11-07 09:44:26",
+  "generated_at": "2026-11-07 16:35:48",
   "sources": {
     "https://big.oisd.nl/": {
       "is_allow_source": false,
       "ok": true,
-      "lines": 232506,
-      "kept_black": 232495,
+      "lines": 232353,
+      "kept_black": 232342,
       "kept_allow": 0,
       "kept_regex": 0,
       "skipped": {
-        "total": 232506,
-        "kept": 232495,
+        "total": 232353,
+        "kept": 232342,
         "comment": 10,
         "element": 0,
         "js": 0,
@@ -139,20 +139,20 @@
     "https://adguardteam.github.io/HostlistsRegistry/assets/filter_1.txt": {
       "is_allow_source": false,
       "ok": true,
-      "lines": 190255,
-      "kept_black": 189838,
+      "lines": 190353,
+      "kept_black": 189935,
       "kept_allow": 31,
       "kept_regex": 21,
       "skipped": {
-        "total": 190255,
-        "kept": 189890,
+        "total": 190353,
+        "kept": 189987,
         "comment": 9,
         "element": 0,
         "js": 0,
         "path": 11,
         "modifier": 0,
         "ip": 74,
-        "invalid": 271
+        "invalid": 272
       }
     },
     "https://raw.githubusercontent.com/8680/GOODBYEADS/master/data/rules/dns.txt": {
@@ -215,20 +215,20 @@
     "https://raw.githubusercontent.com/5whys-adblock/AdGuardHome-rules/main/rules/output_medium.txt": {
       "is_allow_source": false,
       "ok": true,
-      "lines": 308361,
-      "kept_black": 307660,
+      "lines": 308985,
+      "kept_black": 308283,
       "kept_allow": 176,
       "kept_regex": 87,
       "skipped": {
-        "total": 308361,
-        "kept": 307923,
+        "total": 308985,
+        "kept": 308546,
         "comment": 39,
         "element": 0,
         "js": 0,
         "path": 40,
         "modifier": 0,
         "ip": 1,
-        "invalid": 358
+        "invalid": 359
       }
     },
     "https://raw.githubusercontent.com/VeleSila/yhosts/master/hosts": {
@@ -253,13 +253,13 @@
     "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/pro.txt": {
       "is_allow_source": false,
       "ok": true,
-      "lines": 219334,
-      "kept_black": 219320,
+      "lines": 225585,
+      "kept_black": 225571,
       "kept_allow": 0,
       "kept_regex": 0,
       "skipped": {
-        "total": 219334,
-        "kept": 219320,
+        "total": 225585,
+        "kept": 225571,
         "comment": 13,
         "element": 0,
         "js": 0,
@@ -291,13 +291,13 @@
     "https://raw.githubusercontent.com/easylist/easylistchina/master/easylistchina.txt": {
       "is_allow_source": false,
       "ok": true,
-      "lines": 17869,
-      "kept_black": 5878,
+      "lines": 17871,
+      "kept_black": 5880,
       "kept_allow": 11,
       "kept_regex": 0,
       "skipped": {
-        "total": 17869,
-        "kept": 5889,
+        "total": 17871,
+        "kept": 5891,
         "comment": 874,
         "element": 5364,
         "js": 0,
@@ -436,10 +436,10 @@
     "force_write": false
   },
   "dedup": {
-    "blacklist": 553470,
+    "blacklist": 552764,
     "allowlist": 4601,
     "regex": 88,
-    "total": 558159
+    "total": 557453
   },
   "sanitize": {
     "never_allow_dropped": 146,
@@ -455,42 +455,54 @@
   },
   "diff": {
     "black": {
-      "prev": 553478,
-      "now": 553558,
-      "added": 88,
-      "removed": 8,
-      "unchanged": 553470,
+      "prev": 553558,
+      "now": 552852,
+      "added": 1898,
+      "removed": 2604,
+      "unchanged": 550954,
       "added_samples": [
-        "||1adda2699c.com^",
-        "||4ad9bqnjb.com^",
-        "||74478393.cfd^",
-        "||ajtcqmlorjesx.site^",
-        "||allegrolokalnie.748248379.sbs^",
-        "||alppbalwrsyyw.online^",
-        "||anrlfkpaweafl.online^",
-        "||beauingmantramsynovia.cfd^",
-        "||biedronka-bowl.shop^",
-        "||biedronka-fryer.shop^",
-        "||bkflfwqegazki.site^",
-        "||blandusedge.digital^",
-        "||boomboxcleridchaffs.cyou^",
-        "||bqwtvcpkrrnlq.site^",
-        "||brasecolon.store^",
-        "||bylawskilnman.click^",
-        "||cheerercrackup.cfd^",
-        "||cndfot.shop^",
-        "||cnkkfxajyvium.site^",
-        "||coaqhbgliewbm.space^"
+        "|365-instinctagile.com|",
+        "|365operation.com|",
+        "|52-detailsventure.com|",
+        "|7-groupoperation.com|",
+        "|7instinctintelligent.com|",
+        "|acuteinspiration-inventive.com|",
+        "|ads-34ekn.open-adsyield.com|",
+        "|ads-34eko.open-adsyield.com|",
+        "|ads-34elf.open-adsyield.com|",
+        "|ads-34elg.open-adsyield.com|",
+        "|ads-apac-34ej7.open-adsyield.com|",
+        "|ads-ilf8bl.ads-pubsfusion.com|",
+        "|ads-ilf8bm.ads-pubsfusion.com|",
+        "|ads-ilf8ct.ads-pubsfusion.com|",
+        "|ads-pubsfusion.com|",
+        "|adstracking.io|",
+        "|adtron.network|",
+        "|adxvel.com|",
+        "|agencycloud-52.com|",
+        "|agentrylaicise.com|"
       ],
       "removed_samples": [
-        "||a57af701b6.1adda2699c.com^",
-        "||bjg.u8kgzf.top^",
-        "||cwj.u8kgzf.top^",
-        "||fc.yuo123.cc^",
-        "||kfqxx.n9oipy.casa^",
-        "||lnpoct.pk9hti.cfd^",
-        "||p28hs.u8kgzf.top^",
-        "||truly4-ea14.cfd^"
+        "||02ux.com^",
+        "||10n10.org^",
+        "||10waf.com^",
+        "||11ghqextfougerengtx5gyueby4.cyou^",
+        "||121jio.senes.at^",
+        "||12b2xh3i9culz5v8xbj5vkgknr.cyou^",
+        "||1312a.com^",
+        "||13368899.com^",
+        "||13dy.com^",
+        "||15mxqionfmjc6jowlk1rvbfj25f44vfg.cyou^",
+        "||15nib4vvytokux2w8nc7z.cyou^",
+        "||16eq4pk9zxgzu4vojk.cyou^",
+        "||189tutors.com^",
+        "||18blowjob.com^",
+        "||19gzjg6grxxpty.cyou^",
+        "||19hekoc4x6bfpo557u6y.cyou^",
+        "||19j.top^",
+        "||1hwbnu4kzc9rrphmfci.cyou^",
+        "||1m9unllxqggoyb.cyou^",
+        "||1mreview.com^"
       ]
     },
     "allow": {
@@ -505,7 +517,7 @@
   },
   "output": {
     "rules_file": "dist/adguard-home-rules.txt",
-    "rules_count": 553558,
+    "rules_count": 552852,
     "allow_file": "dist/adguard-home-allowlist.txt",
     "allow_count": 4601,
     "hosts_file": null,
