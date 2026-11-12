@@ -1,4 +1,4 @@
-# split_protected 剔除审计  2026-11-11 17:49:19
+# split_protected 剔除审计  2026-11-12 00:23:49
 # 共 11 条
 # 格式: category / rule / hit / src
 split_protected	@@||1music.cc^	hit=1music.cc	src=file:local/whitelist.txt
