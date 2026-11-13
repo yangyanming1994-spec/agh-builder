@@ -1,4 +1,4 @@
-# never_allow 剔除审计  2026-11-12 18:02:19
+# never_allow 剔除审计  2026-11-13 00:58:32
 # 共 146 条
 # 格式: category / rule / hit / src
 abuse_tld	@@||*.agency^	hit=*.agency	src=https://raw.githubusercontent.com/5whys-adblock/AdGuardHome-rules/main/rules/output_medium.txt
@@ -110,7 +110,7 @@ tracker	@@||recommender.scarabresearch.com^	hit=recommender.scarabresearch.com	s
 tracker	@@||redirect.appmetrica.yandex.com^	hit=redirect.appmetrica.yandex.com	src=https://raw.githubusercontent.com/217heidai/adblockfilters/main/rules/adblockdns.txt
 encrypted_dns	@@||reports.adguard.com^	hit=reports.adguard.com	src=https://raw.githubusercontent.com/217heidai/adblockfilters/main/rules/adblockdns.txt
 ad_platform	@@||res.ads.nicovideo.jp^	hit=res.ads.nicovideo.jp	src=https://raw.githubusercontent.com/217heidai/adblockfilters/main/rules/adblockdns.txt
-tracker	@@||s.click.*.com^	hit=s.click.tmall.com	src=file:local/whitelist.txt
+tracker	@@||s.click.*.com^	hit=s.click.taobao.com	src=file:local/whitelist.txt
 tracker	@@||s.click.taobao.com^	hit=s.click.taobao.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt;file:local/whitelist.txt
 tracker	@@||s.click.tmall.com^	hit=s.click.tmall.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 ad_platform	@@||s0.2mdn.net^	hit=s0.2mdn.net	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt

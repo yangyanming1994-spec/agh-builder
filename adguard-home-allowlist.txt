@@ -1,9 +1,9 @@
 ! Title: sofmed DNS（白名单）
 ! Homepage: sofmed DNS提供
-! Version: 2026-11-13 02:02:40（北京时间）
+! Version: 2026-11-13 08:58:51（北京时间）
 ! Expires: 12 hours
 ! Description: 由 sofmed DNS独家提供
-! Total count: 4606
+! Total count: 4610
 @@||ndcpp.com^$important
 @@||dj.1688.com^$important
 @@||ndcimgs.com^$important
@@ -307,6 +307,7 @@
 @@||cg.163.com^
 @@||cibntv.net^
 @@||d.bmcx.com^
+@@||dev.mi.com^
 @@||dns.qq.com^
 @@||dot.360.cn^
 @@||ds.163.com^
@@ -341,6 +342,7 @@
 @@||ifdian.net^
 @@||inporn.com^
 @@||instant.io^
+@@||iot.mi.com^
 @@||jia.360.cn^
 @@||jwpcdn.com^
 @@||jxdown.com^
@@ -522,6 +524,7 @@
 @@||mars.jd.com^
 @@||mb-mods.net^
 @@||mibrel.shop^
+@@||mimo.mi.com^
 @@||minefox.lol^
 @@||missav.live^
 @@||mob.163.com^
@@ -4002,6 +4005,7 @@
 @@||fin-ingress-ele.aliyuncs.com^
 @@||footprints-pa.googleapis.com^
 @@||g2insights-cdn.azureedge.net^
+@@||hyperos.developer.xiaomi.com^
 @@||jhk-cdn-mampic.hismarttv.com^
 @@||lf*-dy-cdn-tos.bytegecko.com^
 @@||lf*material.searchpstatp.com^
