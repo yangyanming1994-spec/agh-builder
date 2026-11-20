@@ -1,6 +1,7 @@
 haokan.baidu.com##.tieba-pause-ad-container
 !屏蔽B站直播P2P上传
-‖*.chat.bilibili.com
+# 原规则使用了非 ASCII 的 ‖ 字符，已失效；由下方 ||chat.bilibili.com^ 覆盖
+# ‖*.chat.bilibili.com
 #罗盘软件
 !Amazon ADS
 !Google Analytics
@@ -3278,8 +3279,10 @@ vacations.ctrip.com##.side_function
 ||jp.ad.gameley.com^
 ||ca.iadsdk.apple.com^
 ||tr.iadsdk.apple.com^
-||data.flurry.com^$important  # Flurry 广告分析网络(原巴哈姆特放行,纯第三方统计无功能依赖) [wlaudit 2026-10-16]
-||diagnosis.ad.xiaomi.com^$important  # 小米广告诊断上报 [wlaudit 2026-10-16]
+# Flurry 广告分析网络(原巴哈姆特放行,纯第三方统计无功能依赖) [wlaudit 2026-10-16]
+||data.flurry.com^$important
+# 小米广告诊断上报 [wlaudit 2026-10-16]
+||diagnosis.ad.xiaomi.com^$important
 ! ai-discovered 2026-10-16
 ||uc-track-gl.heytapmobi.com^$important
 ! ai-discovered 2026-10-16
@@ -3764,7 +3767,6 @@ vacations.ctrip.com##.side_function
 ||ma.zijieapi.com^$important
 
 ! ai-discovered 2026-10-26
-||tnc3-bjlgy.zijieapi.com.w.kunluncan.com^$important
 
 ! ai-discovered 2026-10-26
 ||mssdk.zijieapi.com^$important
@@ -3773,7 +3775,6 @@ vacations.ctrip.com##.side_function
 ||ad-sh-sz-zb.wagbridge.tanx.alimama.com^$important
 ||default.cn.sz.wagbridge.ad.alibabacorp.com^$important
 ||default.cn.wagbridge.ad.alibabacorp.com^$important
-||tnc3-bjlgy.zijieapi.com^$important
 
 
 ||skan.singular.net^
@@ -3790,7 +3791,6 @@ vacations.ctrip.com##.side_function
 ||klink-jimu1.kuaishouzt.com^
 
 ! ai-discovered 2026-10-27
-||static.adtidy.org^$important
 
 ! ai-discovered 2026-10-27
 ||stat2.twinkstar.com^$important
@@ -3895,3 +3895,453 @@ vacations.ctrip.com##.side_function
 
 ! ai-discovered 2026-10-30
 ||bdimg7.qunliao.info^$important
+
+! ai-auto 2026-10-30
+||mon11-misc-lf.fqnovel.com^$important
+
+! ai-auto 2026-10-30
+||mon3-misc-lf.fqnovel.com^$important
+
+! ai-discovered 2026-10-30
+||ads.cup.com.cn^$important
+
+! ai-discovered 2026-10-31
+||dataservice.alipayobjects.com^$important
+
+! ai-discovered 2026-10-31
+||penguin-stats.io^$important
+||dataservice.alipayobjects.com^
+
+! ai-discovered 2026-10-31
+||sdklog.leiting.com^$important
+||sdklog.leiting.com^
+
+! ai-auto 2026-10-31
+||adx.szlzsd.com^$important
+
+! ai-discovered 2026-10-31
+||gdynamic.qpic.cn^$important
+||metrics.123245.com^
+
+! ai-discovered 2026-11-01
+
+! ai-discovered 2026-11-03
+||bbdhbukhbjbhid.dy.zzcdnx.com^$important
+
+! ai-discovered 2026-11-03
+||jihbgqhvkhjg.dy.zzcdnx.com^$important
+
+! ai-discovered 2026-11-03
+||tracking.wosai.cn^$important
+
+! ai-discovered 2026-11-03
+||redirectinteractionact.kwd.inkuai.com^$important
+||redirectinteractionact.kwd.inkuai.com^
+
+! ai-discovered 2026-11-04
+||bbjhvqbhbkbhbjv.ctydoh.cn^$important
+
+! ai-discovered 2026-11-04
+||bvqhbevhvbbhbde.ctydoh.cn^$important
+
+! ai-discovered 2026-11-04
+||vvjhbbjhjuhuv.ctydoh.cn^$important
+
+! ai-discovered 2026-11-04
+||jihbgihbvdhbuv.dy.zzcdnx.com^$important
+
+! ai-discovered 2026-11-04
+||24098c3c090001070000000000000077.qrstuvwxyzab.com^$important
+
+! ai-discovered 2026-11-04
+||stats.proxypurity.com^$important
+
+! ai-discovered 2026-11-04
+||jihbgihbvdhbgb.dy.zzcdnx.com^$important
+||bvqhbevhvbbhbde.ctydoh.cn^
+||bbjhvqbhbkbhbjv.ctydoh.cn^
+||jihbgihbvdhbuv.dy.zzcdnx.com^
+||jihbgihbvdhbgb.dy.zzcdnx.com^
+||vvjhbbjhjuhuv.ctydoh.cn^
+
+! ai-discovered 2026-11-04
+||3396231993.qrstuvwxyzab.com^$important
+
+! ai-discovered 2026-11-04
+||push.zone1.meitudata.com^$important
+
+! ai-discovered 2026-11-04
+||cp501.prod.do.dsp.mp.microsoft.com^$important
+
+! ai-discovered 2026-11-04
+||t.hs.lingjuad.com^$important
+
+! ai-discovered 2026-11-04
+||bid.adbiding.cn^$important
+
+! ai-discovered 2026-11-04
+||bid.buluken.com^$important
+
+! ai-discovered 2026-11-04
+||ads-sdk-api.yourongsj.com^$important
+||bid.buluken.com^
+||bid.adbiding.cn^
+||t.hs.lingjuad.com^
+||ads-sdk-api.yourongsj.com^
+
+! ai-discovered 2026-11-05
+||jihbgihbvdhbek.ctydoh.cn^$important
+
+! ai-discovered 2026-11-05
+||jihbgihbvdhbgk.ctydoh.cn^$important
+
+! ai-discovered 2026-11-05
+||vvjhbbbhbiuheq.ctydoh.cn^$important
+
+! ai-discovered 2026-11-05
+||g-page-quic-51yidun.gslb.sxct.51yidun.com^$important
+||bd-track.zuhaowan.cn^
+
+! ai-discovered 2026-11-05
+||kv501.prod.do.dsp.mp.microsoft.com^$important
+
+! ai-discovered 2026-11-05
+||bd-track.zuhaowan.cn^$important
+||kv501.prod.do.dsp.mp.microsoft.com^
+
+! ai-discovered 2026-11-05
+||reporta1.luckystar001.top^$important
+
+! ai-discovered 2026-11-05
+||kpxxgamecn164cgsa.luckystar001.top^$important
+
+! ai-discovered 2026-11-05
+||pubapi7.bizport.cn^$important
+||pubapi7.bizport.cn^
+||kpxxgamecn164cgsa.luckystar001.top^
+||reporta1.luckystar001.top^
+
+! ai-discovered 2026-11-05
+||logpya1.luckystar001.top^$important
+||imp.ucarinc.com^
+
+! ai-discovered 2026-11-06
+||umami.wsmdn.top^$important
+
+! ai-discovered 2026-11-06
+||i.finzfin.com^$important
+
+! ai-discovered 2026-11-06
+||zjic2hvjjugyzpkznnsfjzrjpl0c6z53omruk7ndi4rgwfvo0xegzo66.xs.alibabachengdun.com^$important
+
+! ai-discovered 2026-11-06
+||obus-dctech-cn.heytapmobi.com.lan^$important
+
+! ai-discovered 2026-11-06
+||1862424787.qrstuvwxyzab.com^$important
+
+! ai-discovered 2026-11-06
+||search5-search-lf.amemv.com^$important
+||umami.wsmdn.top^
+||1862424787.qrstuvwxyzab.com^
+
+! ai-discovered 2026-11-07
+||1aaaedc3949ba59aburadsj7zfpn53wpeb5cz54h3fy.bdcgslb.com^$important
+
+! ai-discovered 2026-11-07
+||1865651237.qrstuvwxyzab.com^$important
+
+! ai-discovered 2026-11-08
+||api26-core-hl.amemv.com^$important
+
+! ai-discovered 2026-11-08
+||tdid4.tencenttds.com^$important
+
+! ai-discovered 2026-11-08
+||imapi5-oth-lq.zijieapi.com^$important
+
+! ai-discovered 2026-11-08
+||zz13.yirujs.com^$important
+
+! ai-discovered 2026-11-10
+||yr.c.lencr.org^$important
+
+! ai-discovered 2026-11-10
+||log-operate-1.eye4.cn^$important
+
+! ai-auto 2026-11-14
+||applog-perf.lc.quark.cn^$important
+||track.340825.xyz^
+||staging.track.assistant.miui.com^
+
+! ai-discovered 2026-11-15
+||eshopactivity-solar.kwd.inkuai.com^$important
+
+! ai-discovered 2026-11-15
+||d2-ec.eckwai.com^$important
+||test996.com^
+
+! ai-discovered 2026-11-16
+||ma-adx.ctrip.com^$important
+
+! ai-discovered 2026-11-17
+||search2.aiseewhaley.aisee.tv^$important
+
+! ai-discovered 2026-11-17
+||medusalog2.aiseewhaley.aisee.tv^$important
+
+! ai-discovered 2026-11-17
+||log.aiseewhaley.aisee.tv^$important
+
+! ai-discovered 2026-11-17
+||stats.sfgj.org^$important
+||ad.daguiot.com^
+
+! ai-discovered 2026-11-18
+||ztjsv6-wh-scd.yzzhu.cn^$important
+
+! ai-discovered 2026-11-18
+||jihbgqhvkhvi.dy.zzcdnx.com^$important
+
+! ai-discovered 2026-11-18
+||jihbgqhbbbhje.dy.zzcdnx.com^$important
+
+! ai-discovered 2026-11-18
+||jihbgihbvdhbgi.dy.zzcdnx.com^$important
+
+! ai-discovered 2026-11-18
+||bbbhvhkkhvvd.dy.zzcdnx.com^$important
+
+! ai-discovered 2026-11-18
+||jihbgqhbbbhvg.ctydoh.cn^$important
+
+! ai-discovered 2026-11-18
+||vuqenkmvqnvkmbniqjnne.ctydoh.cn^$important
+
+! ai-discovered 2026-11-18
+||bkjhvuqhdbhvg.dy.zzcdnx.com^$important
+
+! ai-discovered 2026-11-18
+||vvbhvqehbqihbek.dy.zzcdnx.com^$important
+
+! ai-discovered 2026-11-18
+||vvjhbbjhjuhbb.dy.zzcdnx.com^$important
+
+! ai-discovered 2026-11-18
+||bbbhvhkkhvvv.dy.zzcdnx.com^$important
+
+! ai-discovered 2026-11-18
+||jihbgqhvkhgd.ctydoh.cn^$important
+
+! ai-discovered 2026-11-18
+||jihbijhbvghbgj.dy.zzcdnx.com^$important
+
+! ai-discovered 2026-11-18
+||vuqsnejmnvqinbqqnndi.ctydoh.cn^$important
+
+! ai-discovered 2026-11-18
+||bbdhbudhbkjhi.dy.zzcdnx.com^$important
+
+! ai-discovered 2026-11-18
+||jehbvehbvghbu.ctydoh.cn^$important
+
+! ai-discovered 2026-11-18
+||jihbgqhbbbhvk.ctydoh.cn^$important
+
+! ai-discovered 2026-11-18
+||bvqhvgghgkhvqq.dy.zzcdnx.com^$important
+
+! ai-discovered 2026-11-18
+||vuqknkdjkncqqqnvqnbqnnbib.dy.zzcdnx.com^$important
+
+! ai-discovered 2026-11-18
+||bbbhvhkkhvju.dy.zzcdnx.com^$important
+
+! ai-discovered 2026-11-18
+||bbbhvhkkhbei.dy.zzcdnx.com^$important
+
+! ai-discovered 2026-11-18
+||jihbgqhbbbhvq.ctydoh.cn^$important
+
+! ai-discovered 2026-11-18
+||vbehbguhvughvvv.dy.zzcdnx.com^$important
+
+! ai-discovered 2026-11-18
+||bkjhvuqhdbhd.dy.zzcdnx.com^$important
+
+! ai-discovered 2026-11-18
+||vuqenkmvqnisabneqgnnui.ctydoh.cn^$important
+
+! ai-discovered 2026-11-18
+||vuqenkdqvneqmknbqqnne.dy.zzcdnx.com^$important
+
+! ai-discovered 2026-11-18
+||jihbgqhvkhji.dy.zzcdnx.com^$important
+
+! ai-discovered 2026-11-18
+||jihbgihbvdhvqd.dy.zzcdnx.com^$important
+
+! ai-discovered 2026-11-18
+||bbdhbuehbjehe.dy.zzcdnx.com^$important
+
+! ai-discovered 2026-11-18
+||vvjhbbjhjuhbq.ctydoh.cn^$important
+
+! ai-discovered 2026-11-18
+||bbdhbudhbkjhiu.dy.zzcdnx.com^$important
+
+! ai-discovered 2026-11-18
+||jihbgihbvdhvvi.dy.zzcdnx.com^$important
+
+! ai-discovered 2026-11-18
+||uvhgihkuhbib.ctydoh.cn^$important
+
+! ai-discovered 2026-11-18
+||jihbgqhbbbhe.ctydoh.cn^$important
+
+! ai-discovered 2026-11-18
+||bkjhvuqhdbhi.dy.zzcdnx.com^$important
+
+! ai-discovered 2026-11-18
+||jihbgqhvkhbk.dy.zzcdnx.com^$important
+
+! ai-discovered 2026-11-18
+||uvhgihkuhbgk.ctydoh.cn^$important
+
+! ai-discovered 2026-11-18
+||vuqsneuinjqqgnbqqnnej.ctydoh.cn^$important
+
+! ai-discovered 2026-11-18
+||bbbhvhkkhvqv.dy.zzcdnx.com^$important
+
+! ai-discovered 2026-11-18
+||bbbhvhkkhvqd.dy.zzcdnx.com^$important
+
+! ai-discovered 2026-11-18
+||jihbgqhbbbhbb.dy.zzcdnx.com^$important
+
+! ai-auto-hard 2026-11-18
+
+! ai-auto-hard 2026-11-18
+||vuqenkmvqnisabneqgnnba.dy.zzcdnx.com^
+||track.tapseek.cn^
+
+! ai-auto-hard 2026-11-19
+||vvjhbbbhbiuheq.dy.zzcdnx.com^
+
+! ai-auto-hard 2026-11-19
+||vuqsnejsnbqbnbnnu.ctydoh.cn^
+
+! ai-auto-hard 2026-11-19
+||vvjhbbjhjuhuq.ctydoh.cn^
+
+! ai-auto-hard 2026-11-19
+||jihbgihbvdhbgg.dy.zzcdnx.com^
+
+! feature-lib 2026-11-19
+||ad.zhuanzhuan.com^$important
+||ad.mcloud.139.com^$important
+||adsdk.music.163.com^$important
+||ad-serving.bangdao-tech.com^$important
+||adx.v.mitvos.com^$important
+||dsp.lenovo.com.cn^$important
+||sigma-orbitv3-impression.proxima.nie.netease.com^$important
+||v5-se2-mc-reading-ad.qznovelvod.com^$important
+||egg-banner.fp.ps.netease.com^$important
+||app-i-csj.y2002.com^$important
+||csj-act-api.y2002.com^$important
+||rtb-adtrack.quark.cn^$important
+||test-log.aiseewhaley.aisee.tv^
+||report.zhidianmijin.top^
+
+||inner-report.shunchangzhixing.com^
+||jehbvehbvghvuu.dy.zzcdnx.com^
+||jihbgihbvdhbed.dy.zzcdnx.com^
+||jihbgihbvdhvvj.dy.zzcdnx.com^
+||jihbijhbvghbii.dy.zzcdnx.com^
+||bbjhvqdhkghvbi.ctydoh.cn^
+||vvjhbbjhjuhkq.dy.zzcdnx.com^
+||iqhbghbjeheg.dy.zzcdnx.com^
+||jihbgihbvdhvqi.dy.zzcdnx.com^
+||jihbgihbvdhbed.ctydoh.cn^
+||iqhvbkhbjihg.ctydoh.cn^
+||bbjhghighbji.dy.zzcdnx.com^
+||jihbgihbvdhvvd.dy.zzcdnx.com^
+||jihbijhbvghbik.dy.zzcdnx.com^
+||vvbhvbvhijhvqq.dy.zzcdnx.com^
+||bbjhvqdhdvhbje.dy.zzcdnx.com^
+||vvjhbbjhjuhde.ctydoh.cn^
+||jihbgihbvdhvvd.ctydoh.cn^
+||jihbgihbvdhvvk.dy.zzcdnx.com^
+||bbjhuhvvqhji.dy.zzcdnx.com^
+||vbkhiqhbkhvvu.dy.zzcdnx.com^
+||bbjhuhvvqhvb.dy.zzcdnx.com^
+||vvjhbbjhjuhde.dy.zzcdnx.com^
+||jihbgqhbbbhbg.dy.zzcdnx.com^
+||bbjhgehjvhbj.ctydoh.cn^
+||vbkhiqhjehvbq.ctydoh.cn^
+||vbkhkhbgvhbuu.ctydoh.cn^
+||uvhgihkuhbie.ctydoh.cn^
+||bbihbeihbuvhvu.ctydoh.cn^
+||jihbgqhvkhjv.dy.zzcdnx.com^
+||jihbgqhvkhje.dy.zzcdnx.com^
+||jihbgqhbbbhuv.dy.zzcdnx.com^
+||bkjhvuqhdbhd.ctydoh.cn^
+||vuqknkdiunqnbgnnbnpv.dy.zzcdnx.com^
+||jihbgihbvdhvbg.dy.zzcdnx.com^
+||bbjhghighbjb.dy.zzcdnx.com^
+||vvjhbbjhjuhdq.dy.zzcdnx.com^
+||vvjhbbjhjuhjd.dy.zzcdnx.com^
+||jihbgqhbbbhd.dy.zzcdnx.com^
+||vvjhbbjhjuhjk.dy.zzcdnx.com^
+||jihbgqhvkhjj.dy.zzcdnx.com^
+||jihbgqhbbbhbq.ctydoh.cn^
+||jihbgqhbbbhjk.dy.zzcdnx.com^
+||jihbgqhvkhvu.dy.zzcdnx.com^
+||vvjhbbjhjuhe.dy.zzcdnx.com^
+||vvjhbbjhjuhvg.dy.zzcdnx.com^
+||vvjhbbjhjuhbb.ctydoh.cn^
+||jihbijhbvghbuv.dy.zzcdnx.com^
+||jehbvehbvghvvk.ctydoh.cn^
+||vbkhkhbgvhbug.dy.zzcdnx.com^
+||jihbgqhvkhjg.ctydoh.cn^
+||iqhvbkhvbhbij.ctydoh.cn^
+||gkhbehbduhbdd.ctydoh.cn^
+||vuqsnejmnvqinbqqnnic.ctydoh.cn^
+||bbjhvqdhkghvqi.ctydoh.cn^
+||vvbhvqehbdvhvi.ctydoh.cn^
+||vvjhbbjhjuhub.dy.zzcdnx.com^
+||vbkhkhbgvhbud.dy.zzcdnx.com^
+||iqhbghbjehed.dy.zzcdnx.com^
+||vvjhbbjhjuhuv.dy.zzcdnx.com^
+||jihbgihbvdhvqv.dy.zzcdnx.com^
+||jihbgqhbbbhbq.dy.zzcdnx.com^
+||vvjhbbjhjuhe.ctydoh.cn^
+||vvjhbbjhjuhuj.dy.zzcdnx.com^
+||vvjhbbjhjuhbd.dy.zzcdnx.com^
+||jihbgqhbbbhjk.ctydoh.cn^
+||vvjhbbjhjuhgg.dy.zzcdnx.com^
+||vvjhbbjhjuhvd.dy.zzcdnx.com^
+||vbkhiqhjehvbu.ctydoh.cn^
+||bbjhghighbjq.dy.zzcdnx.com^
+||jihbijhbvghbiv.dy.zzcdnx.com^
+||jihbgihbvdhbdu.ctydoh.cn^
+
+! ai-auto-hard 2026-11-20
+||vuqenkmvqnvkmbniqjnnvb.ctydoh.cn^
+
+! ai-auto-hard 2026-11-20
+||jihbgqhbbbhvd.dy.zzcdnx.com^
+||vvjhbbjhjuhbq.dy.zzcdnx.com^
+||vuqenkmvqnkpcbnbjnnd.dy.zzcdnx.com^
+
+! ai-auto-hard 2026-11-20
+||vuqenkmvqnisabneqgnkqqqnnjk.dy.zzcdnx.com^
+||vvjhbbjhjuhvj.dy.zzcdnx.com^
+||vvjhbbjhjuhij.dy.zzcdnx.com^
+||jehbvehbvghbqk.dy.zzcdnx.com^
+||jihbgihbvdhbdu.dy.zzcdnx.com^
+||jihbgqhvkhjj.ctydoh.cn^
+||jihbgihbvdhvqv.ctydoh.cn^
+||vuqenkmvqnkpcbnbjnnuq.ctydoh.cn^
+||jihbgqhbbbhjb.dy.zzcdnx.com^
