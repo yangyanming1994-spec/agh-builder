@@ -3,10 +3,11 @@
 
 https://big.oisd.nl/
 https://adguardteam.github.io/HostlistsRegistry/assets/filter_2.txt
-https://raw.githubusercontent.com/badmojr/1Hosts/master/Lite/domains.txt
 https://raw.githubusercontent.com/2771936993/HG/main/hg1.txt
 https://adrules.top/dns.txt
-https://raw.githubusercontent.com/privacy-protection-tools/anti-AD/master/anti-ad-easylist.txt
+https://raw.githubusercontent.com/privacy-protection-tools/anti-AD/master/anti-ad-domains.txt
+# yhosts 国产广告 hosts（2026-11-13 补充）
+https://raw.githubusercontent.com/VeleSila/yhosts/master/hosts
 https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 https://adguardteam.github.io/HostlistsRegistry/assets/filter_1.txt
 https://raw.githubusercontent.com/8680/GOODBYEADS/master/data/rules/dns.txt
@@ -18,8 +19,6 @@ https://raw.githubusercontent.com/217heidai/adblockfilters/main/rules/adblockdns
 # 5whys-MED 专为中国地区设计,适合低配设备(用户补充)
 https://raw.githubusercontent.com/5whys-adblock/AdGuardHome-rules/main/rules/output_medium.txt
 
-# yhosts 国产广告hosts(2026-10-16补充)
-https://raw.githubusercontent.com/VeleSila/yhosts/master/hosts
 https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/pro.txt
 https://adguardteam.github.io/HostlistsRegistry/assets/filter_3.txt
 https://raw.githubusercontent.com/easylist/easylistchina/master/easylistchina.txt
