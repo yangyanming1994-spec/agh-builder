@@ -98,9 +98,6 @@ toblog*.ctobsnssdk.com
 *-be-pack-sign.pglstatp-toutiao.com
 dig*.bdurl.net
 ad*.qznovelvod.com
-tracking.miui.com
-tracking.intl.miui.com
-metrics-dra.dt.hicloud.com
 logbak.hicloud.com
 ck.ads.oppomobile.com
 bdapi.ads.oppomobile.com
@@ -111,3 +108,17 @@ adbehavior.wsa.ximalaya.com
 wmlog.meituan.com
 # 拼多多促销广告素材 CDN（仅 promotion-* 主机，正常商品图 pddpic 不拦）
 promotion-*.pddpic.com
+
+# ---- 精度训练 v1（2026-11-19）：真实流量确认的漏拦广告域（精确主域，自动拦截）----
+ad.zhuanzhuan.com
+ad.mcloud.139.com
+adsdk.music.163.com
+ad-serving.bangdao-tech.com
+adx.v.mitvos.com
+dsp.lenovo.com.cn
+sigma-orbitv3-impression.proxima.nie.netease.com
+v5-se2-mc-reading-ad.qznovelvod.com
+egg-banner.fp.ps.netease.com
+app-i-csj.y2002.com
+csj-act-api.y2002.com
+rtb-adtrack.quark.cn
