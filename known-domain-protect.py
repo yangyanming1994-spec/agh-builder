@@ -1,5 +1,8 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
+import sys as _sw_sys
+_sw_sys.path.insert(0, '/usr/local/bin')
+from sofmed_observe import note as _swallow, expected as _expected
 # known-domain-protect.py v1.0
 # 知名业务域自动保护: 若知名业务域被父域级规则整体拦截,自动放行父域+保留其广告子域拦截
 # 放行父域 -> local/wan.txt (白名单源) ; 广告子域转important -> local/hardblock.txt (强制黑名单源)
@@ -35,7 +38,7 @@ def log(msg):
     print(line)
     try:
         with open(LOG, "a") as f: f.write(line + "\n")
-    except Exception: pass
+    except Exception: _swallow('known-domain-protect.py:38')
 
 def is_registered(dom):
     parts = dom.split(".")
@@ -76,7 +79,7 @@ def main():
                 if m:
                     exact_allowed.add(m.group(1))
         except Exception:
-            pass
+            _swallow('known-domain-protect.py:79')
 
     # 读取已有精确子域白名单(wan.txt/whitelist.txt), 判断知名域是否已通过业务子域精确放行
     exact_allowed_sub = set()
@@ -87,7 +90,7 @@ def main():
                 if _m and "." in _m.group(1) and "*" not in _m.group(1):
                     exact_allowed_sub.add(_m.group(1))
         except Exception:
-            pass
+            _swallow('known-domain-protect.py:90')
 
     whole_protect, exact_protect = [], []
     skipped_sub_protected = []
