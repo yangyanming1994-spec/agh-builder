@@ -1,8 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import sys as _sw_sys
-_sw_sys.path.insert(0, '/usr/local/bin')
-from sofmed_observe import note as _swallow, expected as _expected
+if '/usr/local/bin' not in _sw_sys.path:
+    _sw_sys.path.insert(0, '/usr/local/bin')
+try:
+    from sofmed_observe import note as _swallow, expected as _expected
+except Exception:  # 无该模块的环境（如 GitHub Actions）静默降级
+    def _swallow(*_a, **_k):
+        return 0
+    def _expected(*_a, **_k):
+        return None
 """
 AGH-Builder v2.8 — 本程序适配 AdGuard Home。
 
