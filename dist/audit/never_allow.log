@@ -1,4 +1,4 @@
-# never_allow 剔除审计  2026-11-20 10:14:25
+# never_allow 剔除审计  2026-11-20 16:52:56
 # 共 126 条
 # 格式: category / rule / hit / src
 abuse_tld	@@||*.agency^	hit=*.agency	src=https://raw.githubusercontent.com/5whys-adblock/AdGuardHome-rules/main/rules/output_medium.txt
