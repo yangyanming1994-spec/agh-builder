@@ -123,3 +123,5 @@ fp.tongdun.net
 fraudmetrix.cn
 sedge.nfl.com
 omniture.walmart.com
+# A策略v2（2026-11-19）：Firebase 日志上报属第三方统计，禁止上游白名单放行
+firebaselogging.googleapis.com
