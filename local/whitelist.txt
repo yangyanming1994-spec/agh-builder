@@ -102,7 +102,6 @@
 #知乎
 @@||www.zhihu.com^
 @@||apm.zhihu.com^
-#转转App的放行规则
 @@||app.zhuanzhuan.com^
 @@||h5offline.zhuanzhuan.com^
 @@||m.zhuanzhuan.com^
@@ -117,7 +116,6 @@
 @@||sdk-api.beizi.biz^
 #快手的放行规则
 @@||w1.kskwai.com^
-@@||szlong.weixin.qq.com^
 @@||api.look.163.com^
 @@||ac.dun.163.com^
 @@||syndicatedsearch.goog^
@@ -171,7 +169,6 @@
 !QQ音乐PC端登录
 @@||c.y.qq.com^
 !小爱音箱配网
-@@||tracker.ai.xiaomi.com^
 !阿里验证
 @@||acs.m.taobao.com^
 !淘宝特卖网
@@ -200,12 +197,6 @@
 @@||support.weixin.qq.com^
 !Bootcdn
 @@||cdn.bootcdn.net^
-!饿了么小程序
-@@||waimai-guide.ele.me^
-!小米隐私政策撤回同意
-@@||data.sec.miui.com^
-!腾讯游戏登录
-@@||ap6.ssl.msdk.qq.com^
 !ofiii
 @@||cdi.ofiii.com^
 @@||fino.svc.litv.tv^
@@ -380,7 +371,6 @@
 @@||dp.push.dc.360.cn^
 @@||mall.360.cn^
 ##夸克
-@@||download.uc.cn^
 @@||soutiapi.quark.cn^
 @@||souti-ims.sm.cn^
 ##蓝奏
@@ -434,7 +424,6 @@
 ##美团领券小程序
 @@||dpurl.cn^
 @@||market.waimai.meituan.com^
-##夸克
 @@||px.wpk.quark.cn^
 @@||dw-data-channel.quark.cn^
 @@||aeventlog.beacon.qq.com^
@@ -444,8 +433,6 @@
 @@||masterconn2.qq.com^
 ##瑞幸
 @@||dualstack-a.apilocate.amap.com^
-##番茄小说
-@@||log5-applog.fqnovel.com^
 @@||p6-novel.byteimg.com
 @@||p3-novel-sign.byteimg.com^
 @@||p3-novel.byteimg.com^
@@ -453,17 +440,10 @@
 @@||p3-reading-sign.fqnovelpic.com^
 @@||p6-reading-sign.fqnovelpic.com^
 @@||p9-reading-sign.fqnovelpic.com^
-##豆包
-@@||lf-c-flwb.bytetos.com^
-@@||lf-cdn-tos.bytescm.com^
 @@||abtestvm.bytedance.com^
 @@||p1-tt.byteimg.com^
 @@||p3-tt.byteimg.com^
 @@||p9-tt.byteimg.com^
-@@||p3-search.byteimg.com^
-@@||p3-flow-imagex-sign.byteimg.com^
-@@||p6-flow-imagex-sign.byteimg.com^
-@@||p9-flow-imagex-sign.byteimg.com^
 @@||swimg1.hstdyf.com^
 @@||www.hao123.com^
 @@||dns.adguard.com^
@@ -483,9 +463,6 @@
 @@||dlswbr.baidu.com^
 @@||pull.yximgs.com^
 @@||s2.kskwai.com^
-@@||iyfbodn.com^
-@@||grpc.biliapi.net^
-@@||api.look.163.com^
 @@||dun.163.com^
 @@||saveu5-normal-lq.zijieapi.com^
 @@||ecombdimg.com^
@@ -497,12 +474,10 @@
 
 #拼多多主域名(修复||pinduoduo.*^通配符误封)
 #拼多多运营域名主域(修复||yangkeduo.com^误封, mobile子域已有白名单)
-
 !修复明确误封域名(白名单)
 @@||pingan.com^
 @@||koolearn.com^
 @@||oschina.net^
-
 #亚马逊/AWS云服务(防GOODBYEADS等整域误封双保险,广告在独立域amazon-adsystem不受影响)
 @@||amazon.com^
 @@||amazonaws.com^
@@ -547,11 +522,9 @@ acjs.aliyun.com
 @@||login.yangkeduo.com^
 @@||seller.yangkeduo.com^
 @@||example.com^
-@@||example.com^
 @@||ontology.health.apple.com^
 @@||mesu.apple.com^
 @@||apd-pcdnwxlogin.teg.tencent-cloud.net^
-
 #火山方舟大模型API与TOS存储(修复||volces.com^父域级误封, 精确放行3个业务子域, 不放开整父域)
 @@||ark.cn-beijing.volces.com^$important
 @@||tos-cn-beijing.volces.com^$important
@@ -585,10 +558,8 @@ acjs.aliyun.com
 @@||translate.googleapis.com^
 @@||optimizationguide-pa.googleapis.com^
 @@||ugcdn.taobao.com^
-
 #百度主域保护(2026-10-17)
 @@|baidu.com|
-
 #大厂主域保护(2026-10-17): 防|domain|精确误拦
 @@|taobao.com|
 @@|tmall.com|
@@ -619,12 +590,10 @@ acjs.aliyun.com
 @@||t.yangkeduo.com^
 @@||interface.bilibili.com^
 @@||h5log-api-dualstack.mihoyo.com^
-
 # ============================================================
 # 字节(抖音/红果/番茄) 功能与内容基础设施 important 保护（2026-10-24 误伤修复）
 # 原则：仅放行 功能/内容/CDN/支付/安全 域；广告(ads/ad/adx)、日志(log/mon/mcs/applog/seraph)、
 #       统计(pglstatp) 等遥测域 不在此列，保持拦截。通配只覆盖明确功能前缀，不与广告前缀重叠。
-# ============================================================
 # --- snssdk 核心 SDK/业务接口（初始化/分享/登录/特效/搜索/阅读/频道/长连接）---
 @@||i.snssdk.com^$important
 @@||ib.snssdk.com^$important
@@ -659,7 +628,6 @@ acjs.aliyun.com
 @@||api5-normal-sinfonlinea.fqnovel.com^$important
 @@||novelapp.fqnovelvod.com^$important
 @@||v*-novelapp.fqnovelvod.com^$important
-@@||*-reading-video.fqnovelvod.com^$important
 @@||*.fqnovelpic.com^$important
 @@||*.fqnovelstatic.com^$important
 @@||frontier100*.fqnovel.com^$important
@@ -670,7 +638,6 @@ acjs.aliyun.com
 @@||p9-pc-sign.douyinpic.com^$important
 @@||lf*-webcast*.bytegecko.com^$important
 @@||lf-cdn-tos.bytescm.com^$important
-
 # 友盟主域/SDK配置放行（裸域单主机）；广告遥测子域 ar/aaid/alog/alogs/umtrack 等仍由 hardblock 拦（#99）
 @@|umeng.com|
 @@|www.umeng.com|
@@ -694,3 +661,62 @@ acjs.aliyun.com
 @@||open.weixin.qq.com^
 @@||otheve.beacon.qq.com^
 @@||oth.str.beacon.qq.com^
+@@||vuqknkdgmnbqqqnindqqbnnk.jspcdn.cn^
+@@||grs.dbankcloud.com^
+@@||grs.dbankcloud.cn^
+@@||ntp.en.gifshow.com^
+@@||d-pxy-access.xxpkg.com^
+@@||dataflow.biliapi.com^
+@@||vpushort-stsdk.vivo.com.cn^
+@@||s3-hnapuhdd-cdn.didistatic.com^
+@@||ilce.alicdn.com^
+@@||metrics1.data.dbankcloud.cn^
+# DNS基础设施/大厂功能域名误杀修复 2026-11-03
+@@||dns.weixin.qq.com.cn^
+@@||union-httpdns.gslb.yy.com^
+@@||info.3g.qq.com^
+@@||iosqqdata.ab.qq.com^
+@@||httpdns-push-cn.heytapmobi.com^
+@@||idm.iot.mi.com^
+@@||iphonesubmissions.apple.com^
+@@||hyperos.developer.xiaomi.com^
+@@||push.gifshow.com^
+@@||access-live.d.xxpkg.com^
+@@||p4-ec.ecukwai.com^
+@@||sdkapiv2.bizport.cn^
+@@||zj-cn-live-comet.chat.bilibili.com^
+@@||cloudconf-app-cn.heytapmobi.com^
+@@||video4-p.pddugc.com^
+@@||gxh.material.qq.com^
+@@||img2.imgtp.com^
+@@||iv6.gtimg.cn^
+@@||code.jquery.com^
+
+# LibreOffice 官网插件入口（anti-AD domains 版误收，2026-11-13 修复）
+@@||app.libre.org^
+@@||unigetui.com^
+@@||wingetui.com^
+@@||api.getui.com^
+@@||sdk.openapi.getui.com^
+@@||push-api.getui.com^
+@@||getui.net^
+
+# ---- 精度训练 v1（2026-11-19）：系统服务豁免（防误拦破坏系统更新/验证码）----
+@@||dsp.mp.microsoft.com^
+@@||vcode-od.vivo.com.cn^
+@@||metrics.icloud.com^
+@@||gateway.icloud.com^
+@@||gateway.icloud.com.cn^
+@@||httpdns.bilivideo.com^
+# 遥测非广告（精度训练v1）：设备统计/灯塔埋点放行，避免影响系统服务
+@@||tracking.miui.com^
+@@||tracking.intl.miui.com^
+@@||astrategy.beacon.qq.com^
+# A策略 v2（2026-11-19）：系统级遥测永久放行
+@@||metrics-drcn.dt.dbankcloud.cn^
+@@||metrics1-drcn.dt.dbankcloud.cn^
+@@||metrics1.data.hicloud.com^
+@@||metrics-dra.dt.hicloud.com^
+@@||metrics.data.hicloud.com^
+
+@@||v20.events.data.microsoft.com^
