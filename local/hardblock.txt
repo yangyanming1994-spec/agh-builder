@@ -12,9 +12,7 @@ data.mistat.xiaomi.com
 
 data.mistat.intl.xiaomi.com
 
-metrics.data.hicloud.com
 
-metrics2.data.hicloud.com
 
 cnzz.com
 
@@ -86,7 +84,6 @@ api.ad.xiaomi.com
 
 sdkconfig.ad.xiaomi.com
 
-tracking.miui.com
 
 pglstatp-toutiao.com
 
@@ -96,7 +93,6 @@ ad.e.kuaishou.com
 
 ad.partner.gifshow.com
 
-push.gifshow.com
 
 ulog-sdk.gifshow.com
 
@@ -275,9 +271,7 @@ h-adashx.ut.taobao.com
 
 h-adashx.ut.dingtalk.com
 
-metrics-drcn.dt.dbankcloud.cn
 
-metrics1-drcn.dt.dbankcloud.cn
 
 logservice.dbankcloud.cn
 
@@ -285,15 +279,20 @@ adx-drcn.op.dbankcloud.cn
 
 huashan-datahub-drcn.emui.dbankcloud.com
 
-data.flurry.com  # Flurry 广告分析网络(原巴哈姆特放行,纯第三方统计无功能依赖) [wlaudit 2026-10-16]
+# Flurry 广告分析网络(原巴哈姆特放行,纯第三方统计无功能依赖) [wlaudit 2026-10-16]
+data.flurry.com
 
-ad-log-upload.mihoyo.com  # 米哈游广告日志上报(原原神放行,广告埋点非游戏功能) [wlaudit 2026-10-16]
+# 米哈游广告日志上报(原原神放行,广告埋点非游戏功能) [wlaudit 2026-10-16]
+ad-log-upload.mihoyo.com
 
-diagnosis.ad.xiaomi.com  # 小米广告诊断上报 [wlaudit 2026-10-16]
+# 小米广告诊断上报 [wlaudit 2026-10-16]
+diagnosis.ad.xiaomi.com
 
-metrics-drcn.dt.hihonorcloud.com  # 荣耀遥测(与华为 metrics 一致拦截) [wlaudit 2026-10-16]
+# 荣耀遥测(与华为 metrics 一致拦截) [wlaudit 2026-10-16]
+metrics-drcn.dt.hihonorcloud.com
 
-metrics-basecloud-drcn.dt.hihonorcloud.com  # 荣耀遥测(与华为 metrics 一致拦截) [wlaudit 2026-10-16]
+# 荣耀遥测(与华为 metrics 一致拦截) [wlaudit 2026-10-16]
+metrics-basecloud-drcn.dt.hihonorcloud.com
 
 uc-track-gl.heytapmobi.com
 
@@ -308,7 +307,6 @@ lf-ad-convert-feedback.oceanengine.com
 
 haohuo.snssdk.com
 
-f-cashloan.snssdk.com
 
 
 
@@ -344,7 +342,6 @@ pingjs.qq.com
 
 h.trace.qq.com
 
-rdelivery.qq.com
 
 t7z.cupid.iqiyi.com
 
@@ -366,7 +363,6 @@ cmp.inmobi.com
 
 tsis.jpush.cn
 
-xfr-ss.getui.com
 
 push1.91cloud.net
 
@@ -445,17 +441,14 @@ abtest3-misc-lq.zijieapi.com
 traffic-monitor-cn.allawntech.com
 cn-datareceiver.aki-game.com
 ma.zijieapi.com
-tnc3-bjlgy.zijieapi.com.w.kunluncan.com
 mssdk.zijieapi.com
 
 # #100 CNAME 归一化补真实查询名 2026-10-26
 ad-sh-sz-zb.wagbridge.tanx.alimama.com
 default.cn.sz.wagbridge.ad.alibabacorp.com
 default.cn.wagbridge.ad.alibabacorp.com
-tnc3-bjlgy.zijieapi.com
 2408-8710-1020-18db-1-0-0-1f8-ne79e83e.free-lbv6.idouyinvod.com
 applog.pwesports.cn
-static.adtidy.org
 stat2.twinkstar.com
 toblog.ctobsnssdk.com.lan
 s1.dmgyta.com
@@ -471,5 +464,136 @@ report.idqqimg.com
 v3.oskwai.com
 datasec-kmsex-cn.heytapmobi.com
 push-ads-cn.heytapmobi.com
-v20.events.data.microsoft.com
 bdimg7.qunliao.info
+mon11-misc-lf.fqnovel.com
+mon3-misc-lf.fqnovel.com
+ads.cup.com.cn
+dataservice.alipayobjects.com
+penguin-stats.io
+sdklog.leiting.com
+adx.szlzsd.com
+gdynamic.qpic.cn
+m1.ad.10010.com
+bbdhbukhbjbhid.dy.zzcdnx.com
+jihbgqhvkhjg.dy.zzcdnx.com
+tracking.wosai.cn
+redirectinteractionact.kwd.inkuai.com
+bbjhvqbhbkbhbjv.ctydoh.cn
+bvqhbevhvbbhbde.ctydoh.cn
+vvjhbbjhjuhuv.ctydoh.cn
+jihbgihbvdhbuv.dy.zzcdnx.com
+24098c3c090001070000000000000077.qrstuvwxyzab.com
+stats.proxypurity.com
+jihbgihbvdhbgb.dy.zzcdnx.com
+3396231993.qrstuvwxyzab.com
+push.zone1.meitudata.com
+cp501.prod.do.dsp.mp.microsoft.com
+t.hs.lingjuad.com
+bid.adbiding.cn
+bid.buluken.com
+ads-sdk-api.yourongsj.com
+jihbgihbvdhbek.ctydoh.cn
+jihbgihbvdhbgk.ctydoh.cn
+vvjhbbbhbiuheq.ctydoh.cn
+g-page-quic-51yidun.gslb.sxct.51yidun.com
+kv501.prod.do.dsp.mp.microsoft.com
+bd-track.zuhaowan.cn
+reporta1.luckystar001.top
+kpxxgamecn164cgsa.luckystar001.top
+pubapi7.bizport.cn
+logpya1.luckystar001.top
+umami.wsmdn.top
+i.finzfin.com
+zjic2hvjjugyzpkznnsfjzrjpl0c6z53omruk7ndi4rgwfvo0xegzo66.xs.alibabachengdun.com
+obus-dctech-cn.heytapmobi.com.lan
+1862424787.qrstuvwxyzab.com
+search5-search-lf.amemv.com
+bd-ad.a.yximgs.com
+1aaaedc3949ba59aburadsj7zfpn53wpeb5cz54h3fy.bdcgslb.com
+1865651237.qrstuvwxyzab.com
+api26-core-hl.amemv.com
+tdid4.tencenttds.com
+imapi5-oth-lq.zijieapi.com
+zz13.yirujs.com
+yr.c.lencr.org
+log-operate-1.eye4.cn
+applog-perf.lc.quark.cn
+eshopactivity-solar.kwd.inkuai.com
+d2-ec.eckwai.com
+ma-adx.ctrip.com
+search2.aiseewhaley.aisee.tv
+medusalog2.aiseewhaley.aisee.tv
+log.aiseewhaley.aisee.tv
+stats.sfgj.org
+ztjsv6-wh-scd.yzzhu.cn
+jihbgqhvkhvi.dy.zzcdnx.com
+jihbgqhbbbhje.dy.zzcdnx.com
+jihbgihbvdhbgi.dy.zzcdnx.com
+bbbhvhkkhvvd.dy.zzcdnx.com
+jihbgqhbbbhvg.ctydoh.cn
+vuqenkmvqnvkmbniqjnne.ctydoh.cn
+bkjhvuqhdbhvg.dy.zzcdnx.com
+vvbhvqehbqihbek.dy.zzcdnx.com
+vvjhbbjhjuhbb.dy.zzcdnx.com
+bbbhvhkkhvvv.dy.zzcdnx.com
+jihbgqhvkhgd.ctydoh.cn
+jihbijhbvghbgj.dy.zzcdnx.com
+vuqsnejmnvqinbqqnndi.ctydoh.cn
+bbdhbudhbkjhi.dy.zzcdnx.com
+jehbvehbvghbu.ctydoh.cn
+jihbgqhbbbhvk.ctydoh.cn
+bvqhvgghgkhvqq.dy.zzcdnx.com
+vuqknkdjkncqqqnvqnbqnnbib.dy.zzcdnx.com
+bbbhvhkkhvju.dy.zzcdnx.com
+bbbhvhkkhbei.dy.zzcdnx.com
+jihbgqhbbbhvq.ctydoh.cn
+vbehbguhvughvvv.dy.zzcdnx.com
+bkjhvuqhdbhd.dy.zzcdnx.com
+vuqenkmvqnisabneqgnnui.ctydoh.cn
+vuqenkdqvneqmknbqqnne.dy.zzcdnx.com
+jihbgqhvkhji.dy.zzcdnx.com
+jihbgihbvdhvqd.dy.zzcdnx.com
+bbdhbuehbjehe.dy.zzcdnx.com
+vvjhbbjhjuhbq.ctydoh.cn
+bbdhbudhbkjhiu.dy.zzcdnx.com
+jihbgihbvdhvvi.dy.zzcdnx.com
+uvhgihkuhbib.ctydoh.cn
+jihbgqhbbbhe.ctydoh.cn
+bkjhvuqhdbhi.dy.zzcdnx.com
+jihbgqhvkhbk.dy.zzcdnx.com
+uvhgihkuhbgk.ctydoh.cn
+vuqsneuinjqqgnbqqnnej.ctydoh.cn
+bbbhvhkkhvqv.dy.zzcdnx.com
+bbbhvhkkhvqd.dy.zzcdnx.com
+jihbgqhbbbhbb.dy.zzcdnx.com
+vuqenkmvqnisabneqgnnba.dy.zzcdnx.com
+
+log5-applog.fqnovel.com
+vvjhbbbhbiuheq.dy.zzcdnx.com
+vuqsnejsnbqbnbnnu.ctydoh.cn
+vvjhbbjhjuhuq.ctydoh.cn
+jihbgihbvdhbgg.dy.zzcdnx.com
+
+# ---- 精度训练 v1（2026-11-19）：真实流量确认的广告子域，硬拦优先于父域白名单 ----
+ad.zhuanzhuan.com
+ad.mcloud.139.com
+adsdk.music.163.com
+ad-serving.bangdao-tech.com
+adx.v.mitvos.com
+dsp.lenovo.com.cn
+sigma-orbitv3-impression.proxima.nie.netease.com
+v5-se2-mc-reading-ad.qznovelvod.com
+egg-banner.fp.ps.netease.com
+app-i-csj.y2002.com
+csj-act-api.y2002.com
+rtb-adtrack.quark.cn
+firebaselogging.googleapis.com
+test-log.aiseewhaley.aisee.tv
+report.zhidianmijin.top
+
+inner-report.shunchangzhixing.com
+app-i-csj.y2002.com
+vuqenkmvqnvkmbniqjnnvb.ctydoh.cn
+jihbgqhbbbhvd.dy.zzcdnx.com
+vuqenkmvqnisabneqgnkqqqnnjk.dy.zzcdnx.com
+jihbgihbvdhvqv.ctydoh.cn
