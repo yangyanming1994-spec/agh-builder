@@ -35,3 +35,25 @@
 ## 回滚
 cp -a /root/backups/unbound-cn-sync.bak-v2-20261121-234420 /usr/local/bin/unbound-cn-sync
 （回滚后同步恢复卡死态，但不影响解析服务本身）
+
+## 第九轮：长尾性能优化（2026-11-21 23:55，用户批准范围后执行）
+配置4项（/etc/unbound/unbound.conf，备份 unbound.conf.bak-perf-20261121-235533）：
+- prefetch-key: no→yes（DNSSEC 钥匙到期前后台续期，削冷验签尖峰）
+- serve-expired-client-timeout: 500→200（过期刷新等待长尾 -300ms；旧答案仍受 reply-ttl 30 约束）
+- infra-host-ttl: 3600（转发器测速档案 15min→1h，减少周期重探）
+- aggressive-nsec: yes（签名域 NXDOMAIN/泛解析链省一次上游往返）
+cn-sync v3（备份 unbound-cn-sync.bak-v3-20261121-235533）：增量新增>0 时异步触发
+unbound-full-warm.py（限流/内存门控/熔断/CONF指纹幂等），新区首查成本后台预付。
+红回路C harness_sync_warm.py：v2 无触发 RED → v3 有新增才触发 GREEN。
+
+验证：checkconf 无错；get_option 四旋钮生效；reload_keep_cache 前后
+msg 24909 / rrset 31619 完全一致（缓存零损失）；抽查应答全 NOERROR、复测 0ms；
+SERVFAIL=0；AGH 302 健康。本轮同步指纹无变化跳过更新（无新增→不预热，符合设计）。
+
+ECS 警告取证（不改动结论）：unbound 告警 subnetcache 模块数据不享受
+prefetch/serve-expired；实测出站包带真实客户端网段（AGH edns_client_subnet 开启）、
+上游应答 scope=0 → 答案落主缓存仍享受两旋钮；subnet 缓存命中仅 3 次，影响可忽略。
+保留 subnetcache：拆除会使异地客户端拿到错误 CDN 节点。
+
+回滚：cp -a /root/backups/unbound.conf.bak-perf-20261121-235533 /etc/unbound/unbound.conf
+&& unbound-control reload_keep_cache；脚本回滚 cp -a ...bak-v3-... /usr/local/bin/unbound-cn-sync
