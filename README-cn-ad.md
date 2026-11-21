@@ -265,3 +265,25 @@ cp /root/backups/cn-ad-net-audit.py.bak-v92-<ts> /usr/local/bin/cn-ad-net-audit.
     cp /root/backups/status-server.bak-sanitize-<ts> /usr/local/bin/status-server-py3.py && systemctl restart status-server
     cp /root/backups/postcheck.py.bak-v24-<ts> /opt/agh-builder/postcheck.py
     cp /root/backups/hardblock.txt.bak-dedup-<ts> /opt/agh-builder/local/hardblock.txt
+
+## 2026-11-21 第七轮：检测原语 /api/check 专项（脱敏补全 + AGH 会话池）
+
+### BUG（公网 5xx 泄露内部拓扑，7 处）
+- /api/check、/api 总出口、report、appeal、ai-exemption-remove、custom-rules 增/删
+  异常时把 str(e) 原样回公网（含 http://127.0.0.1:3000 内部地址端口）。
+- 红回路 ops/harness_check_leak.py（ast 抽真实分支+打桩抛错）：
+  旧版 error 含内部 URL（红）→ 统一 _pub_err() 脱敏为 "internal error"，细节进 stderr（绿）；
+  静态断言全文件 'error': str( 残留 0。第六轮 cn-ad 回路复跑仍绿。
+
+### 优化（AGH 登录风暴 → 会话池）
+- 旧版 agh_check 每查一个域重新登录一次 AGH：复检一轮 679 域 = 679 次登录；
+  且会话 401 时直接抛错不恢复。
+- 红回路 ops/harness_agh_login.py（urllib 打桩计数）：
+  50 次查询旧版登录 50 次（红）→ 会话池（上限8，取/还）后 1 次（绿）；
+  中途 401 旧版抛错（红）→ 自动重登一次成功（绿）。
+- dig CNAME 探测加 +time=2 +tries=1，避免默认 3 次重试拖满超时。
+- 生产实测：复检 679 域 15.9s → 冷池 11.1s → 热池 3.6s（约 4.4 倍），
+  AGH 登录次数 679 → ≤10/轮；广告域/业务域/非法域判定回归全对，failed 单元 0。
+
+### 回滚
+    cp /root/backups/status-server.bak-pool-<ts> /usr/local/bin/status-server-py3.py && systemctl restart status-server
