@@ -104,3 +104,23 @@ aggressive-nsec 负应答 NXDOMAIN 正确(实测)、五票 infra 账本阿里 rt
 生产回归：v4 实跑增量 +0/-46 正常放行；运行态 1123 == 配置 1123；
 缓存 24786/31849 前后一致；AGH 302；五回路(A窗口/B护栏/C新增预热/D竞态/E重载预热)全绿。
 回滚：cp -a /root/backups/unbound-cn-sync.bak-v4-20261122-004358 /usr/local/bin/unbound-cn-sync
+
+## 第十三轮：预热机制三缺陷 + v5/v2（2026-11-22 00:54，红回路纪律）
+1. **F 指纹永久跳过**（full-warm 旧版）：同指纹+同分片数即 SKIP，无时间/force 维度 →
+   v4 重载后预热与 6h(:22) 周期刷新在 CONF 不变时全为 no-op（11-16/17/18 06:22 SKIP 实录）。
+   修 full-warm v2：--force 绕过；同指纹仅 3h 内跳；state 清 7 天前键。
+   红回路F harness_warm_skip：force/4h前 旧版跳 RED → 新版跑 GREEN；近期重复仍跳。
+2. **G 容量余量不足**（潜在）：1168 域 x10 片=292s vs 300s 熔断仅余 2.7%；热点库 420→1168
+   持续增长，过 ~1200 域必撞熔断。修：自适应分片使计划时长<=熔断80%。
+   红回路G harness_warm_margin：292s RED → 8 片 234s(余量22.1%) GREEN。
+   （假设纠正：曾疑 180s 熔断致每轮 abort，日志实证 TOTAL_TIMEOUT=300 且历史轮完整完成，撤回。）
+3. **H 手动运行无锁**：systemd ExecStart 有 flock 但手动 python3 直跑绕过 → 可与 timer 重叠写
+   LIST/conf。修 cn-sync v5：脚本内 fcntl 非阻塞锁(同路径)，占用即跳过；三处预热触发改 --force。
+   红回路H harness_sync_lock：旧版无锁 RED → 占用跳过/空闲继续 GREEN；生产持锁实测跳过日志确认。
+生产实证：force 真跑 1122 域 x8 片=8976 对 243.1s 完整完成 abort=False fail0.9%；
+紧接无 force SKIP age=1s；持锁手动运行跳过；锁空闲实跑增量 +2/-0 并触发 force 预热；
+运行态 1125==配置 1125；缓存无重置；dig NOERROR 0ms；AGH 302。
+审查干净项：地址比对用 set(顺序不敏感)、systemd 串行化、内存/失败/超时门控保留。
+八回路(A窗口/B护栏/C新增预热/D竞态/E重载预热/F指纹/G余量/H锁)全绿，留 ops/ 作回归资产。
+回滚：cp -a /root/backups/unbound-full-warm.bak-v2-20261122-005422 /usr/local/bin/unbound-full-warm.py；
+cp -a /root/backups/unbound-cn-sync.bak-v5-20261122-005422 /usr/local/bin/unbound-cn-sync
