@@ -217,3 +217,25 @@ cp /root/backups/refresh-agh-filters.sh.bak-v4-<ts> /usr/local/bin/refresh-agh-f
 cp /root/backups/cn-ad-net-audit.py.bak-v92-<ts> /usr/local/bin/cn-ad-net-audit.py
 ```
 
+
+## 2026-11-21 第五轮：正则覆盖盲区修复 + 首次真实故障演练
+
+### BUG（审计 v9.2 → v9.3）
+- 覆盖面判定只编译含 `ads?` 字面量的那一条正则；产物实测有 57 条正则，
+  被其它正则挡住的基线域会被记"无覆盖"→ 每小时假告警（dig 明明已拦）。
+  红回路 ops/harness_regex_cov.py：非 ads? 正则覆盖 → v9.2 none=1/ALERT（红）→ v9.3 regex=1/ok（绿）。
+  修复：load_dist 收集全部正则（上限 256），classify 逐条匹配；快照 dist.regex 改为条数。
+- refresh v4.1：日志截断临时文件改 mktemp，四方并发截断不再互踩。
+
+### 真实故障演练（首次在生产走通"告警→自愈→恢复"全链）
+1. 备份清单/快照/账本到 /root/drill-20261121-193338
+2. 注入 ||zz-drill-1121.example^ 进基线（产物无对应规则，dig 未拦）
+3. 跑审计：判失效 1 → 触发自愈 → 重建 159s（17 项回归全过）→ 复检 57/57 → dig 0.0.0.0
+   heal.json 正确记账：last_ok=true / runs=1 / day_fail=0；全程 2m40s
+4. 还原清单 → 重建 exit=0 → 审计 56/56 / 规则 538670 恢复原值 / 无演练残留
+5. 自愈冷却戳在位（1 小时内不重复重建）；failed 单元 0
+
+### 回滚
+    cp /root/backups/cn-ad-net-audit.py.bak-v93-<ts> /usr/local/bin/cn-ad-net-audit.py
+    cp /root/backups/refresh-agh-filters.sh.bak-v41-<ts> /usr/local/bin/refresh-agh-filters.sh
+    cp /root/drill-20261121-193338/cn-ad-networks.txt /opt/agh-builder/local/cn-ad-networks.txt
