@@ -89,3 +89,18 @@ prefetch/serve-expired；实测出站包带真实客户端网段（AGH edns_clie
   （824ms/1.09s 样本），属预期，非常态。
 - 回滚：cp -a /root/backups/unbound.conf.bak-minfix-20261122-003230 /etc/unbound/unbound.conf
   && unbound-control reload_keep_cache；生成器/分流回滚见 bak-ali2-20261122-003138。
+
+## 第十二轮：九~十一轮改动审计 + v4（2026-11-22 00:43，红回路纪律）
+审计范围：cn-sync v2/v3、unbound.conf 六旋钮、生成器五票。查出 2 个真缺陷（均在新代码内）：
+1. **轮转竞态双计**（v2 窗口改动引入）：读取序 [json, .1]，解析期间若 AGH 轮转，
+   旧窗口被读两遍 → 热点权重翻倍失真。红回路D harness_sync_rot_race：dup 权重 1000(应500) RED。
+   修 v4：序改 [.1, json]，竞态时只漏一个窗口(可接受)不双计。GREEN dup=0/old=500。
+2. **保缓存重载后无预热**（v3 缺口）：reload_keep_cache 保留 msg/rrset 但重建 ECS/infra 缓存，
+   成功路径不预热 → 每 /16 首查冷 0.8-1.1s 由用户承担。红回路E harness_sync_warm_reload：
+   成功路径预热=0 RED。修 v4：成功路径也异步限流预热（兼补 ECS 无 prefetch 缺口）。GREEN 1/1。
+审查干净项：护栏数学(小库保护保留)、预热仅新增触发、max16/min0 合法组合、
+aggressive-nsec 负应答 NXDOMAIN 正确(实测)、五票 infra 账本阿里 rtt 268-365 自然劣后于腾讯
+(备份票角色符合设计)、conf.d 的 .bak 不被 include、AGH fallback 未动(用户偏好)。
+生产回归：v4 实跑增量 +0/-46 正常放行；运行态 1123 == 配置 1123；
+缓存 24786/31849 前后一致；AGH 302；五回路(A窗口/B护栏/C新增预热/D竞态/E重载预热)全绿。
+回滚：cp -a /root/backups/unbound-cn-sync.bak-v4-20261122-004358 /usr/local/bin/unbound-cn-sync
