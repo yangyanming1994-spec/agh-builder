@@ -164,3 +164,24 @@ v2 修复：旧→新→旧三遍读 + 本轮 seen 集合去重（游标只作�
   远低于阈值，属死代码级保险）；status-server-mem-guard 无冷却（持续超阈会每5分钟重启）；
   AGH RSS 525MB 接近告警阈600MB（过滤规则53.8万条内存占用，观察）。
 备份后缀 .bak-r15-20261122-011819；AGH yaml 备份 .bak-qlog-20261122-011353。
+
+## 第十六轮（2026-11-22 01:3x）：剩余未审计面清尾 + 四缺陷修复
+
+清尾范围：agh-update/backup-config/backup-querylog/cache-load/agh-monitor/agh-build-guard/
+agh-postcheck/agh-config-guard/agh-clients-tick/kms-stats/alert.sh/sofmed_observe/adopt 路径扫描。
+修复（红回路先红后绿，harness 存 ops/r15/）：
+- Q1 backup-querylog 每日误删 hot-warm 的 .pos 游标（备份目录里 46 字节 .pos.gz 实证）、
+  删除前不校验备份、.1 无消费宽限 → v4：不碰 .pos、gzip -t 校验后才删、.1 保留 6h。
+- M1 agh-monitor 兜底拉起失败只写本地日志=静默宕机 → 接 alert_throttled(agh-down/agh-recovered)。
+- U1 agh-update 健康检查 dig @127.0.0.1 实测的是 unbound（端口归属实证：unbound 127.0.0.1:53、
+  AGH [::]:53）→ unbound 瞬时无答案会错误回滚好的 AGH 升级 → 改打 @::1。
+- B2 backup-config 清单同样缺 /etc/unbound → 补入（实跑包内 25 个 unbound 条目）。
+证伪/关闭三条：①sofmed_observe「缺失」实为脚本目录导入（/usr/local/bin/sofmed_observe.py 存在）；
+  ②cn-ad-net-discover LAST=n/a 非死定时：单元 11-21 14:42 创建、OnCalendar=Sun 03:45 weekly，
+  今天首跑；①上轮 dump_infra 取错列的 rtt 数字撤回，正确解析阿里 357ms≈腾讯 371ms（K1 收益确认）。
+H6 闭环：hot-warm 命中率 82%→90%、刷新率 8.5/s<12 不再饱和，无需再调。
+披露待决策：/etc/sysconfig/smartdns-alert 无外部通道配置 → 告警仅本机留痕（箱死即无人知），
+  配置 webhook/token 需用户提供；agh-auto-update 无人值守升级仍待决策；WECOM 通道 JSON 未转义
+  （当前未启用该通道，休眠缺陷）；backup-clean 注释「core 60 天」与 backup-core 实际 14 天不符（文案）。
+回归：四新回路对真身全绿+历史回路全绿；失败单元 0；monitor/backup-querylog/backup-config 实跑通过；
+agh-update --check 返回「已是最新」rc0 未触发升级。备份后缀 .bak-r16-20261122-013954。
