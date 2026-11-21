@@ -1,18 +1,18 @@
 {
   "builder": "AGH-Builder",
   "version": "2.9.3",
-  "generated_at": "2026-11-21 07:52:37",
+  "generated_at": "2026-11-21 14:38:22",
   "sources": {
     "https://big.oisd.nl/": {
       "is_allow_source": false,
       "ok": true,
-      "lines": 226447,
-      "kept_black": 226436,
+      "lines": 226593,
+      "kept_black": 226582,
       "kept_allow": 0,
       "kept_regex": 0,
       "skipped": {
-        "total": 226447,
-        "kept": 226436,
+        "total": 226593,
+        "kept": 226582,
         "comment": 10,
         "element": 0,
         "js": 0,
@@ -139,13 +139,13 @@
     "https://adguardteam.github.io/HostlistsRegistry/assets/filter_1.txt": {
       "is_allow_source": false,
       "ok": true,
-      "lines": 192090,
-      "kept_black": 191670,
+      "lines": 192217,
+      "kept_black": 191797,
       "kept_allow": 32,
       "kept_regex": 21,
       "skipped": {
-        "total": 192090,
-        "kept": 191723,
+        "total": 192217,
+        "kept": 191850,
         "comment": 9,
         "element": 0,
         "js": 0,
@@ -177,14 +177,14 @@
     "file:local/adblock.txt": {
       "is_allow_source": false,
       "ok": true,
-      "lines": 4176,
-      "kept_black": 3679,
+      "lines": 4219,
+      "kept_black": 3715,
       "kept_allow": 0,
       "kept_regex": 1,
       "skipped": {
-        "total": 4176,
-        "kept": 3680,
-        "comment": 384,
+        "total": 4219,
+        "kept": 3716,
+        "comment": 391,
         "element": 85,
         "js": 0,
         "path": 13,
@@ -272,13 +272,13 @@
     "https://raw.githubusercontent.com/easylist/easylistchina/master/easylistchina.txt": {
       "is_allow_source": false,
       "ok": true,
-      "lines": 18006,
-      "kept_black": 6013,
+      "lines": 18010,
+      "kept_black": 6017,
       "kept_allow": 11,
       "kept_regex": 0,
       "skipped": {
-        "total": 18006,
-        "kept": 6024,
+        "total": 18010,
+        "kept": 6028,
         "comment": 874,
         "element": 5364,
         "js": 0,
@@ -310,18 +310,37 @@
     "file:local/user_deny.txt": {
       "is_allow_source": false,
       "ok": true,
-      "lines": 9,
-      "kept_black": 6,
+      "lines": 10,
+      "kept_black": 7,
       "kept_allow": 0,
       "kept_regex": 0,
       "skipped": {
-        "total": 9,
-        "kept": 6,
+        "total": 10,
+        "kept": 7,
         "comment": 3,
         "element": 0,
         "js": 0,
         "path": 0,
         "modifier": 0,
+        "ip": 0,
+        "invalid": 0
+      }
+    },
+    "https://adguardteam.github.io/AdguardFilters/ChineseFilter/sections/adservers.txt": {
+      "is_allow_source": false,
+      "ok": true,
+      "lines": 252,
+      "kept_black": 130,
+      "kept_allow": 0,
+      "kept_regex": 1,
+      "skipped": {
+        "total": 252,
+        "kept": 131,
+        "comment": 23,
+        "element": 0,
+        "js": 0,
+        "path": 0,
+        "modifier": 98,
         "ip": 0,
         "invalid": 0
       }
@@ -425,10 +444,10 @@
     "force_write": false
   },
   "dedup": {
-    "blacklist": 538096,
-    "allowlist": 4917,
+    "blacklist": 538317,
+    "allowlist": 4914,
     "regex": 61,
-    "total": 543074
+    "total": 543292
   },
   "sanitize": {
     "never_allow_dropped": 126,
@@ -438,88 +457,84 @@
       "encrypted_dns": 16,
       "tracker": 73
     },
-    "hardblock_dropped": 219,
-    "hardblock_derived_from_important": 549,
+    "hardblock_dropped": 224,
+    "hardblock_derived_from_important": 562,
     "protected_split_removed": 3
   },
   "diff": {
     "black": {
-      "prev": 538299,
-      "now": 538157,
-      "added": 432,
-      "removed": 574,
-      "unchanged": 537725,
+      "prev": 538157,
+      "now": 538378,
+      "added": 228,
+      "removed": 7,
+      "unchanged": 538150,
       "added_samples": [
-        "|2004seo.cn|",
-        "|aurorapush.com|",
-        "|chinaih.com|",
-        "|druic.mytxt.cc|",
-        "|fenbo.cn|",
-        "|fw.zhuaji.org|",
-        "|jq159.com|",
-        "|m.enrogwm.cn|",
-        "|mynsystems.com|",
-        "|pr.zhuaji.org|",
-        "|www.aurorapush.com|",
-        "||01097978.sbs^",
-        "||010music.com^",
-        "||0mron.com^",
-        "||1000more.net^",
-        "||1001-games.us^",
-        "||100mg.biz^",
-        "||10stoptours.com^",
-        "||1111bp.com^",
-        "||2guys1stump.com^"
+        "||1862686149.qrstuvwxyzab.com^$important",
+        "||1973386244.qrstuvwxyzab.com^$important",
+        "||2086639963.qrstuvwxyzab.com^$important",
+        "||306068c782.com^",
+        "||3d-secure.fr^",
+        "||4qhg8h56veuu9mmj4c.rest^",
+        "||4xo99r3nuoqno64lgjvj.rest^",
+        "||8urqj3m2wrx4cqkbo2lpp74q.cfd^",
+        "||adkbrfxxkgtlf.online^",
+        "||ads.anjuke.com^$important",
+        "||aiuaraudkcpjp.online^",
+        "||ajogbellon.com^",
+        "||allegro.pl-oferta-prywatna92383.cfd^",
+        "||allegrolokalnie.ogloszenie-s295430-2026.sbs^",
+        "||allegrolokalnie.pl-oferta-prywatna92383.cfd^",
+        "||allegrolokalnie.transakcja915829381927417241.sbs^",
+        "||ammircontr.store^",
+        "||apnqvhqlhzvhc.site^",
+        "||appcrash-report.anjuke.com^",
+        "||armletwouf.rest^"
       ],
       "removed_samples": [
-        "|35kds.com|",
-        "|emediatrack.com|",
-        "|js.guangsss1999.com|",
-        "|m.zineworm.com|",
-        "|n.35kds.com|",
-        "|u.umm6.cn|",
-        "|whiteclick.biz|",
-        "||01kk.net^",
-        "||05819129.sbs^",
-        "||0a09c-j80-i4cx-mvyql-20-09-2026-aa.pages.dev^",
-        "||158-158-1-61.cprapid.com^",
-        "||15google.com^",
-        "||1avpc1-cma00uzf0-intelligence-agentic-models.vercel.app^",
-        "||1ftt23.pics^",
-        "||1l0h9hcw-a543q2t52-rcr66-8jfyz.pages.dev^",
-        "||1x.club^",
-        "||2004seo.cn^",
-        "||23usd.com^",
-        "||2buw1-8hi-vozo-7dm9k-19-09-2026-hh.pages.dev^",
-        "||2winbet.gr^"
+        "||1862424787.qrstuvwxyzab.com^",
+        "||cbfahah.fraudate.com^",
+        "||coldcreams.com^",
+        "||frugalfriends.com^",
+        "||kusadasianahtarcideniz.com^",
+        "||mak-wils.unllm.info^",
+        "||xn--w9q675dm1p7em.net^"
       ]
     },
     "allow": {
       "prev": 4917,
-      "now": 4917,
-      "added": 0,
-      "removed": 0,
-      "unchanged": 4917,
-      "added_samples": [],
-      "removed_samples": []
+      "now": 4914,
+      "added": 2,
+      "removed": 5,
+      "unchanged": 4912,
+      "added_samples": [
+        "@@||m.anjuke.com^",
+        "@@||www.anjuke.com^"
+      ],
+      "removed_samples": [
+        "@@||*.anjuke.com^",
+        "@@||brownellmarkets.com^",
+        "@@||conceptandmarketing.com^",
+        "@@||lidsmarket.com^",
+        "@@||trustbridgemarket.com^"
+      ]
     }
   },
   "source_health": {
-    "sources": 20,
+    "sources": 21,
     "stale": [],
     "dead": []
   },
   "rule_lastseen": {
-    "tracked": 581221,
-    "updated": 469
+    "tracked": 581408,
+    "updated": 356144
   },
   "stale": {
     "enabled": true,
     "mode": "observe_only",
-    "local": 3474,
+    "local": 3510,
     "checked": 800,
-    "nx2": 260,
-    "upstream_alive": 5,
+    "nx2": 267,
+    "upstream_alive": 12,
     "candidates": 255,
     "dropped": 0,
     "sample": [
@@ -542,9 +557,9 @@
   },
   "output": {
     "rules_file": "dist/adguard-home-rules.txt",
-    "rules_count": 538157,
+    "rules_count": 538378,
     "allow_file": "dist/adguard-home-allowlist.txt",
-    "allow_count": 4917,
+    "allow_count": 4914,
     "hosts_file": null,
     "hosts_count": 0
   },

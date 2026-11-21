@@ -1,9 +1,9 @@
 ! Title: sofmed DNS（白名单）
 ! Homepage: sofmed DNS提供
-! Version: 2026-11-21 07:53:19（北京时间）
+! Version: 2026-11-21 14:38:55（北京时间）
 ! Expires: 12 hours
 ! Description: 由 sofmed DNS独家提供
-! Total count: 4917
+! Total count: 4914
 @@||ndcpp.com^$important
 @@||dj.1688.com^$important
 @@||ndcimgs.com^$important
@@ -646,7 +646,6 @@
 @@|www.umeng.com|
 @@|yangkeduo.com|
 @@||*.7k7kimg.cn^
-@@||*.anjuke.com^
 @@||1000yjs.skin^
 @@||1password.cx^
 @@||24hocst.help^
@@ -786,6 +785,7 @@
 @@||lb.gtimg.com^
 @@||limbopro.com^
 @@||limestart.cn^
+@@||m.anjuke.com^
 @@||m.ixigua.com^
 @@||m.jingxi.com^
 @@||m.qidian.com^
@@ -1369,7 +1369,6 @@
 @@||lens.zhihu.com^
 @@||leshizyimg.com^
 @@||level-plus.net^
-@@||lidsmarket.com^
 @@||link.meet5.net^
 @@||link.zhihu.com^
 @@||log.taobao.com^
@@ -1475,6 +1474,7 @@
 @@||www.123pan.com^
 @@||www.airport.us^
 @@||www.ali213.net^
+@@||www.anjuke.com^
 @@||www.bmw.com.cn^
 @@||www.bootcdn.cn^
 @@||www.cup.com.cn^
@@ -2890,7 +2890,6 @@
 @@||bobdivelymodels.com^
 @@||boxeasynews.digital^
 @@||breville-polska.com^
-@@||brownellmarkets.com^
 @@||bvairnyluwqjs.space^
 @@||bzgwjzrgipzwx.space^
 @@||canrwhwfhzobw.space^
@@ -3434,7 +3433,6 @@
 @@||syndicatedsearch.goog^
 @@||theme.heytapimage.com^
 @@||transfer.sec.miui.com^
-@@||trustbridgemarket.com^
 @@||udpolimenew.baidu.com^
 @@||uiam.unionpayintl.com^
 @@||update.googleapis.com^
@@ -3675,7 +3673,6 @@
 @@||cindyholbrook.lpages.co^
 @@||client.app.coc.10086.cn^
 @@||clientlog*music.163.com^
-@@||conceptandmarketing.com^
 @@||console.huaweicloud.com^
 @@||content-open.douyin.com^
 @@||cse.avlyun.sec.miui.com^
