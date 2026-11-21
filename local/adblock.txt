@@ -3523,14 +3523,12 @@ vacations.ctrip.com##.side_function
 ! 2. 番茄小说视频广告（限制 ad 特征，放行正常阅读与视频流）
 ||ad*.qznovelvod.com^$important
 ! 3. 字节性能归因与广告签名（限制特定前缀）
-||*-edge-perf.byte008.com^$important
 ||dig*.bdurl.net^$important
 ! 红果漫剧 & 字节系深度去广/防追踪整合版
 ! 【1. 核心广告请求（穿山甲/第三方联盟）】
 ||mi.gdt.qq.com^$important
 ! 【2. 广告素材与签名（防盗链）】
 ! 【3. 核心追踪与归因节点】
-||dig-edge-perf.byte008.com^$important
 ||mon*.zijieapi.com^$important
 ! 【4. 漫剧/小说专属广告CDN】
 ! feature-lib 2026-10-18
@@ -4394,3 +4392,5 @@ vacations.ctrip.com##.side_function
 ||brownellmarkets.com^$important
 ||conceptandmarketing.com^$important
 ||lidsmarket.com^$important
+||vvjhbbjhjuhbbk.ctydoh.cn^
+||jehbvehbvghbqk.ctydoh.cn^
