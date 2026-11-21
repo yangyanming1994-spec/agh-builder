@@ -124,3 +124,15 @@ aggressive-nsec 负应答 NXDOMAIN 正确(实测)、五票 infra 账本阿里 rt
 八回路(A窗口/B护栏/C新增预热/D竞态/E重载预热/F指纹/G余量/H锁)全绿，留 ops/ 作回归资产。
 回滚：cp -a /root/backups/unbound-full-warm.bak-v2-20261122-005422 /usr/local/bin/unbound-full-warm.py；
 cp -a /root/backups/unbound-cn-sync.bak-v5-20261122-005422 /usr/local/bin/unbound-cn-sync
+
+## 终验轮（2026-11-22 01:0x）：归档脚本轮转竞态（最后一个已知缺陷）
+
+终验扫出唯一失败单元 agh-querylog-archive.service：01:00 恰逢 AGH 轮转、当前 querylog 暂缺 →
+脚本读失败即 exit1 → unit failed；且只读当前文件，两轮之间被轮转进 .1 的尾段永久丢档。
+v2 修复：旧→新→旧三遍读 + 本轮 seen 集合去重（游标只作起点过滤、取最大值；
+第一版用游标跨遍去重被回路 c 证伪：轮转后第三遍读到更旧时间戳会被滤掉丢档）+ 单遍失败非 fatal、三遍全失败才 exit1。
+红回路 I（harness_archive_rot）三场景：缺失当前 fatal/尾段在 .1 丢档/中途轮转丢档，旧全红新全绿。
+生产实证：手动 rc=0 补回 8000 条丢尾、游标推进 01:01:12；reset-failed+start 后失败单元清单 0。
+备份 querylog-archive.bak-v2-20261122-010413。
+终验其余全绿：三脚本真身==修复版、九回路全绿、运行态==配置 1125、缓存 24878/31925、
+三类解析 NOERROR/NOERROR/NXDOMAIN、近 3000 条 fallback 0%、无新告警/熔断/回滚。
