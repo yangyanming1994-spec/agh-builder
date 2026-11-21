@@ -136,3 +136,38 @@ cp /root/backups/status-server.bak-cnadlink-<ts> /usr/local/bin/status-server-py
 systemctl restart status-server
 ```
 
+
+## v9 全链加固（2026-11-21 第二轮）
+
+审计 v8 只修了"读"的一侧，v9 把"写"的一侧（构建脚本）也理顺，并补上前端与发现脚本的缺陷。
+
+### 构建链（build-and-refresh.sh v2 / refresh-agh-filters.sh v3）
+
+| 缺陷 | 后果 | 修法 |
+|------|------|------|
+| 跳过路径（内存不足、构建锁被占）只 `exit 0`，无任何痕迹 | 审计只能靠 mtime 猜，猜不准就是"假成功" | 跳过时写 `state/build-skip.json`（`reason: locked/mem`）；真正开跑先删戳，审计可精确区分"跳过"与"跑过但失败" |
+| `refresh-agh-filters.sh` 不校验返回码与返回体，400 也当成功 | dist 已更新但 AGH 没重载 → 规则不生效却报构建成功 | 校验 HTTP 200 + 无 `"error"` 字段，失败 `exit 1`；builder 显式判断并写"规则未生效"日志 |
+| 白名单净化 9 条串各跑一次 `grep`（每次全量读 12MB，9 次 IO） | 构建慢、IO 浪费 | 合并为单次 `grep -vF -f` 列表，1 次读盘 |
+| 刷新日志 `tail -200` | 两小时前的失败记录就没了 | 提到 2000 行 |
+
+> 实测踩坑：把 `whitelist` 参数化成 `0/1` 会被 AGH 拒（`cannot unmarshal number ... type bool`，HTTP 400）。必须是 JSON bool `false/true`——这正是"刷新失败显式报错"机制当场抓出来的。
+
+### 审计 v9
+
+- 自愈成功判据 = `dist` mtime 变化 **且** 复检有改善；只变了 mtime 但复检无改善 → 记"自愈无效"，不谎报成功。
+- 自愈无效时**释放冷却戳**，下一轮（1 小时后）可再试；配 `HEAL_MAX_TRY_PER_DAY=3` 日上限，防上游真塌方时每小时连撞 3 次重建。
+- 自愈历史独立持久化到 `state/cn-ad-heal.json`（last_ts/last_ok/last_reason/day_fail/runs），不再因删冷却戳而丢失"上次自愈"。
+- 构建超时 300s→420s（refresh 两次 curl 各 60s，加上构建 160s 已逼近旧上限）。
+- `build-skip.json` 参与判断，跳过时 20s 后重试，不算失败。
+
+### 前端
+
+- `/status` 广告联盟板块：接口 `ok:false` / `data:null` 时置灰为「快照读取失败」「暂无健康快照」，**不再显示"全部生效"**（此前会假绿）。
+- `/cn-ad`：`row()` 全字段 HTML 转义（新增 `esc()` 与 `rowRaw()`，仅"关键宽规则"的富文本走 raw 且内部已转义）。此前构造型域名可注入 `<img onerror>` 并执行。
+
+### 发现脚本 v6
+
+- 候选快照改为 `.tmp` + `rename` 原子写，页面读不到半截 JSON。
+- 进度计数加 `threading.Lock`（原来多线程裸 `+=`）。
+- 修掉 v6 首次上线自带的命名冲突：计数器字典 `cnt` 被 `for host, cnt, target` 覆盖 → 写快照报 `'int' object is not subscriptable`（已改名 `prog`，全量 22648 域实跑通过）。
+
