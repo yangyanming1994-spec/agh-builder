@@ -193,3 +193,27 @@ cp /root/backups/agh-postcheck.sh.bak-v2-<ts> /usr/local/bin/agh-postcheck.sh
 cp /root/backups/cn-ad-net-audit.py.bak-v91-<ts> /usr/local/bin/cn-ad-net-audit.py
 ```
 
+
+## 第四轮加固（2026-11-21 晚，并发与通配盲区）
+
+### refresh-agh-filters.sh v4（并发 cookie 竞态）
+
+- refresh 有 4 个调用方：hourly timer、构建链、status-server、备份脚本。旧版共用 `/tmp/agh-refresh.cookies` 且启动先 `rm -f`——并发时 B 会删掉 A 正在用的 cookie，A 的刷新变 401。v3 加了严格校验后，这种竞态会从"静默"升级成"构建链假失败"。
+- v4：cookie 改 `mktemp` 独立文件 + `trap EXIT` 清理。红回路（假 curl 注入时序）：旧版 A exit=1（RED），v4 双 0（GREEN）；生产真并发 ×2 亦 0/0，无 cookie 残留。
+
+### 审计 v9.2（白名单通配盲区）
+
+- 产物白名单实测有 **160 条通配**（`*.fqnovelpic.com`、`tnc*.snssdk.com` 等），旧版 `load_allow` 跳过一切含 `*` 的条目 → 被通配白名单放行的基线域会被判"失效"并**触发无效自愈重建**。
+- v9.2：`load_allow` 返回（精确集, 通配表），新增 `allow_covered()` 按域+父域逐级做 fnmatch，并兼容 `*.base` 的裸域语义。红回路：`@@||*.zzwx.example^` 放行基线域 → v9.1 fail=1/自愈 1 次（RED），v9.2 conflict=1/自愈 0 次（GREEN）；v9.1 的自愈一致性回路复跑仍绿（无回归）。
+
+### 回归
+
+- 真并发 refresh ×2：0/0；audit v9.2：56/56 生效 0 误杀 0 冲突；完整构建 17 项回归全过 exit=0（2m32s）。
+
+### 回滚
+
+```bash
+cp /root/backups/refresh-agh-filters.sh.bak-v4-<ts> /usr/local/bin/refresh-agh-filters.sh
+cp /root/backups/cn-ad-net-audit.py.bak-v92-<ts> /usr/local/bin/cn-ad-net-audit.py
+```
+
