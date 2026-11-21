@@ -239,3 +239,29 @@ cp /root/backups/cn-ad-net-audit.py.bak-v92-<ts> /usr/local/bin/cn-ad-net-audit.
     cp /root/backups/cn-ad-net-audit.py.bak-v93-<ts> /usr/local/bin/cn-ad-net-audit.py
     cp /root/backups/refresh-agh-filters.sh.bak-v41-<ts> /usr/local/bin/refresh-agh-filters.sh
     cp /root/drill-20261121-193338/cn-ad-networks.txt /opt/agh-builder/local/cn-ad-networks.txt
+
+## 2026-11-21 第六轮：接口报错脱敏 + 复检清单并发加锁
+
+### BUG 1（status-server，公网信息泄露）
+- /api/cn-ad-* 快照读取失败时把 str(_e) 原样回给公网，暴露服务器内部路径
+  （如 /opt/agh-builder/state/...）与系统错误细节；/api/ai-discovered 同样。
+- 红回路 ops/harness_api_leak.py（ast 抽真实 do_GET 分支原文执行）：
+  旧版 error 含内部路径（红）→ 新版统一 "snapshot unavailable"，细节只进 stderr（绿）。
+- 顺手收紧：/api/cn-ad- 前缀下只认 health/candidates 两个端点，其余回 not found
+  （旧版任意后缀都会误读 candidates 文件）。
+
+### BUG 2（postcheck v2.3 → v2.4，并发竞态）
+- append_unique 先读后追加无锁：定时器与 wrapper 重试并发时重复写 wan/hardblock。
+  生产实锤：hardblock.txt 存在历史重复条目 app-i-csj.y2002.com（已去重，备份在案）。
+- 红回路 ops/harness_append_race.py（20 线程并发+放大竞态窗口）：
+  旧版 200 行/190 重复（红）→ v2.4 同一 fd flock 排他读+追加，10 行/0 重复（绿）。
+- 生产实跑 postcheck v2.4：545+134 域全过 rc=0。
+
+### 部署核验
+- status-server.service 重启 active；health/candidates 接口 ok；/cn-ad 200；
+  bogus 端点回 not found；failed 单元 0。
+
+### 回滚
+    cp /root/backups/status-server.bak-sanitize-<ts> /usr/local/bin/status-server-py3.py && systemctl restart status-server
+    cp /root/backups/postcheck.py.bak-v24-<ts> /opt/agh-builder/postcheck.py
+    cp /root/backups/hardblock.txt.bak-dedup-<ts> /opt/agh-builder/local/hardblock.txt
