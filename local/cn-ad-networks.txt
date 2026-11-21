@@ -94,3 +94,6 @@
 ||ads-img-al.xhscdn.com^
 ||optimus-ads.amap.com^
 ||p3-ad-sign.byteimg.com^
+
+# [E] 主力宽正则本地镜像 —— 与上游 666 源同一规则，本地固化防上游删除
+/(^|[._\/-])ads?([._\/-]|$)/
