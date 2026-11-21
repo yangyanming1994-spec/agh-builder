@@ -720,3 +720,6 @@ acjs.aliyun.com
 @@||metrics.data.hicloud.com^
 
 @@||v20.events.data.microsoft.com^
+
+# anti-AD 项目官网（规则提供方，被 666 源 ad/ads 粗正则误伤）
+@@||anti-ad.net^
