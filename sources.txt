@@ -24,3 +24,6 @@ https://adguardteam.github.io/HostlistsRegistry/assets/filter_3.txt
 https://raw.githubusercontent.com/easylist/easylistchina/master/easylistchina.txt
 https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/AWAvenue-Ads-Rule.txt
 file:local/user_deny.txt # self-service deny
+
+# AdGuard 中文过滤 · 广告服务器段（2026-11-21 补充）
+https://adguardteam.github.io/AdguardFilters/ChineseFilter/sections/adservers.txt
