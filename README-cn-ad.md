@@ -171,3 +171,25 @@ systemctl restart status-server
 - 进度计数加 `threading.Lock`（原来多线程裸 `+=`）。
 - 修掉 v6 首次上线自带的命名冲突：计数器字典 `cnt` 被 `for host, cnt, target` 覆盖 → 写快照报 `'int' object is not subscriptable`（已改名 `prog`，全量 22648 域实跑通过）。
 
+
+## 第三轮加固（2026-11-21 晚）
+
+### agh-postcheck.sh v2（复检链闭环）
+
+- 旧版把构建"跳过"（锁被占/内存不足）当重建成功：`rebuild_rc=0` 但什么都没跑，若复检碰巧通过就记"闭环"。
+- v2 读 `build-skip.json`（时间戳须新于本轮开始），跳过则 30s 后重试，最多 3 次；未闭环日志带 `built/last_reason`，不再含糊。
+- 红回路验证：假构建恒写 locked 跳过戳 → 旧版只试 1 次（RED），v2 试 3 次并记原因（GREEN）；真成功路径只跑 1 次不过度重试（GREEN）。
+
+### 审计 v9.1（自愈状态一致性）
+
+- 修"重建跑了但复检无改善"时 `cn-ad-heal.json` 仍记 `last_ok=true, day_fail=0` 的矛盾：现在同步记失败、计入日失败上限（3 次/日）、释放冷却供下轮再试。否则上游真坏时会**每小时空转重建**且账面全是成功。
+- 自愈成功后重测 12 个业务域误杀（重建可能改变误杀面，不能沿用重建前旧结果）。
+- 红回路验证：打桩 dig 让基线域永不生效 + 假构建 touch dist → v9 账面 last_ok=true（RED），v9.1 last_ok=false/day_fail=1（GREEN）；日上限=3 时拒绝再重建（GREEN）。
+
+### 回滚
+
+```bash
+cp /root/backups/agh-postcheck.sh.bak-v2-<ts> /usr/local/bin/agh-postcheck.sh
+cp /root/backups/cn-ad-net-audit.py.bak-v91-<ts> /usr/local/bin/cn-ad-net-audit.py
+```
+
