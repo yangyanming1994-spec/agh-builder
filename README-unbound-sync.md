@@ -136,3 +136,31 @@ v2 修复：旧→新→旧三遍读 + 本轮 seen 集合去重（游标只作�
 备份 querylog-archive.bak-v2-20261122-010413。
 终验其余全绿：三脚本真身==修复版、九回路全绿、运行态==配置 1125、缓存 24878/31925、
 三类解析 NOERROR/NOERROR/NXDOMAIN、近 3000 条 fallback 0%、无新告警/熔断/回滚。
+
+## 第十五轮（2026-11-22 01:1x）：全量运行代码盘点 + 六缺陷修复
+
+盘点：自定义 service/timer 全列映射脚本；已审计四脚本与镜像哈希一致（无漂移）；
+未审计面=两常驻 daemon（hot-warm-v4、upstream-keepalive）+ 十余 timer 小脚本。
+修复（红回路先红后绿，harness 存 ops/r15/）：
+- H1 hot-warm 瞬态超时误剔热对（实测~1次/分钟）→ 仅确定性非NOERROR才剔，瞬态保留+退避。
+- H3+H5 轮转时 mtime 竞态误选 .1（55MB 重读）+ 工作集清零（实测 5000→2155）→ 当前文件优先；
+  轮转补读 .1 尾段、工作集与计数保留。
+- H4 walk 逐行抢锁 → 整批一次锁（20000 行锁获取 20000→1）。
+- H6 刷新率恒=QPS上限=桶饱和、18% 刷新落空 → 默认 QPS 8→12（env 可覆盖）。
+- K1 keepalive 启动时解析一次配置/域名库 → 00:26 入组的阿里两票 84h 从未被保活
+  （60s 汇总实证仅4键）→ v2 周期300s跟随+worker差量增删；部署后汇总6键阿里 q=12 ok=12。
+- S1 unbound-stats 命中率分子缺 subnet_cache（ECS 早已启用）→ 恒0.1~3% 触发<5%慢性误报
+  （alert.log 23:15/00:15 实证）→ 分子=cachehits+subnet_cache，首跑 43.0% 无误报。
+- B1 backup-core 清单缺 /etc/unbound（1125区配置灾备即丢）→ 补入；实跑包内含
+  unbound.conf 与 forward-cn.conf（1573文件/6.3M）。
+证伪撤回两条：①「AGH querylog 写盘停滞」实为 size_memory=2000 批 flush（3~6分钟一批，
+  fd 间歇为0正常）；发现前已执行一次 AGH 重启（无害：unbound 缓存不受影响，AGH 缓存冷一次）。
+  ②「hot-warm 令牌桶 lead 无界」实受 worker 数上限（≤8s），不成立。
+溢出收益：腾讯保活探针 104/128ms→66/68ms、本地预热 243→34ms（hot-warm v5 覆盖更全）。
+遗留披露：hot-warm 刷新率在12仍饱和（工作集2443、短TTL占比高），观察命中率趋势再定
+  ratio/QPS 二选一；worker 到期全表扫描 CPU 3.6%（可改堆但收益小不动）；seed 日志「尾部0字节」
+  为_walk后计算_的文案缺陷（不影响行为）；agh-auto-update 04-06窗口无人值守升级AGH主程序
+  （风险项待用户决策）；unbound-mem-guard 阈值1100MB 动作是 flush_zone .（全清缓存，当前RSS172MB
+  远低于阈值，属死代码级保险）；status-server-mem-guard 无冷却（持续超阈会每5分钟重启）；
+  AGH RSS 525MB 接近告警阈600MB（过滤规则53.8万条内存占用，观察）。
+备份后缀 .bak-r15-20261122-011819；AGH yaml 备份 .bak-qlog-20261122-011353。
