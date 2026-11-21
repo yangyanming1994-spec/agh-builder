@@ -57,3 +57,22 @@ prefetch/serve-expired；实测出站包带真实客户端网段（AGH edns_clie
 
 回滚：cp -a /root/backups/unbound.conf.bak-perf-20261121-235533 /etc/unbound/unbound.conf
 && unbound-control reload_keep_cache；脚本回滚 cp -a ...bak-v3-... /usr/local/bin/unbound-cn-sync
+
+## 第十轮：/16 网段聚合 + 阿里第四票（2026-11-22 00:26，用户批准）
+- max-client-subnet-ipv4: 24→16（发出网段上限=/16，上游按/16应答、ECS缓存按/16键聚合）。
+  语义纠正：聚合靠 max（发出上限）；min-client-subnet-ipv4 是「拒收过短网段」的接收门槛，
+  误改会 REFUSED 客户端查询，保持 24 不动（官方 man 证实）。
+- 生成器 CN 组加回 223.5.5.5 作第四票（破腾讯同源集体限速）。历史：11-09 因 p90 3038ms
+  移出；本轮复测带ECS 3/3 稳定 83-89ms、不带ECS 1327ms（依赖 always-forward 才可用）；
+  再劣化由 infra 测速罚分自动边缘化 + infra-keep-probing 自动复测归队。根区仍仅 8.8.8.8。
+- 实证：出站问包 ECS option 前缀位 0x10（/16）；应答 CLIENT-SUBNET scope=16；
+  同/16不同/24 第三发 0ms 且 num.query.subnet_cache +1（聚合命中成立）；
+  运行态 gov.cn 四票含 223.5.5.5；reload_keep_cache 前后 msg 24762/rrset 31724 一致；
+  cn-sync 实跑增量 +4/-0 且 v3 预热触发首次生产生效；AGH 302 健康。
+- 已知限制（官方 man 明示）：subnetcache 模块不与 prefetch/serve-expired 交互，
+  ECS 答案无预取/过期服务；由 AGH 乐观缓存 + full-warm 分网段键补偿。
+- 代价：CDN 节点精度区县级→城市级（/16 同城同节点）；隐私改善（对外仅暴露/16）。
+- 回滚：cp -a /root/backups/unbound.conf.bak-ecs16ali-20261122-002639 /etc/unbound/unbound.conf；
+  cp -a /root/backups/unbound-gen-forward-cn.bak-ali-20261122-002639 /usr/local/bin/unbound-gen-forward-cn；
+  cp -a /root/backups/forward-cn.conf.bak-ali-20261122-002639 /etc/unbound/unbound.conf.d/forward-cn.conf；
+  unbound-control reload_keep_cache
