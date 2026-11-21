@@ -4370,4 +4370,27 @@ vacations.ctrip.com##.side_function
 ! ai-auto-hard 2026-11-21
 ||vuqenkmvqnisabneqgnnjb.ctydoh.cn^
 ||atanx.com^
-||gromore.cn^
+||gromore.cn^$important
+
+! ai-discovered 2026-11-21
+||1973386244.qrstuvwxyzab.com^$important
+
+! ai-discovered 2026-11-21
+||1862686149.qrstuvwxyzab.com^$important
+
+! ai-discovered 2026-11-21
+||2086639963.qrstuvwxyzab.com^$important
+
+! ai-discovered 2026-11-21
+||v3-b-dcardmusic.amemv.com^$important
+||2086639963.qrstuvwxyzab.com^
+||vvjhbbjhjuhub.ctydoh.cn^
+# --- 国内广告联盟补充（2026-11-21，$important 防白名单剔除）---
+||eqifa.com^$important
+||ruangao.com^$important
+||youmi.com^$important
+||ads.anjuke.com^$important
+||trustbridgemarket.com^$important
+||brownellmarkets.com^$important
+||conceptandmarketing.com^$important
+||lidsmarket.com^$important
