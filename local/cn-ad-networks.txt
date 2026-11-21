@@ -73,3 +73,24 @@
 
 # [C] 待核实 —— 证据不足，暂不拦
 # kuaishouad.com           无 CNAME 直连 23.154.252.183，非快手官方域（官方 e.kuaishou.com / kwaiad.com）
+
+# ----------------------------------------------------------
+# [D] 宽正则兜底域 —— 仅被上游 ads 段宽正则覆盖，此处显式固化
+# 来源：2026-11-21 querylog 归档 22156 域扫描，命中宽正则且高频
+||push-ads-cn.heytapmobi.com^
+||ads.heytapmobi.com^
+||ad.xiaomi.com^
+||js-ad.a.yximgs.com^
+||adukwai.com^
+||metrics-ad-drcn.dt.hihonorcloud.com^
+||dt.hihonorcloud.com^
+||ads.honor.com^
+||ads-adnet-drcn.cloud.honor.com^
+||v96-reading-ad.qznovelvod.com^
+||v5-bd-daily-reading-ad.qznovelvod.com^
+||v5-se-ex-mc-reading-ad.qznovelvod.com^
+||v6-reading-ad.qznovelvod.com^
+||v13-reading-ad.qznovelvod.com^
+||ads-img-al.xhscdn.com^
+||optimus-ads.amap.com^
+||p3-ad-sign.byteimg.com^
