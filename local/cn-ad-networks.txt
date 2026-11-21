@@ -1,0 +1,75 @@
+# ==========================================================
+# 国内广告联盟主域基线清单  cn-ad-networks
+# 目的：锁定国内主流广告联盟主域，防止上游源删规则后静默退化
+# 实测：2026-11-21 首版 39 域全部解析为 0.0.0.0（生效）
+# 维护：[A] 段新增平台即可；业务域写进 [B] 段永不加黑
+# 审计：/usr/local/bin/cn-ad-net-audit.sh 每周日 03:20
+# ==========================================================
+
+# [A] 字节系 · 穿山甲 / Pangle / GroMore
+||pangolin-sdk-toutiao.com^
+||pangolin-sdk-toutiao-b.com^
+||pangle.io^
+||api.pangle.io^
+||csjplatform.com^
+||gromore.cn^
+||gromore.com^
+||ad.toutiao.com^
+||ad.douyin.com^
+
+# [A] 腾讯 · 优量汇 GDT
+||gdt.qq.com^
+||mi.gdt.qq.com^
+||gdt.mdt.qq.com^
+||pgdt.gtimg.cn^
+||v.gdt.qq.com^
+||e.qq.com^
+
+# [A] 百度 · 联盟 / 百青藤
+||mobads.baidu.com^
+||pos.baidu.com^
+||cpro.baidu.com^
+||eclick.baidu.com^
+
+# [A] 阿里 · 妈妈 TanX / UniDesk
+||tanx.com^
+||atanx.com^
+||alimama.com^
+||mmstat.com^
+
+# [A] 快手 · 联盟
+||ad.kuaishou.com^
+||adkwai.com^
+
+# [A] 京东 · 京准通
+||ad.jd.com^
+||x.jd.com^
+
+# [A] 厂商联盟 · OPPO / vivo / 华为 / 小米
+||ads.oppomobile.com^
+||adlog.vivo.com.cn^
+||ads.hicloud.com^
+||adv.sec.miui.com^
+
+# [A] 聚合广告平台 · Mintegral / TopOn
+||mintegral.com^
+||toponad.com^
+
+# [A] 媒体自有广告系统
+||sinaads.sina.com.cn^
+||ads.iqiyi.com^
+||ads.mgtv.com^
+||ad.bilibili.com^
+||ads.zhihu.com^
+||rtb-adtrack.quark.cn^
+
+# ----------------------------------------------------------
+# [B] 业务域 —— 不得加入黑名单
+# ||mbd.baidu.com^         百度移动搜索业务域(CNAME mbd.n.shifen.com)，实测 PASS
+# ||umeng.com^             友盟统计+推送 SDK，实测 PASS，拦了会破坏大量 App 初始化
+# ||pingfore.qq.com^       腾讯性能监控上报，非广告联盟（当前被上游源拦截；如需放行写 local/whitelist.txt）
+# ||cnzz.com^              阿里站点统计，非广告联盟（当前被上游源拦截；如需放行写 local/whitelist.txt）
+# ||nc.music.163.com^      网易云音乐业务域，实测 PASS
+
+# [C] 待核实 —— 证据不足，暂不拦
+# kuaishouad.com           无 CNAME 直连 23.154.252.183，非快手官方域（官方 e.kuaishou.com / kwaiad.com）
