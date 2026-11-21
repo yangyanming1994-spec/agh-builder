@@ -76,3 +76,16 @@ prefetch/serve-expired；实测出站包带真实客户端网段（AGH edns_clie
   cp -a /root/backups/unbound-gen-forward-cn.bak-ali-20261122-002639 /usr/local/bin/unbound-gen-forward-cn；
   cp -a /root/backups/forward-cn.conf.bak-ali-20261122-002639 /etc/unbound/unbound.conf.d/forward-cn.conf；
   unbound-control reload_keep_cache
+
+## 第十一轮：223.6.6.6 入组 + min 门槛回归修复（2026-11-22 00:31-00:32，用户批准）
+- CN 组第五票 223.6.6.6（阿里内冗余；带ECS 3/3 84-89ms，不带ECS 208ms）。
+  运行态 gov.cn 五票确认；根区仍仅 8.8.8.8；reload_keep_cache 主缓存零损失。
+- **自引回归与修复**：第十轮 max→16 后，无网段客户端查询由 unbound 自生成 /16 ECS，
+  低于 min-client-subnet-ipv4=24 接收门槛 → 本地 REFUSED（0ms）。
+  修：min 24→0（默认，全接受）。验证：无网段/带/24/带/8 均 NOERROR；/16 聚合命中仍 +1。
+  影响面：AGH querylog 102000 条 REFUSED=0（AGH 恒带 /24，真实用户零影响）；
+  仅 00:26-00:32 本机无网段探针受影响。教训：max<min 组合非法，改 max 必须同步放宽 min。
+- 观察：reload_keep_cache 保留 msg/rrset 但网段(ECS)缓存重建，重载后每 /16 首查冷一次
+  （824ms/1.09s 样本），属预期，非常态。
+- 回滚：cp -a /root/backups/unbound.conf.bak-minfix-20261122-003230 /etc/unbound/unbound.conf
+  && unbound-control reload_keep_cache；生成器/分流回滚见 bak-ali2-20261122-003138。
