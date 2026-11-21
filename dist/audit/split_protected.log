@@ -1,4 +1,4 @@
-# split_protected 剔除审计  2026-11-21 06:38:47
+# split_protected 剔除审计  2026-11-21 16:01:00
 # 共 3 条
 # 格式: category / rule / hit / src
 split_protected	@@||akamaized.net^	hit=akamaized.net	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt

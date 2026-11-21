@@ -1,18 +1,18 @@
 {
   "builder": "AGH-Builder",
   "version": "2.9.3",
-  "generated_at": "2026-11-21 14:38:22",
+  "generated_at": "2026-11-22 00:00:22",
   "sources": {
     "https://big.oisd.nl/": {
       "is_allow_source": false,
       "ok": true,
-      "lines": 226593,
-      "kept_black": 226582,
+      "lines": 226690,
+      "kept_black": 226679,
       "kept_allow": 0,
       "kept_regex": 0,
       "skipped": {
-        "total": 226593,
-        "kept": 226582,
+        "total": 226690,
+        "kept": 226679,
         "comment": 10,
         "element": 0,
         "js": 0,
@@ -139,13 +139,13 @@
     "https://adguardteam.github.io/HostlistsRegistry/assets/filter_1.txt": {
       "is_allow_source": false,
       "ok": true,
-      "lines": 192217,
-      "kept_black": 191797,
+      "lines": 192335,
+      "kept_black": 191915,
       "kept_allow": 32,
       "kept_regex": 21,
       "skipped": {
-        "total": 192217,
-        "kept": 191850,
+        "total": 192335,
+        "kept": 191968,
         "comment": 9,
         "element": 0,
         "js": 0,
@@ -215,13 +215,13 @@
     "https://raw.githubusercontent.com/5whys-adblock/AdGuardHome-rules/main/rules/output_medium.txt": {
       "is_allow_source": false,
       "ok": true,
-      "lines": 333189,
-      "kept_black": 332509,
+      "lines": 333549,
+      "kept_black": 332869,
       "kept_allow": 177,
       "kept_regex": 58,
       "skipped": {
-        "total": 333189,
-        "kept": 332744,
+        "total": 333549,
+        "kept": 333104,
         "comment": 39,
         "element": 0,
         "js": 0,
@@ -234,13 +234,13 @@
     "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/pro.txt": {
       "is_allow_source": false,
       "ok": true,
-      "lines": 244070,
-      "kept_black": 244056,
+      "lines": 244990,
+      "kept_black": 244976,
       "kept_allow": 0,
       "kept_regex": 0,
       "skipped": {
-        "total": 244070,
-        "kept": 244056,
+        "total": 244990,
+        "kept": 244976,
         "comment": 13,
         "element": 0,
         "js": 0,
@@ -272,18 +272,18 @@
     "https://raw.githubusercontent.com/easylist/easylistchina/master/easylistchina.txt": {
       "is_allow_source": false,
       "ok": true,
-      "lines": 18010,
-      "kept_black": 6017,
+      "lines": 17704,
+      "kept_black": 5712,
       "kept_allow": 11,
       "kept_regex": 0,
       "skipped": {
-        "total": 18010,
-        "kept": 6028,
+        "total": 17704,
+        "kept": 5723,
         "comment": 874,
         "element": 5364,
         "js": 0,
         "path": 4327,
-        "modifier": 822,
+        "modifier": 821,
         "ip": 10,
         "invalid": 585
       }
@@ -310,13 +310,13 @@
     "file:local/user_deny.txt": {
       "is_allow_source": false,
       "ok": true,
-      "lines": 10,
-      "kept_black": 7,
+      "lines": 13,
+      "kept_black": 10,
       "kept_allow": 0,
       "kept_regex": 0,
       "skipped": {
-        "total": 10,
-        "kept": 7,
+        "total": 13,
+        "kept": 10,
         "comment": 3,
         "element": 0,
         "js": 0,
@@ -345,6 +345,25 @@
         "invalid": 0
       }
     },
+    "file:local/cn-ad-networks.txt": {
+      "is_allow_source": false,
+      "ok": true,
+      "lines": 86,
+      "kept_black": 56,
+      "kept_allow": 0,
+      "kept_regex": 1,
+      "skipped": {
+        "total": 86,
+        "kept": 57,
+        "comment": 29,
+        "element": 0,
+        "js": 0,
+        "path": 0,
+        "modifier": 0,
+        "ip": 0,
+        "invalid": 0
+      }
+    },
     "file:local/wan.txt": {
       "is_allow_source": true,
       "ok": true,
@@ -367,14 +386,14 @@
     "file:local/whitelist.txt": {
       "is_allow_source": true,
       "ok": true,
-      "lines": 718,
+      "lines": 720,
       "kept_black": 0,
-      "kept_allow": 552,
+      "kept_allow": 553,
       "kept_regex": 0,
       "skipped": {
-        "total": 718,
-        "kept": 552,
-        "comment": 163,
+        "total": 720,
+        "kept": 553,
+        "comment": 164,
         "element": 0,
         "js": 0,
         "path": 1,
@@ -444,10 +463,10 @@
     "force_write": false
   },
   "dedup": {
-    "blacklist": 538317,
-    "allowlist": 4914,
+    "blacklist": 538693,
+    "allowlist": 4915,
     "regex": 61,
-    "total": 543292
+    "total": 543669
   },
   "sanitize": {
     "never_allow_dropped": 126,
@@ -458,84 +477,90 @@
       "tracker": 73
     },
     "hardblock_dropped": 224,
-    "hardblock_derived_from_important": 562,
+    "hardblock_derived_from_important": 560,
     "protected_split_removed": 3
   },
   "diff": {
     "black": {
-      "prev": 538157,
-      "now": 538378,
-      "added": 228,
-      "removed": 7,
-      "unchanged": 538150,
+      "prev": 538378,
+      "now": 538754,
+      "added": 809,
+      "removed": 433,
+      "unchanged": 537945,
       "added_samples": [
-        "||1862686149.qrstuvwxyzab.com^$important",
-        "||1973386244.qrstuvwxyzab.com^$important",
-        "||2086639963.qrstuvwxyzab.com^$important",
-        "||306068c782.com^",
-        "||3d-secure.fr^",
-        "||4qhg8h56veuu9mmj4c.rest^",
-        "||4xo99r3nuoqno64lgjvj.rest^",
-        "||8urqj3m2wrx4cqkbo2lpp74q.cfd^",
-        "||adkbrfxxkgtlf.online^",
-        "||ads.anjuke.com^$important",
-        "||aiuaraudkcpjp.online^",
-        "||ajogbellon.com^",
-        "||allegro.pl-oferta-prywatna92383.cfd^",
-        "||allegrolokalnie.ogloszenie-s295430-2026.sbs^",
-        "||allegrolokalnie.pl-oferta-prywatna92383.cfd^",
-        "||allegrolokalnie.transakcja915829381927417241.sbs^",
-        "||ammircontr.store^",
-        "||apnqvhqlhzvhc.site^",
-        "||appcrash-report.anjuke.com^",
-        "||armletwouf.rest^"
+        "|mobee.xyz|",
+        "|scannary.com|",
+        "||0701966c0eeb.top^",
+        "||0e55ba5a5e.e6b0db6ec2.com^",
+        "||11zzc.com^",
+        "||1459f4a279.space^",
+        "||14691856716.analytics-03.media-qzcr2w4-72.sussybaka.store^",
+        "||18tllktok.xyz^",
+        "||1ea07cb89ee3e4c4.com^",
+        "||1vmm9owd0.metrics-rzhx6lj-97.sussybaka.store^",
+        "||282929.xyz^",
+        "||31.250.102.34.bc.googleusercontent.com^",
+        "||33e76afd325a.top^",
+        "||3d-puzzlewelt.com^",
+        "||3q71nx23ewrl482z7jbnx.cfd^",
+        "||44a6b9p.44a6b94ff64f0d38fe00952cc1eb1342190cdf51.com^",
+        "||52suyingtv.com^",
+        "||5bcf71846c9c.top^",
+        "||5cfb2bp.5cfb2b5054c4117516dc42a915d8b3e8a476af11.com^",
+        "||5v8xnjmivocmuh6zul.cfd^"
       ],
       "removed_samples": [
-        "||1862424787.qrstuvwxyzab.com^",
-        "||cbfahah.fraudate.com^",
-        "||coldcreams.com^",
-        "||frugalfriends.com^",
-        "||kusadasianahtarcideniz.com^",
-        "||mak-wils.unllm.info^",
-        "||xn--w9q675dm1p7em.net^"
+        "|cdn.ad.xelements.cn|",
+        "||*-edge-perf.byte008.com^$important",
+        "||0411proklayod.com^",
+        "||057108.com^",
+        "||512934.lol^",
+        "||5yedpf632rk3t98.icu^",
+        "||7eleven-telemetry-public-api.trueid.net^",
+        "||8rpplay.com^",
+        "||aaaboulderhousing.com^",
+        "||abancommercials.com^",
+        "||abilenegaragedoorcompany.com^",
+        "||accf1a4a-19fe-a71a-3906-c2daa2a9ed94-rum.cdnvideo.ru^",
+        "||ad.porkolt.com^",
+        "||ad.schloemer-gmbh.de^",
+        "||ad.tsna.com^",
+        "||ad14.dl.hildesheimer-allgemeine.de^",
+        "||adminetole.icu^",
+        "||ads-api.fastwork.co^",
+        "||ads.chr-news.com^",
+        "||ads.dulieuphapluat.vn^"
       ]
     },
     "allow": {
-      "prev": 4917,
-      "now": 4914,
-      "added": 2,
-      "removed": 5,
-      "unchanged": 4912,
+      "prev": 4914,
+      "now": 4915,
+      "added": 1,
+      "removed": 0,
+      "unchanged": 4914,
       "added_samples": [
-        "@@||m.anjuke.com^",
-        "@@||www.anjuke.com^"
+        "@@||anti-ad.net^"
       ],
-      "removed_samples": [
-        "@@||*.anjuke.com^",
-        "@@||brownellmarkets.com^",
-        "@@||conceptandmarketing.com^",
-        "@@||lidsmarket.com^",
-        "@@||trustbridgemarket.com^"
-      ]
+      "removed_samples": []
     }
   },
   "source_health": {
-    "sources": 21,
+    "sources": 22,
     "stale": [],
     "dead": []
   },
   "rule_lastseen": {
-    "tracked": 581408,
-    "updated": 356144
+    "tracked": 582208,
+    "updated": 162329
   },
   "stale": {
     "enabled": true,
     "mode": "observe_only",
-    "local": 3510,
+    "local": 3532,
     "checked": 800,
-    "nx2": 267,
-    "upstream_alive": 12,
-    "candidates": 255,
+    "nx2": 275,
+    "upstream_alive": 13,
+    "candidates": 262,
     "dropped": 0,
     "sample": [
       "1862424787.qrstuvwxyzab.com",
@@ -547,19 +572,19 @@
       "ad.douban.com",
       "ad.hicloud.com",
       "ad.ixigua.com",
+      "ad.kuaishou.com",
       "ad.kuaishouzt.com",
       "ad.kuwo.cn",
       "ad.meizu.com",
       "ad.qqmusic.com",
-      "ad.so.com",
-      "ad.sogou.com"
+      "ad.so.com"
     ]
   },
   "output": {
     "rules_file": "dist/adguard-home-rules.txt",
-    "rules_count": 538378,
+    "rules_count": 538754,
     "allow_file": "dist/adguard-home-allowlist.txt",
-    "allow_count": 4914,
+    "allow_count": 4915,
     "hosts_file": null,
     "hosts_count": 0
   },
