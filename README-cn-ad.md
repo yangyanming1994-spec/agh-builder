@@ -97,3 +97,42 @@ cp /usr/local/bin/cn-ad-net-audit.py.bak-v5 /usr/local/bin/cn-ad-net-audit.py
 cp /usr/local/bin/status-server-py3.py.bak-cnad5 /usr/local/bin/status-server-py3.py
 systemctl restart status-server
 ```
+
+## v8 审计修复（2026-11-21）
+
+审计脚本 v8 修掉 4 个会导致「假绿 / 假自愈 / 漏报」的缺陷：
+
+| # | 缺陷 | 后果 | v8 修法 |
+|---|------|------|---------|
+| 1 | `dig` 超时只 `communicate(timeout=8)` 不 kill 子进程 | 每小时可能残留 dig，长期累积 | `TimeoutExpired` 后 `p.kill()` + 回收 |
+| 2 | 自愈看 `build-and-refresh.sh` 的 rc=0 就算成功，但该脚本遇构建锁只打印「已有构建进行中，跳过」并 exit 0 | 并发构建时自愈**永远假成功**，冷却戳已写死 → 真故障一小时内不再重试 | 改为校验 `dist` mtime 是否真的变化；未变视为被跳过，30s 后重试，最多 3 次；systemd `TimeoutStartSec=900` 容纳最长路径 |
+| 3 | 退化判定要求 `prev.total == len(baseline)` | 基线从 39 扩到 56 后历史里找不到同数基准 → 退化检测**静默失效** | 不再比 total 相等，改记 `from_ratio/to_ratio` 与 `lost` 列表 |
+| 4 | 基线域被 `@@||domain^` 放行时 `dig` 返回真实 IP，被算作「失效」 | 触发无效自愈 + 每小时误报 | 新增 `covered_by()` 判定，单列 `whitelist_conflict`，不计 fail、不触发自愈 |
+
+附带改进：dig 并发 `min(16, max(4, 基线数))` 自适应；快照新增 `ver`、`whitelist_conflict`、`coverage.domains`；日志行补「冲突 N」。
+
+## 页面合并（/cn-ad 并入 /status）
+
+`/cn-ad` 的核验结论已作为「广告联盟基线」板块合并进 `/status`：
+
+- 桌面：`header-right` 新增 `📢 广告联盟`（紫渐变，指向 `/cn-ad` 完整页）
+- 手机：`.m-nav` 新增 `📢 联盟` 锚点（`#sec-cnad`）
+- 板块位置：`规则管理` 之前，复用页内 `.sec / panel / h3` 浅色主题；三栏 = 核验结果（基线生效 / 业务误杀 / 白名单冲突 + 覆盖率条）/ 规则覆盖来源 / 失效与异常
+- 数据源：`GET /api/cn-ad-health`（每 60s 刷新，页面隐藏时暂停）
+- 折叠、隐藏、锚点高亮沿用页面原有 `initSecCollapse` / `initSecHide`（自动纳入 `.sec` 集合）
+- `/cn-ad` 右上角加「← 状态面板」互链
+
+## 回滚（v8 与合并）
+
+```bash
+# 审计回滚到 v7
+cp /root/agh-bak-archive/cn-ad-net-audit.bak-v7-<ts> /usr/local/bin/cn-ad-net-audit.py
+
+# status.html 回滚
+cp /root/backups/status.html.bak-cnadmerge-<ts> /var/www/dns-page/status.html
+
+# status-server 回滚（去掉 /cn-ad 返回链接）
+cp /root/backups/status-server.bak-cnadlink-<ts> /usr/local/bin/status-server-py3.py
+systemctl restart status-server
+```
+
