@@ -420,3 +420,39 @@ soa-collect 与 ai-bot 重启后均 active；周体检复跑「严重 0 / 警告
 health-loop 全链路 22 项 PASS、0 项失败、rc=0；audit-reverse --dry-run rc=0；
 dig @127.0.0.1 与 @::1 均正常解析；failed 单元 0；avail 2104MB、load 0.29。
 回滚：cp /root/backups/<name>.bak-20261122-r20 回原路径；停用周体检 systemctl disable --now sofmed-self-audit.timer。
+
+### 第二十轮·完成度核验补记（13:2x-13:3x）：核验本身又抓出 3 个真问题
+
+方式：不靠记忆，拉线上真身与补丁做 md5 逐一比对（r19 五项 + r20 七项，12/12 SAME），
+再用修正后的 ExecStart 解析拉全 59 个在跑脚本复扫（scan_r20.py）。
+
+- X8（严重·新代码静默空转）sofmed-self-audit.sh 第 2 项用 `systemctl show -p ExecStart --value`，
+  但本机 **systemd 219 不支持 --value**（实测 `systemctl: unrecognized option '--value'`，rc=1），
+  该项全程取空 → 最有价值的"死任务/退役引用"探测在本机上从未真正运行。
+  且 `path=` 取到的是解释器 /bin/bash 而非脚本本身，即便支持 --value 也判不准。
+  → 改为 `systemctl show -p ExecStart` 并从 argv[] 中取真正的脚本路径（.sh/.py 或 /usr/local/bin、/opt 下），
+  path= 仅作兜底；grep 加 -I 跳过二进制。真机证明：59 个 timer 中 52 个成功解析出脚本（其余为二进制/内联命令）。
+  **回路桩此前用了带 --value 的假输出，属于桩不真实导致的假绿**；已把桩改成真实 219 行为
+  （遇 --value 报错退出、输出 ExecStart={ path=/bin/bash ; argv[]=... }），旧版复红、新版转绿。
+- X7（高·与 X4 同类）scan-fp.py:225 重建 Popen.communicate() 无超时（py2），卡住则单实例锁挡死后续轮次，
+  误伤白名单静默不生效。→ 与 X4 同方案：deadline 轮询 + killpg + fp-build-timeout 告警。
+  回路 harness_build_timeout.py fp：旧版 >15s 挂起（红）→ 新版 4.1s 终止并告警（绿）。
+- X9（新探测器误报）retired-ref 原按"文件里出现 smartdns/5353"判定，把 backup-config.sh / backup-core.sh
+  误判为退役引用——它们只是把历史路径列进备份清单/注释，并不操作退役对象。
+  → 收紧为"真的操作"：systemctl (restart|start|reload|enable) … smartdns、-p 5353、写入 /etc/smartdns。
+  夹具补上"被 timer 引用的备份类脚本"（此前该脚本未被任何 timer 引用，等于没覆盖，控制实验不红），
+  旧 grep 复红、新 grep 转绿；真机 13:26 两条误报 → 13:29 归零。
+
+复扫剩余 46 条线索的定性（未修部分均给出理由，不做无谓改动）：
+- 已有界，属扫描器误报：status-server-py3.py 6 处 Popen 均走自带 _communicate(p,timeout)（超时 kill + 有界回收）；
+  unbound-full-warm.py:93 与新增 _alert 的 bash 调用由 alert.sh 内部 curl 超时兜底；
+  cn-ad-net-audit.py:45 dig 带 +time=3 +tries=1；update-geocn.sh:26 命中的是 `command -v curl` 存在性检查。
+- 本地短命令，无挂起面：cp/pgrep 类若干（audit-reverse 3 处 cp、kms_key_sync:191 cp、upstream-latency-probe:167 pgrep）。
+- 已评估低危：/tmp 锁 4 处（每次 open(...,'w') 截断刷新 mtime，10d tmpfiles 规则够不到）；
+  静默吞异常 3 处（探测失败返回 False/-1 的预期降级，且已有 [silent-exc] 上报）。
+- 仍未处理（下轮范围，已明确）：unbound-upstream-keepalive.py:100 `tail -n 4000 querylog` 的 communicate() 无超时；
+  ad-feature-lib.py:49 fire-and-forget Popen 不回收构建结果；ai-bot/server.py:258 Popen 未逐行核；
+  status-server-py3.py 4 处 shell=True 抽查取值来自内部上游清单而非 HTTP 入参，完整数据流核实待做。
+
+终验：scan-fp py2 编译通过、--dry-run rc=0；周体检「严重 0 / 警告 0」；health-loop 全链路 0 项失败；
+failed 单元 0；dig @::1 正常；avail 2054MB。备份 .bak-20261122-r20 / -r20b。
