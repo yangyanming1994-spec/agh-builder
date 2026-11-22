@@ -360,3 +360,63 @@ agh-mem-guard 实跑只记录 RSS=524MB 未动作；monitor-healthguard 实跑 f
 geo 实跑 SKIP 当前已是最新 v26.4.19；sofmed-auto-update --check rc0 零改动（报告 nginx/3proxy 落后但不在白名单）；
 update-cnlist.timer 已 disabled；失败单元 0；avail 2049MB、load 0.61；当日告警额度 4/5、无 push-fail。
 备份后缀 .bak-r19-*。
+
+## 第二十轮（2026-11-22 12:0x-13:2x）：清尾六项 + 每周自动体检上线
+
+一、补上轮欠账：watchdog.sh（21KB/493 行）逐行全读，发现两处真缺陷
+- X1（严重·自愈静默失效）AGH 假死探测目标取自 /usr/local/bin/local-ip，而该脚本最终兜底是
+  `echo "${V:-127.0.0.1}"`。127.0.0.1:53 上是 unbound 不是 AGH（AGH 持 [::]:53）。
+  路由抖动走到兜底时，"探 AGH"变成"探 unbound"：AGH 真死也探得通 → 一次都不会重启，且无任何告警。
+  → v2 回落识别（空/127.*/::1 一律改探 ::1），并新增 agh_probe_target_ok：回落模式下先用
+  ss -lntu 确认 [::]:53 真有监听才探；无监听则只记 ALERT_PROBE_CFG + 告警，绝不误重启。
+  回路 harness_wd_probe_fallback.py 两场景：A(AGH死/unbound活/回落) 旧版 0 次重启（红）→ 新版正确重启（绿）；
+  B(回落且::1无监听) 新版只告警不重启（绿）。
+- X2（中·证据自毁）log() 每写一条就 `tail -100` 截断自身。面板 SELFHEAL 只读展示 watchdog.log，
+  auto_ack_alerts 也依赖历史 ALERT 行 → 崩溃告警稍后就被自己抹掉，自动确认永远等不到依据。
+  → 上限放宽到 5000 行（轮转仍由 logrotate.d/sofmed-custom 负责）。
+  回路 harness_wd_log_retain.py：写 1 条崩溃告警 + 150 条普通日志，旧版剩 100 行且告警消失（红）→ 新版 151 行保留（绿）。
+
+二、上轮"识别未修"的挂起风险，本轮按解释器差异逐个修（不是简单加 timeout）
+- X3 known-domain-protect.py:156、X4 audit-reverse.py:231 均为 **python2**（无 subprocess.run(timeout=)）。
+  → Popen + deadline 轮询（默认 1800s，env KDP_BUILD_TIMEOUT / AR_BUILD_TIMEOUT 可调），
+  超时 **os.killpg 杀整个进程组**（只 kill 父进程时 sleep/curl 孙进程仍持有 stdout 管道，communicate 继续阻塞
+  —— 这是回路实测出来的，第一版补丁就踩了），并接 kdp-build-timeout / kdp-build-fail / ar-build-timeout 告警。
+  回路 harness_build_timeout.py：旧版 >15s 仍挂起（红）→ 新版 4.1s 终止并告警（绿）。
+- X5 /root/ai-bot/server.py 两处 Popen.communicate() 无超时，会永久挂住 HTTP 处理线程。
+  → _comm() 带超时 + start_new_session=True（线程服务不用 preexec_fn）+ 超时 killpg，交既有 except 降级为 None。
+- X6 health-loop.py 三处（systemctl is-active / ss -lntp / crontab -l）与 soa-collect.py 一处
+  （systemctl --failed）无超时。→ health-loop 新增 _run_t() 统一带超时 + 进程组清理；soa 加 timeout，
+  失败计数按既有 except 降级 -1。回路 harness_subproc_timeout.py 三个 seam：旧版全挂起（红）→ 新版 3.1s 降级（绿）。
+
+三、核实后关闭的假阳性（不做无谓生产改动）
+- /tmp/*.lock 被 systemd-tmpfiles 清理（tmp.conf: `v /tmp 1777 root root 10d`）：四个锁均以 open(...,'w')
+  或 exec N> 打开，每次运行都会截断刷新 mtime，10 天 age 规则够不到活跃锁 → 不构成并发缺陷。
+- sofmed-monitor.py / swallowed-daily.py 的 except：前者是探测失败返回 (False,-1) 的预期路径且已有
+  [silent-exc] 上报机制，后者是 --days 参数解析兜底 → 均属预期降级，不改。
+- health-loop 的 smartdns 检查是"零残留"断言（带 timeout=10），不是查已退役服务的假阳性。
+
+四、定期优化：新增每周自动体检（只读，不改任何生产配置）
+/usr/local/bin/sofmed-self-audit.sh + sofmed-self-audit.timer（Sun 06:30，Persistent=true，
+RandomizedDelaySec=300，TimeoutStartSec=600，Nice=10；首次触发 2026-11-29 06:33）。
+十类检查，全部是历轮真实踩过的缺陷类型：
+ failed 单元 / timer 指向不存在脚本或仍引用已退役对象(W1 类) / 会重启服务却未接告警库 /
+ >50MB 日志未纳入 logrotate / core+config 备份新鲜度(>48h 警告, >120h 严重) / 证书剩余天数(<15 警告, <3 严重) /
+ 磁盘与可用内存水位 / DNS 双活(@127.0.0.1=unbound、@::1=AGH) / alert.log 推送失败 / 规则数漂移(±20%)。
+结果写 /var/log/sofmed-self-audit.log（新增 logrotate.d/sofmed-r20，weekly rotate 12）与
+/var/lib/sofmed-self-audit/last.txt；有严重项走 critical 键 system-down，否则普通键 self-audit-weekly
+（节流 6 天，每周 1 条，免费额度 5 条/天足够）。
+验收回路 harness_self_audit.py 是判别式的：坏环境夹具 13 类缺陷必须全抓、干净环境必须零误报、
+推送分级必须正确；对空实现跑为红，证明回路能失败。
+**该回路抓出新脚本自身两个真 bug**（已修）：
+ (a) `exec 9>"$LOCK" 2>/dev/null` —— exec 不带命令时重定向永久生效，把整个脚本 stderr 丢进黑洞；
+ (b) `grep -c ... || echo 0` —— 零匹配时 grep 本就输出 0 且退出码 1，再补一个 0 得到 "0\n0"，
+     算术展开致命错误使非交互 shell 直接退出，干净环境永远发不出周报。
+首次实跑还暴露两处探测器误报（已修并写进夹具）：config 备份实际落 /root/backups/config-*.tgz（无子目录）；
+已加退役守卫的 update-cnlist.sh 不该算告警盲区。
+
+五、部署与回归（全部实测）
+备份后缀 .bak-20261122-r20；bash -n / python2 -m py_compile / python3 -m py_compile 全通过；
+soa-collect 与 ai-bot 重启后均 active；周体检复跑「严重 0 / 警告 0」；watchdog 实跑 rc=0；
+health-loop 全链路 22 项 PASS、0 项失败、rc=0；audit-reverse --dry-run rc=0；
+dig @127.0.0.1 与 @::1 均正常解析；failed 单元 0；avail 2104MB、load 0.29。
+回滚：cp /root/backups/<name>.bak-20261122-r20 回原路径；停用周体检 systemctl disable --now sofmed-self-audit.timer。
