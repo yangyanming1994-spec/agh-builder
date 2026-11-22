@@ -456,3 +456,61 @@ dig @127.0.0.1 与 @::1 均正常解析；failed 单元 0；avail 2104MB、load 
 
 终验：scan-fp py2 编译通过、--dry-run rc=0；周体检「严重 0 / 警告 0」；health-loop 全链路 0 项失败；
 failed 单元 0；dig @::1 正常；avail 2054MB。备份 .bak-20261122-r20 / -r20b。
+
+### 第二十一轮：四项遗留风险收尾（13:4x-13:5x）
+
+上一轮复扫留下的 4 项，逐项定性并处理；全部先写回路复红、再转绿。
+
+**Y1 keepalive 读 querylog 无超时（真缺陷）**
+unbound-upstream-keepalive.py 是常驻服务（Type=simple），`tail -n 4000 querylog` 的 `communicate()` 无超时。
+querylog 在 AGH 批 flush、磁盘抖动或文件被轮转时，tail 可能长时间不回 → 整个保活循环挂死，
+上游链路预热与 never-stop 查询全停，且无任何告警。
+→ v2：`start_new_session=True` + `_comm_bounded(p, 10s)`，超时 `killpg` 整组并降级返回已采集部分。
+回路 `harness_ka_tail_timeout.py`（PATH 上 tail 睡 30s）：旧版 15s 仍未返回（红），新版 2.0s 返回并记 swallow（绿）。
+
+**Y2 ad-feature-lib 触发构建不回收结果（真缺陷）**
+`_trigger_build()` 在 status-server 未运行时 `Popen(build-and-refresh.sh)` fire-and-forget：
+构建失败 rc 不可见、卡住会留孤儿进程，而单元 TimeoutStartSec=30min 也不会立刻兜住。
+新增特征可能静默不生效，用户侧只表现为"该拦的没拦"。
+→ v2：`wait(timeout=1500s)` 回收 rc；超时 `killpg` 整组并关日志句柄；
+失败/超时分别走 `afl-build-fail` / `afl-build-timeout` 告警键。
+回路 `harness_afl_build_result.py fail|hang`：旧版失败无告警、卡住留孤儿（双红）；新版均告警且无孤儿（双绿）。
+真机未主动触发构建（避免动生产规则），下次 timer 15:15 自然走新路径。
+
+**Y3 ai-bot 每条反馈都 spawn audit.py（放大器，非死锁）**
+audit.py 自身有单实例锁，重复实例会很快退出，所以不是"堆积"，但解释器启动成本每条都付。
+高频不同域名反馈会放大成 CPU 尖峰，与 DNS 主链路争抢。
+→ v2：进程内最小间隔 `AIBOT_AUDIT_GAP`（默认 60s），并在 spawn 异常时接 `aibot-audit-spawn-fail` 告警。
+回路 `harness_aibot_audit_spawn.py`：20 条反馈旧版启动 20 次（红），新版 1 次（绿）。
+
+**Y4 面板 shell=True 数据流核实（结论：无可达注入，但抓到登录转义缺陷）**
+逐点追完 5 处 shell 执行：
+- `svcs` 为硬编码服务名列表；`nic` 为硬编码网卡名；`agh_get(path)` 全部为字面常量；
+- `_ss(...)` 的 cmd 为常量；`local_ip_set` 为常量管道；
+- 含 `host` 插值的 `dot_query` / `_doq_session` / `_udp53_rtt` **全文件无调用点**（smartdns 时代遗留死代码）。
+即：HTTP 入参无法抵达任何 shell 字符串 → 不存在命令注入。
+→ 顺手两件：
+  (a) 删除 5 个证明无调用的死函数（`_dot_ctx/_median3/dot_query/_doq_session/_udp53_rtt`，-21.9KB），
+      同时清掉两处潜在的 `host` 插值点；区间内仍在用的 `_RESP_CACHE` 原样保留（生成器有断言防误删）。
+  (b) **真缺陷**：`agh_login()` 把用户名/密码直插单引号 shell 串，密码含单引号即破坏命令 → 面板登录静默失败、
+      AGH 统计全空。改为 `json.dumps` 生成载荷 + `shlex.quote` 逐参数转义。
+回路 `harness_panel_login_quote.py`（真 shell + 记录 argv 的 curl + 含引号密码）：
+旧版 curl 收到 None（红），新版载荷逐字节一致（绿）。
+
+**新核实项（不改）**：13:25 日志里 `[ai-discovered] JSONDecodeError: line 38101`。
+写入链路（audit.py、ad-feature-lib、dynamic-ad-discovery）均为 `tmp + os.rename` 原子替换，
+读取端已有 try + `{'ok':True,'data':[],'error':'read failed'}` 降级；该报错为历史瞬时事件，
+影响仅"新链路候选"一栏短暂空白，不构成持久损坏 → 不额外改造。
+
+**部署与验证（13:50-13:56）**
+- 4 文件线上 md5 与本地补丁 **4/4 SAME**；备份 `.bak-20261122-r21` 四份。
+- 三服务重启后 active：keepalive / ai-bot / status-server；failed 单元 0。
+- 面板走 nginx 443（真实用户路径）：/status 200、/cn-ad 200、
+  /status/api/{resp-latency,unbound,protocols,selfheal,daily} 全 200；5 分钟窗口 0 条 traceback/NameError。
+- 真机重登：移走 cookie → 等 30s 缓存过期 → 请求 → 新 cookie 225B 生成、AGH 数据 175832→176417，
+  证明新的转义登录路径在生产可用。
+- health-loop 全链路 **0 项失败**；周体检 last.txt 为空（严重 0 / 警告 0）。
+- 资源：avail 2168MB、load 0.14。
+
+**回滚**：`cp -p <文件>.bak-20261122-r21 <文件> && systemctl restart <unit>`
+（keepalive / ai-bot / status-server；ad-feature-lib 无需重启，timer 下次读回旧文件即可）。
