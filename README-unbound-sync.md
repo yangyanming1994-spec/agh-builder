@@ -224,3 +224,28 @@ QPS12 饱和 → drop-in Environment=HOT_WARM_QPS=16 跑 28min 稳态对照：�
 失败单元 0、keepalive 六键 err=0（182.254 自定义出口 TCP+UDP 双条目按用户偏好原样保留）。
 遗留待用户决策（沿用上轮）：外部告警 webhook/token；agh-auto-update 04-06 无人值守升级策略。
 备份后缀 .bak-r17-*。
+
+### 第十七轮补：微信告警通道接通 + 告警库 v2（额度护栏）
+
+用户澄清"已对接微信"→ 全机核查结论：本机从未配置任何外部推送通道（/etc/sysconfig/smartdns-alert
+不存在，全机无 webhook/token 痕迹，bash_history 0 命中）；此前 grep 命中的 weixin/pushplus/ftqq
+字样均为广告规则列表里的被拦域名与探测目标域名，非通道配置；ai-bot 是网页 AI 客服代理，与微信推送无关。
+用户提供 Server酱 Turbo SendKey → 写入 /etc/sysconfig/smartdns-alert（chmod 600，密钥不入文档/仓库），
+ALERT_ENABLED=1、ALERT_PREFIX="[DNS] "。直发与 alert_throttled 两条测试均返回 code=0/SUCCESS。
+推送域名解析实测未被自家规则拦截（qyapi.weixin/sctapi.ftqq/pushplus/wxpusher 均正常解析）。
+
+随之发现并修复的真实风险（红回路 harness_alert_quota.py 存 ops/）：
+- A1 Server酱免费版每天仅 5 条（官方口径），而告警 key 有十余种、默认节流窗口 1800s →
+  故障日普通告警会吃光额度，最关键的宕机告警反而发不出。→ alert.sh v2 加按天额度护栏：
+  普通告警上限 ALERT_DAILY_CAP=4，关键告警可动用预留的第 5 条（ALERT_CRITICAL_CAP=5）；
+  关键性按 key 自动判定（agh-down/unbound-down/dns-down/cert-expire/backup-fail/system-down/agh-recovered），
+  也可由 alert_throttled 第 4 参显式指定；超额只本地留痕并计数，次日首条推送附带"昨日被压制 N 条"。
+- A2 所有通道 curl 结果被 >/dev/null + || true 吞掉 → 推送失败（额度用尽/密钥失效/网络不通）完全静默。
+  → v2 解析返回码（Server酱 code、TG ok、企业微信 errcode、Bark code），非成功写 [push-fail] 到 alert.log。
+- A3 企业微信分支 JSON 手工拼接未转义（上轮披露的休眠缺陷）→ v2 用 python3 json.dumps 生成 payload，
+  含引号/换行的告警正文不再产生非法 JSON。
+验证：旧版三项全红、v2 三项全绿（额度拦下第 3 条普通告警但放行 agh-down；失败可见；带引号 payload 可解析）；
+部署后真实发第 3 条 code=0、alert.log 无 push-fail、计数器=3、agh-down 判定 critical、失败单元 0。
+今日额度已用 3/5（两条接通测试 + 一条升级验证），计数器已按实际写入避免超发。
+备份 /root/backups/alert.sh.bak-r17-*。若日后告警量变大，可换企业微信群机器人（无条数限制），
+alert.sh 已支持 WECOM_WEBHOOK，只需替换配置文件中的通道项。
