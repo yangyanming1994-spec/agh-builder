@@ -313,3 +313,50 @@ logrotate 覆盖全量核验。watchdog.sh 与 capacity-report.sh 做关键动�
 两个内存守护实跑 rc0 当前不动作；告警库 v3 真实发送 code=0、无 push-fail、当日额度 4/5 无压制；
 失败单元 0；stats hit_all 68.0%、servfail 0、RSS 173MB；hot-warm 回到 QPS12 基线 4998 对/命中率 85%/均值 34ms；
 dig 百度 6ms、QQ 12ms；cn-sync 下轮 12:17。备份后缀 .bak-r18-*。
+
+## 第十九轮（2026-11-22 11:3x-11:4x）：全量在跑程序审计（51 个脚本）+ 五项修复
+
+范围：按 systemd 单元 ExecStart 全量清点，拉取 51 个在跑脚本（358KB）做静态扫描（scan_r19.py，
+10 类高信号模式），命中 47 条线索，再对高危项逐行读。此前几轮只覆盖 DNS 主链，本轮补齐外围。
+
+修复（红回路先红后绿，harness 存 ops/）：
+- W1（假成功·死任务）update-cnlist.sh 维护 /etc/smartdns/cn.list 并 restart smartdns，但 smartdns
+  2026-11-08 已退役：单元不存在、/etc/smartdns 目录不存在、5353 无监听（均实测）。mv 目标目录不存在必失败、
+  探测必失败 → 二次 restart 也失败，而脚本最后一条是 echo，单元每周报 Result=success。
+  11-16 04:30 日志实证：「更新完成：109506 行，smartdns 首次探测失败已二次重启」——全是假的。
+  唯一消费方是脚本自己（grep 全机确认）。→ 停用 update-cnlist.timer（回滚：systemctl enable --now update-cnlist.timer）
+  + 脚本加退役守卫（单元不存在则 SKIP exit 0），双保险防误启用后再假成功。回路 harness_cnlist_dead.py。
+- W2 agh-mem-guard 无冷却 + 告警时序错：RSS≥900MB 每轮（每小时）重启 AGH，无冷却；且在 restart 之前
+  就发"已自动重启"告警，重启失败时告警内容不实。→ v2 加 1800s 冷却（/var/run 标记）+ 先重启后
+  is-active & dig @::1 双校验再告警；恢复发普通告警，未恢复复用 agh-down（critical）。
+  回路 harness_agh_memguard.py：连跑 3 轮旧版重启 3 次（红）、新版 1 次且告警在重启后（绿）。
+- W3 monitor-healthguard 自愈失败静默：连续 2 次异常即 restart sofmed-monitor，但重启后不校验、不告警、无冷却
+  （该脚本背景注释自述"主循环僵死 3 天无人发现"）。→ v2 加 600s 冷却 + 重启后 healthz 校验 +
+  恢复/仍失败分别告警（仍失败 critical）。回路 harness_monitor_hg.py。
+- W4 update-geocn 更新后不回滚不告警：mmdb 下载与解析校验齐全，但 mv 覆盖旧库前无备份、restart geo-server
+  后不校验 → 新库若让服务起不来，归属地功能全挂且无法回滚、无人知情。→ v2 覆盖前 cp .prev、重启后
+  is-active 校验、失败自动回滚旧库与版本号并重启、回滚成功/失败分别告警（均 critical）。
+  回路 harness_geocn_rollback.py：旧版坏库留线上且静默（红）、新版回滚到 OLD-LIB 并告警（绿）。
+- W5 sofmed-auto-update 回滚静默（**非休眠**：/etc/sofmed-auto-update.conf 实测 AUTO_APPLY="sing-box mtg"，
+  这两个组件真的会在 04-06 窗口自动升级）：版本不符中止、服务未 active 回滚、端口未监听回滚三条路径
+  只写日志。→ v2 三条路径均接 critical 告警。回路 harness_sofmed_update_alert.py。
+
+假阳性关闭（扫描命中但核实无缺陷）：
+- audit-reverse.py / scan-fp.py / ai-bot audit.py / healthcheck.py 的 fcntl.flock：对应单元 ExecStart
+  均无 flock wrapper（实测），不存在第十七轮 L1 那类同锁空间自冲突；dynamic-ad-discovery.py 内部无锁、
+  仅 wrapper 持锁， likewise 无冲突。
+- cert-reload.sh：已有 nginx/3proxy 与 AGH 独立 md5 标记、失败告警、失败不写标记下次自动补推，设计完善，不改。
+- sofmed-auto-update 的 flock 用法正确（exec 9> 在主体内、flock -n 9），与第十八轮 alert.sh 的错误写法不同。
+
+已识别但本轮不动（附理由，避免把挂起变成崩溃）：
+- 7 处 subprocess 调用无 timeout（health-loop.py 2、soa-collect.py 1、ai-bot/server.py 3、
+  upstream-latency-probe.py 1）：加 timeout 必须同时加 TimeoutExpired 处理，否则把"挂起"变成"抛异常崩溃"，
+  需逐个设计降级路径，单独一轮做。
+- 4 处 /tmp/*.lock 与 2 处 except: pass（sofmed-monitor.py:152、swallowed-daily.py:18）：低危，
+  /tmp 锁被 tmpfiles 清理只影响极端并发；静默吞异常需先判定是否属预期路径。
+
+验证：5 个新回路对旧版全红、新版全绿；部署后 bash -n 全通过；cnlist 实跑 SKIP rc0；
+agh-mem-guard 实跑只记录 RSS=524MB 未动作；monitor-healthguard 实跑 failcount 归 0；
+geo 实跑 SKIP 当前已是最新 v26.4.19；sofmed-auto-update --check rc0 零改动（报告 nginx/3proxy 落后但不在白名单）；
+update-cnlist.timer 已 disabled；失败单元 0；avail 2049MB、load 0.61；当日告警额度 4/5、无 push-fail。
+备份后缀 .bak-r19-*。
