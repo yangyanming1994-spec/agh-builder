@@ -185,3 +185,42 @@ H6 闭环：hot-warm 命中率 82%→90%、刷新率 8.5/s<12 不再饱和，无
   （当前未启用该通道，休眠缺陷）；backup-clean 注释「core 60 天」与 backup-core 实际 14 天不符（文案）。
 回归：四新回路对真身全绿+历史回路全绿；失败单元 0；monitor/backup-querylog/backup-config 实跑通过；
 agh-update --check 返回「已是最新」rc0 未触发升级。备份后缀 .bak-r16-20261122-013954。
+
+## 第十七轮（2026-11-22 09:1x-09:5x）：夜间无人值守回归 + 核心链停摆根因修复
+
+夜间 timer 链全跑通取证：失败单元 0；discover 首跑 03:45→03:50:54 实探 23458 域/250.3s/候选 0/rc0；
+full-warm v2 首轮无人值守 06:22 完成 8992 对/230.5s/失败率 0.5%/未熔断/已提交；archive 01:40 后 0 错误；
+build 08:16/08:46 自检通过；postcheck 三轮通过（545 功能 + 134 广告）；backup-core 05:10 OK 6.4M/1573 文件、
+backup-config 05:00 OK 30M/1492 文件 checksum PASS；kms-selfcheck 03:20 正常。
+
+修复四缺陷（红回路先红后绿，harness 存 ops/ 与 ops/r15/）：
+- L1（严重·核心链停摆）unbound-cn-sync v5 脚本内 fcntl.flock 与 systemd wrapper 的 `flock -n` 同属
+  BSD 锁空间 → wrapper 持锁期间脚本自锁必失败 → **每个 timer 轮都"锁占用"自跳过**。00:17 轮跑在 v4
+  故正常，06:17 是 v5 首个 timer 轮 → 国内转发链自 06:17 停摆约 3h（手动跑无 wrapper 所以此前测试全绿，
+  属测试与生产不同构的盲区）。→ v6 改 fcntl.lockf（POSIX 锁，与 wrapper 的 BSD flock 独立空间，
+  仍防手动/跨实例重叠）。生产同构回归：用与 timer 完全相同的 `flock -n … -c 'python3 …'` 补跑，
+  rc=0、写入 1139 域、增量 +37/−15 失败 0、未 reload 缓存保留。回路 harness_sync_lock_self.py。
+- F1 full-warm v2 top_ecs() 的 except 统一打 traceback：00:57 轮转瞬间 querylog.json 暂缺属预期，
+  功能上已回退基线网段继续跑，但 traceback 被系统自检扫成"异常"告警 → v3 对 FileNotFoundError/OSError
+  单独静默回退（一行 [rotate] 提示），其余异常仍留 traceback。回路 harness_warm_rot_quiet.py。
+- SC1/SC2 sofmed-system-check.sh 慢性误报：SERVICES 仍含 11-08 已退役的 smartdns；/review.html
+  /rules.html 是鉴权页，401 是正确行为却被期望 200 判坏 → v2 移除 smartdns、这两页接受 200|401。
+  复跑 bad 为空（仅剩 00:57 那条历史 traceback，24h 窗口过后自然消失）。回路 harness_syscheck_fp.py。
+- D3（潜伏）cn-ad-net-discover 有候选时 return 1 → oneshot 单元记 failed（首跑候选 0 未显现）
+  → v7 候选是报告产出而非故障，改 return 0。回路 harness_discover_rc.py（dig 桩造候选）。
+
+QPS16 对照实验（已回滚）：hot-warm 工作集顶到 MAX_PAIRS 5000、命中率 90%→86%、刷新 ~11.8/s 疑似
+QPS12 饱和 → drop-in Environment=HOT_WARM_QPS=16 跑 28min 稳态对照：命中率 75%（基线 86%）、
+均值 62ms（基线 34ms）、有效刷新 9.1/s（基线 11.8/s），**三项全劣**：加压把上游排队拉长反而降吞吐。
+结论：删除 drop-in 回到默认 12，瓶颈在上游单查询延迟而非本地令牌桶；不再提 QPS。
+
+证伪撤回三条：①「cn-sync 08:17 缺轮」不成立，schedule 实为 00/06/12/18:17（NEXT=12:17）；
+②「hot-warm claim 窗口致 5s 重刷」不成立，成功路径 exp=now+ttl 正确，间隔=ttl*(1−R)，饱和是需求>QPS；
+③「discover 被超时杀」不成立，TimeoutStartUSec=0（无限），full-warm 才是 10min。
+另：kms-key-sync-apply 03:10 Result=success 且 /root/kms_sync.log 0 字节 = 脚本仅动作时 print 的静默成功，非缺陷。
+读审干净：gh_push / sofmed_observe.real / assign-client-region / deploy-cert / adopt append 路径
+（原子写+fsync+去重+flock+重试+顶层保护）。
+运行态终验：转发区 1147、stats hit_all 66.5%、servfail 0、unbound RSS 173MB、avail 2143MB、load 0.40、
+失败单元 0、keepalive 六键 err=0（182.254 自定义出口 TCP+UDP 双条目按用户偏好原样保留）。
+遗留待用户决策（沿用上轮）：外部告警 webhook/token；agh-auto-update 04-06 无人值守升级策略。
+备份后缀 .bak-r17-*。
