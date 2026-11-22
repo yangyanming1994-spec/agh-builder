@@ -269,3 +269,47 @@ alert.sh 已支持 WECOM_WEBHOOK，只需替换配置文件中的通道项。
 验证：旧版三段 seam 全无告警（红）；v3 两个分支全绿（回滚后仍异常→agh-down|1；回滚成功→agh-rollback-ok|1；
 成功→agh-upgraded|0；fail 分级正确）。部署后 bash -n 通过、--check 实跑 rc0「已是最新」未发告警、
 当日额度计数器仍为 3、alert.log 无 push-fail、失败单元 0。备份 /root/backups/agh-update.bak-r17-*。
+
+## 第十八轮（2026-11-22 11:2x）：未审面盘点 + 披露项清尾 + 本轮新代码自审
+
+盘点范围：从未读过的 kms-selfcheck.sh / kms_key_sync.py；上轮披露未修项；本轮新写的 alert 额度护栏自审；
+logrotate 覆盖全量核验。watchdog.sh 与 capacity-report.sh 做关键动作扫描（告警/重启/删除/冷却路径）通过，
+未逐行全读，如实标注。
+
+修复（红回路先红后绿，harness 存 ops/ 与 ops/r18/）：
+- K1（严重·会改错生产文件）kms_key_sync.win_prod_to_var 按 dict 插入序做子串匹配，短键先命中：
+  「企业版LTSC」「企业版 LTSC 2021」「IoT企业版LTSC」→ 错映射 Enterprise；「企业版NLTSC」→ 错映射 EnterpriseN。
+  该脚本由 kms-key-sync-apply.service 每周日 03:10 带 --apply 自动改写 /var/www/dns-page/KMS-Sofmed.bat，
+  一旦微软更新 LTSC 密钥且该密钥不在 bat 中，就会把普通企业版的密钥替换成 LTSC 密钥 → 客户端激活失败。
+  → v3 改最长优先匹配（sorted by len desc）+ 第二道保险：产品名含 LTSC/LTSB/IoT 时只允许落到 *S 变量，
+  否则返回 None 交人工。回路 harness_kms_map.py 11 例：旧版 5 例错映射（红），新版全对（绿）。
+  实跑检测：官方 Windows 82 / Office 51，无密钥变更（缺陷属潜伏，尚未触发）。
+- K2 KMS 全链路失败静默：kms_key_sync 抓取失败/解析异常/结构异常/验证失败/需人工/部署完成，
+  以及 kms-selfcheck 重启后仍失败，全部只写 /root 下日志 → 接统一告警库（结构类 critical=1，其余普通），
+  新增 key kms-sync-warn/kms-sync-fail/kms-sync-manual/kms-sync-applied/kms-down/kms-recovered。
+  回路 harness_kms_alert.py（抓取失败夹具）：旧 0 次告警（红）、新 1 次（绿）。
+- G1 status-server-mem-guard 无冷却无告警：RSS>400MB 时每 10 分钟重启一次面板，泄漏持续则反复中断且无人知情
+  → v2 加 600s 冷却（标记 /var/run）+ 重启后 is-active 校验 + 告警（恢复普通/仍挂 critical）。
+  回路 harness_memguard_cooldown.py：连跑 3 轮旧版重启 3 次（红）、新版 1 次（绿）。
+- G2 unbound-mem-guard 动作过激：只有 1100MB 一档，触发即 flush_zone . 全清缓存（命中率雪崩，
+  而第十七轮已证明上游对突发压力敏感）→ v2 分级：≥900MB 只预警不动缓存，≥1100MB 才全清且 critical=1；
+  冷却标记从 /tmp 移 /var/run（tmpfiles 清理会让冷却失效）。回路 harness_unbound_memguard_tier.py 两档均绿。
+- A5a alert.sh 自审：ALERT_ENABLED=0 或未配置任何通道时仍消耗当日额度 → v3 先探测通道可用性，
+  不可用只留痕不扣额度。回路 harness_alert_nochannel.py：旧 used=1（红）、新 used=0（绿）。
+- A5b alert.sh 自审：额度"读-判-增"非原子，并发告警会超发 → v3 用 flock 串行化。
+  **实现陷阱（回路抓到）**：`allowed=$( … ) 9>lockfile` 的 fd 不会传进命令替换子 shell，
+  flock 报 "9: Bad file descriptor" 后静默不加锁；必须把 `exec 9>lockfile` 写在子 shell 内部。
+  回路 harness_alert_atomic.py 加"锁必须真生效"断言（stderr 不得出现 Bad file descriptor）：
+  v2 并发 8 发 5（红）、错误写法计数偶然通过但锁报错仍判红、修正版并发 8 发 4 且无锁错误（绿）。
+- L2 logrotate 遗漏 4 个日志：unbound-full-warm-after-sync.log（每 6h 写）、cn-ad-net-discover.log（每周写）、
+  unbound-mem-guard.log、status-server-mem-guard.log → 新增 /etc/logrotate.d/sofmed-r18
+  （weekly rotate 8 compress delaycompress missingok notifempty copytruncate su root root），logrotate -d 校验无 error。
+- T1 文案两处：backup-clean 注释「core 由 backup-core 按 60 天清理」与实际 14 天不符 → 改 14；
+  hot-warm seed 日志「尾部 0 字节」是 walk 后才算 size-off['pos'] 所致 → 先存 tail 再打印。
+
+关闭上轮疑问：cn-sync 日志历史确已轮转（unbound-cn-sync.log-20261122 14418B + -20261115.gz），
+06:17 那行是新文件首行，与 L1 停摆定性一致，不存在日志丢失。
+回归：8 个新回路对线上真身全绿；部署完整性 diff 四个真身==修复版；KMS 自检实跑 rc0「KMS 正常」；
+两个内存守护实跑 rc0 当前不动作；告警库 v3 真实发送 code=0、无 push-fail、当日额度 4/5 无压制；
+失败单元 0；stats hit_all 68.0%、servfail 0、RSS 173MB；hot-warm 回到 QPS12 基线 4998 对/命中率 85%/均值 34ms；
+dig 百度 6ms、QQ 12ms；cn-sync 下轮 12:17。备份后缀 .bak-r18-*。
