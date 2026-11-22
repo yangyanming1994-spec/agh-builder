@@ -249,3 +249,23 @@ ALERT_ENABLED=1、ALERT_PREFIX="[DNS] "。直发与 alert_throttled 两条测试
 今日额度已用 3/5（两条接通测试 + 一条升级验证），计数器已按实际写入避免超发。
 备份 /root/backups/alert.sh.bak-r17-*。若日后告警量变大，可换企业微信群机器人（无条数限制），
 alert.sh 已支持 WECOM_WEBHOOK，只需替换配置文件中的通道项。
+
+### 第十七轮补2：无人值守升级可观测（agh-update v3）+ 用户决策
+
+用户决策：维持 04-06 窗口无人值守自动升级（理由：已成功自动升级过一次）。
+历史证据：/var/log/agh-auto-update.log 轮转内 2026-11-20 04:17:22「✅ 升级完成: v0.107.80 -> v1.0.0
+（DNS 解析正常，备份 /root/agh-backup-20261120-041715）」；当前 v1.0.0，今日 04:17 与 11:17 检查均「已是最新」。
+
+随之发现并修复 A4（真实盲区）：agh-update 真身 grep alert = 0，升级中止/健康检查失败/自动回滚/
+回滚后服务仍异常全部只写本机日志，微信通道接通后这些路径依然不会推送 → 无人值守失败无人知。
+→ v3 全路径接告警（红回路 harness_update_alert.py 存 ops/，三段 seam 取自真身原文）：
+- fail() 按语义分级：含回滚/版本不符/包损坏/解压失败/读不到当前版本 → key agh-update-fail，critical=1；
+  下载失败、获取最新版本失败等瞬态 → key agh-update-warn，critical=0，节流 21600s 防刷屏。
+- 升级成功 → key agh-upgraded（普通额度），正文含旧→新版本与备份路径。
+- 健康检查失败开始回滚 → agh-update-fail critical=1。
+- 回滚后服务正常 → agh-rollback-ok critical=1；回滚后仍异常 → 复用 key agh-down critical=1
+  （可动用当日预留额度，且与 agh-monitor 共享节流去重，避免同一故障双发）。
+- alert.sh 缺失时降级为 no-op，升级流程本身不受影响。
+验证：旧版三段 seam 全无告警（红）；v3 两个分支全绿（回滚后仍异常→agh-down|1；回滚成功→agh-rollback-ok|1；
+成功→agh-upgraded|0；fail 分级正确）。部署后 bash -n 通过、--check 实跑 rc0「已是最新」未发告警、
+当日额度计数器仍为 3、alert.log 无 push-fail、失败单元 0。备份 /root/backups/agh-update.bak-r17-*。
