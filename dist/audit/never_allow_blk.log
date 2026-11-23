@@ -1,8 +1,10 @@
-# never_allow_blk 剔除审计  2026-11-23 06:59:40
-# 共 6 条
+# never_allow_blk 剔除审计  2026-11-23 20:00:33
+# 共 8 条
 # 格式: category / rule / hit / src
 encrypted_dns	||doh.dns.apple.com^	hit=doh.dns.apple.com	src=<unknown>
 encrypted_dns	||doh.pub^	hit=doh.pub	src=<unknown>
+encrypted_dns	||injections.adguard.org^	hit=injections.adguard.org	src=<unknown>
+encrypted_dns	||local.adguard.org^	hit=local.adguard.org	src=<unknown>
 encrypted_dns	||mozilla.cloudflare-dns.com^	hit=cloudflare-dns.com	src=<unknown>
 encrypted_dns	||opencdnpddpic.jomodns.com^	hit=jomodns.com	src=<unknown>
 encrypted_dns	||opencdnpddvod2.jomodns.com^	hit=jomodns.com	src=<unknown>
