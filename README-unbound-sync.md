@@ -514,3 +514,33 @@ audit.py 自身有单实例锁，重复实例会很快退出，所以不是"堆�
 
 **回滚**：`cp -p <文件>.bak-20261122-r21 <文件> && systemctl restart <unit>`
 （keepalive / ai-bot / status-server；ad-feature-lib 无需重启，timer 下次读回旧文件即可）。
+
+### 第22轮（2026-11-23 10:3x）：自检 traceback 噪声 + after-sync 日志截断
+
+**告警**：Server酱 `[2/5] DNS 系统自检异常: traceback unbound-full-warm-after-sync.log`。
+
+**定性**：不是新故障，是**旧日志残留导致的每日重复误报**。
+- traceback 原文时间戳 2026-11-22 00:59，内容为 `top_ecs` 读 `/opt/AdGuardHome/data/querylog.json`
+  时 `FileNotFoundError`（AGH 轮转/重启瞬间该文件暂缺）。
+- 该场景在第十七轮已修为预期降级（unbound-full-warm.py v3(F1)：打印 `[rotate]` 并回退基线网段），
+  之后 11-22 09:20/12:17、11-23 00:17/06:17 四轮预热全部 `END done=... fail_rate=0.5%` 正常完成。
+- 但 `unbound-cn-sync` 用 `open(...,'a')` 追加写该日志，那条旧 traceback 一直留在文件里；
+  `sofmed-system-check` 每天 08:25 扫"近 24h 有更新"的日志末尾 200 行，该文件每天更新、
+  体积仅 3KB（全量都在末尾 200 行内）→ 旧记录被当成新异常，天天报警、白耗免费额度。
+
+**修复（均先红后绿）**
+1. `sofmed-system-check.sh` v3：traceback 判定增加排除 `silent-exc|\[rotate\]|expected` 前缀，
+   只把**未被捕获处理**的裸 Traceback 当故障；裸异常仍能报（防过修已验）。
+   回路 `harness_syscheck_tb_noise.py`：silent-exc 夹具旧版判 bad（红）、新版不判（绿）；裸夹具两版都判 bad。
+2. `unbound-cn-sync` v6：after-sync 预热日志由 `'a'` 改 `'w'`，每次只保留最近一次运行；
+   避免同类"历史记录跨天触发告警"再次发生。
+   回路 `harness_aftersync_mode.py`：旧版追加后旧 traceback 残留（红），新版截断后消失（绿）。
+3. 清理现场：`after-sync.log` 备份到 `/root/backups/after-sync.log.bak-20261123` 后清空（0 字节）。
+
+**验证**
+- 两文件线上 md5 与本地 **2/2 SAME**；备份 `.bak-20261123-r22`。
+- 手动跑 `sofmed-system-check.sh`：`bad=[]`（此前 08:25 为 `bad=[ traceback[ unbound-full-warm-after-sync.log]]`）。
+- 全盘复扫近 24h 日志：过滤后**无残留裸 traceback**。
+- 未产生新推送，今日免费额度仍为 2/5。
+
+**回滚**：`cp -p <文件>.bak-20261123-r22 <文件>`（cn-sync 与 system-check 均为 timer 调用，无需重启）。
