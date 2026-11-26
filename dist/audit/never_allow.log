@@ -1,4 +1,4 @@
-# never_allow 剔除审计  2026-11-26 00:06:35
+# never_allow 剔除审计  2026-11-26 10:40:43
 # 共 126 条
 # 格式: category / rule / hit / src
 abuse_tld	@@||*.agency^	hit=*.agency	src=https://raw.githubusercontent.com/5whys-adblock/AdGuardHome-rules/main/rules/output_medium.txt
@@ -27,7 +27,7 @@ tracker	@@||alllaw.112.2o7.net^	hit=alllaw.112.2o7.net	src=https://raw.githubuse
 tracker	@@||analysis.windows.net^	hit=analysis.windows.net	src=https://raw.githubusercontent.com/5whys-adblock/AdGuardHome-rules/main/rules/output_medium.txt
 ad_platform	@@||anythinktech.com^	hit=anythinktech.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
 tracker	@@||api.tuisong.baidu.com^	hit=api.tuisong.baidu.com	src=https://raw.githubusercontent.com/qq5460168/666/master/rules.txt
-ad_platform	@@||app-advertise.zhihuishu.com^	hit=app-advertise.zhihuishu.com	src=https://raw.githubusercontent.com/easylist/easylistchina/master/easylistchina.txt;https://raw.githubusercontent.com/217heidai/adblockfilters/main/rules/adblockdns.txt;https://adguardteam.github.io/HostlistsRegistry/assets/filter_1.txt;https://raw.githubusercontent.com/5whys-adblock/AdGuardHome-rules/main/rules/output_medium.txt
+ad_platform	@@||app-advertise.zhihuishu.com^	hit=app-advertise.zhihuishu.com	src=https://raw.githubusercontent.com/217heidai/adblockfilters/main/rules/adblockdns.txt;https://raw.githubusercontent.com/easylist/easylistchina/master/easylistchina.txt;https://adguardteam.github.io/HostlistsRegistry/assets/filter_1.txt;https://raw.githubusercontent.com/5whys-adblock/AdGuardHome-rules/main/rules/output_medium.txt
 ad_platform	@@||artifactory.appodeal.com^	hit=artifactory.appodeal.com	src=https://raw.githubusercontent.com/217heidai/adblockfilters/main/rules/adblockdns.txt
 tracker	@@||autocomplete.clearbit.com^	hit=autocomplete.clearbit.com	src=https://raw.githubusercontent.com/5whys-adblock/AdGuardHome-rules/main/rules/output_medium.txt
 tracker	@@||awin1.com^	hit=awin1.com	src=https://raw.githubusercontent.com/217heidai/adblockfilters/main/rules/adblockdns.txt
