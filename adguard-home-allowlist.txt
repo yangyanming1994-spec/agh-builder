@@ -1,9 +1,9 @@
 ! Title: sofmed DNS（白名单）
 ! Homepage: sofmed DNS提供
-! Version: 2026-11-25 22:04:48（北京时间）
+! Version: 2026-11-26 08:07:08（北京时间）
 ! Expires: 12 hours
 ! Description: 由 sofmed DNS独家提供
-! Total count: 4915
+! Total count: 4917
 @@||ndcpp.com^$important
 @@||dj.1688.com^$important
 @@||ndcimgs.com^$important
@@ -3725,6 +3725,8 @@
 @@||mirrors.huaweicloud.com^
 @@||mkp-intl-res.hc-cdn.com^
 @@||mpay-web.g.mkey.163.com^
+@@||mum.alibabachengdun.com^
+@@||mum.alibabachengdun.net^
 @@||necaptcha.nosdn.127.net^
 @@||netfilx-application.com^
 @@||oss-asq-static.11222.cn^
