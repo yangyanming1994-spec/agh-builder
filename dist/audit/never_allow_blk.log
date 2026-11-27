@@ -1,4 +1,4 @@
-# never_allow_blk 剔除审计  2026-11-27 13:45:14
+# never_allow_blk 剔除审计  2026-11-27 22:35:58
 # 共 8 条
 # 格式: category / rule / hit / src
 encrypted_dns	||doh.dns.apple.com^	hit=doh.dns.apple.com	src=<unknown>
